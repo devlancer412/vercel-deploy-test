@@ -8,7 +8,7 @@ export const highlightedText: HighlightedText = (rawText, Highlighter) => {
 
   const transformString = string => {
     if (!inAsterisks.test(string)) return string
-    const wrappedString = string.slice(1, -1).replace(' ', '\u00A0')
+    const wrappedString = string.slice(1, -1)
 
     return <Highlighter key={string}>{wrappedString}</Highlighter>
   }

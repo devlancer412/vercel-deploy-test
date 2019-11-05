@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import * as parse from '../../lib/parse'
 
 export const fragment = gql`
-  fragment AboutLong on AboutLong {
+  fragment AboutShort on EmphasisedText {
     content
   }
 `
@@ -17,18 +17,24 @@ const Wrapper = styled.div`
 
   grid-column: 2 / span 10;
 
-  font-size: 28px;
-  line-height: 36px;
+  font-size: 40px;
+  text-transform: uppercase;
   letter-spacing: 1px;
-  text-align: left;
-  white-space: pre-wrap;
+  line-height: 50px;
+  text-align: center;
+
+  display: flex;
+  align-items: center;
 `
 
 const Highlighted = styled.span`
-  text-decoration: underline;
+  font-size: 24px;
+  letter-spacing: 1.2px;
+  vertical-align: baseline;
+  line-height: unset;
 `
 
-export const AboutLong = ({ details }) => {
+export const AboutShort = ({ details }) => {
   const { content } = details
   const fancyContent = parse.highlightedText(content, Highlighted)
 

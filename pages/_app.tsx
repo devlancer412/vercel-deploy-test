@@ -1,22 +1,30 @@
 import App from 'next/app'
 import React from 'react'
-import styled, {
-  ThemeProvider,
-  createGlobalStyle,
-  DefaultTheme,
-} from 'styled-components'
+import styled, { ThemeProvider, createGlobalStyle } from 'styled-components'
 
-const theme: DefaultTheme = {}
+const theme = {}
 
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    text-decoration: none;
+    color: unset;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #e9e9e9;
+      transition: color 0.2s;
+    }
   }
 
   @font-face {
     font-family: "Editorial New Ultralight";
     src: url("/fonts/EditorialNew-Ultralight.otf") format("opentype");
-    font-weight: normal;
+    font-weight: 200;
     font-style: normal;
   }
 
@@ -43,9 +51,6 @@ const GlobalStyle = createGlobalStyle`
 `
 
 const Layout = styled.div`
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  column-gap: 40px;
   padding: 0 50px 0 50px;
 `
 

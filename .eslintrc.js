@@ -13,8 +13,10 @@ module.exports = {
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
+    React: 'writable',
   },
   parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint'],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -26,5 +28,11 @@ module.exports = {
     react: {
       version: 'detect', // Tells eslint-plugin-react to automatically detect the version of React to use
     },
+  },
+  rules: {
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': [2, { args: 'none' }],
+    'react/prop-types': 'off',
+    'react/react-in-jsx-scope': 'off',
   },
 }

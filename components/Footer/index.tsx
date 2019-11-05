@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 
 const Wrapper = styled.div`
@@ -9,6 +8,7 @@ const Wrapper = styled.div`
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: 1fr 80px;
   column-gap: 40px;
+  margin-top: 209px;
 `
 
 const Logo = styled.img`
@@ -41,56 +41,52 @@ const Social = styled.div`
   grid-row: 2;
   grid-column: 10 / -1;
   text-align: right;
-  margin: auto 40px;
+  margin: auto 0;
   font-family: 'Adieu Light';
   font-size: 10px;
   letter-spacing: 0.57px;
 `
 
-const GET_FOOTER = gql`
-  query Footer {
-    getContact {
-      address {
-        line1
-        line2
-      }
-      email
-      phoneNumber
-    }
+const SocialLink = styled.a`
+  margin-left: 12px;
+`
 
-    getSocialList {
-      items {
-        acronym
-        name
-        url
-      }
-    }
+export const fragment = gql`
+  fragment Footer on Footer {
+    copyright
   }
 `
 
-export const Footer = () => {
-  const { data, loading, error } = useQuery(GET_FOOTER)
+export const Footer = ({ contact, footer }) => {
+  const { email, address, phoneNumber, socials } = contact
+  const { copyright } = footer
 
-  if (loading) return <>'Loading'</>
-  if (error) return <>'Error'</>
-
-  const { getContact: contact, getSocialList: socialList } = data
+  const socialLinks = socials.map(social => (
+    <SocialLink
+      key={`footer-${social.name}`}
+      href={social.url}
+      title={social.name}
+      target="_blank"
+    >
+      {social.acronym}
+    </SocialLink>
+  ))
 
   return (
     <Wrapper>
       <Logo src="/images/early-logo.png" />
 
-      <Legal>©2019 EARLY Privacy Policy</Legal>
+      <Legal>{copyright}</Legal>
 
       <Contact>
-        <span>{contact.email}</span>
-        <span>{contact.phoneNumber}</span>
+        <a href={`mailto:${email}`}>{email}</a>
+        <a href={`tel:${phoneNumber}`}>{phoneNumber}</a>
         <span>
-          {contact.address.line1}, {contact.address.line2}
+          {address.line1}, {address.line2}
         </span>
       </Contact>
 
-      <Social>insta etc</Social>
+      <Social>{socialLinks}</Social>
     </Wrapper>
   )
 }

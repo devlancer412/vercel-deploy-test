@@ -11,11 +11,11 @@ const Wrapper = styled.div`
   column-gap: 40px;
 `
 
-const Down = styled.div`
+const Down = styled.button`
   box-sizing: border-box;
   height: 17px;
   width: 17px;
-  border: 2px solid #000000;
+  border: 1px solid #000000;
   border-left: 0;
   border-top: 0;
   transform: rotate(45deg);
@@ -23,6 +23,10 @@ const Down = styled.div`
   grid-column: 6 / span 2;
   margin: 0 auto;
   cursor: pointer;
+
+  &:hover {
+    border-color: #e9e9e9;
+  }
 `
 
 const scrollDownPage = () => {

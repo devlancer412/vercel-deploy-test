@@ -32,6 +32,7 @@ const Highlighted = styled.span`
   letter-spacing: 1.2px;
   vertical-align: baseline;
   line-height: unset;
+  white-space: nowrap;
 `
 
 export const AboutShort = ({ details }) => {

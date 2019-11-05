@@ -2,7 +2,7 @@ import React from 'react'
 import { gql } from 'apollo-boost'
 import styled from 'styled-components'
 
-import * as randomlyPlace from '../../lib/randomlyPlace'
+import * as randomlyPlace from '../../../lib/randomlyPlace'
 
 export const fragment = gql`
   fragment LandingGallery on LandingGallery {
@@ -18,12 +18,12 @@ export const fragment = gql`
   }
 `
 
-const GalleryHeading = styled.span`
+const Heading = styled.span`
   pointer-events: none;
   position: relative;
 `
 
-const GalleryImage = styled.img`
+const Image = styled.img`
   transition: opacity 0.4s;
   opacity: 0;
   position: absolute;
@@ -33,7 +33,7 @@ const GalleryImage = styled.img`
   max-height: 400px;
 `
 
-const GalleryLine = styled.div`
+const Row = styled.div`
   text-align: center;
   text-transform: uppercase;
   line-height: 132px;
@@ -42,12 +42,12 @@ const GalleryLine = styled.div`
   -webkit-font-smoothing: subpixel-antialiased;
 
   &:hover {
-    ${GalleryImage} {
+    ${Image} {
       opacity: 2;
       transition: opacity 0.4s;
     }
 
-    ${GalleryHeading} {
+    ${Heading} {
       z-index: 3;
       color: #000000;
     }
@@ -82,7 +82,7 @@ const renderGalleryItem = ({ text, images }) => {
     }
 
     return (
-      <GalleryImage
+      <Image
         key={`landing-gallery-image-${image._id}`}
         src={'https://images.takeshape.io/' + image.path}
         style={imagePosition}
@@ -91,14 +91,14 @@ const renderGalleryItem = ({ text, images }) => {
   })
 
   return (
-    <GalleryLine key={text}>
+    <Row key={text}>
       {placedImages}
-      <GalleryHeading>{text}</GalleryHeading>
-    </GalleryLine>
+      <Heading>{text}</Heading>
+    </Row>
   )
 }
 
-export const LandingGallery = ({ content }) => {
+export const Gallery = ({ content }) => {
   const headers = React.useMemo(() => content.headings.map(renderGalleryItem), [
     content,
   ])

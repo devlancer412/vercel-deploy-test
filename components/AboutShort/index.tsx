@@ -22,9 +22,6 @@ const Wrapper = styled.div`
   letter-spacing: 1px;
   line-height: 50px;
   text-align: center;
-
-  display: flex;
-  align-items: center;
 `
 
 const Highlighted = styled.span`

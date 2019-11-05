@@ -7,7 +7,7 @@ import withData from '../lib/apollo'
 import { Hero } from '../components/Hero'
 import * as AboutLong from '../components/AboutLong'
 import * as AboutShort from '../components/AboutShort'
-import * as Gallery from '../components/LandingGallery'
+import * as Gallery from '../components/Landing/Gallery'
 import * as Footer from '../components/Footer'
 import * as Contact from '../components/About/Contact'
 import * as Services from '../components/About/Services'
@@ -81,7 +81,7 @@ const Landing = () => {
       </Hero>
 
       <Layout>
-        <Gallery.LandingGallery content={gallery} />
+        <Gallery.Gallery content={gallery} />
         <AboutLong.AboutLong details={aboutLong} />
         <Services.Services services={services} />
         <Contact.Contact contactDetails={getContact} />

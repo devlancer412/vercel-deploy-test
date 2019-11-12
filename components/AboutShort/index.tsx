@@ -22,6 +22,10 @@ const Wrapper = styled.div`
   letter-spacing: 1px;
   line-height: 50px;
   text-align: center;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 const Highlighted = styled.span`
@@ -32,13 +36,17 @@ const Highlighted = styled.span`
   white-space: nowrap;
 `
 
+const CenteredParagraph = styled.p`
+  margin: auto 0;
+`
+
 export const AboutShort = ({ details }) => {
   const { content } = details
   const fancyContent = parse.highlightedText(content, Highlighted)
 
   return (
     <Wrapper>
-      <p>{fancyContent}</p>
+      <CenteredParagraph>{fancyContent}</CenteredParagraph>
     </Wrapper>
   )
 }

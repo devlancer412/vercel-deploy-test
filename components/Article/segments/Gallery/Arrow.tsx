@@ -8,8 +8,8 @@ const translateX = ({ visible, facing }) =>
   visible ? '0' : facing === 'left' ? '50vw' : '-50vw'
 
 const Head = styled.div<any>`
-  width: 50px;
-  height: 50px;
+  width: 47px;
+  height: 47px;
   border: 2px solid #000000;
   border-${otherDirection}: none;
   border-${({ facing }) => (facing === 'left' ? 'top' : 'bottom')}: none;
@@ -19,20 +19,20 @@ const Head = styled.div<any>`
 `
 
 const Tail = styled.div`
-  width: 100px;
+  width: 103px;
   height: 2px;
   background-color: #000000;
 `
 
 const Wrapper = styled.div<any>`
   display: flex;
-  width: 100px;
+  // width: 100px;
   grid-column: span 2;
   position: relative;
   align-items: center;
   transform: translate(${translateX}, 0);
   margin-${direction}: auto;
-  margin-${otherDirection}: -14px;
+  margin-${otherDirection}: -16px;
   transition: 0.4s ease-in all;
   cursor: pointer;
 `

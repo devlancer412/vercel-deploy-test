@@ -120,7 +120,7 @@ export const Article = ({ article, category }) => {
   return (
     <Wrapper>
       <FeatureImage>
-        <Image.Image image={featureImage} />
+        <Image.Asset image={featureImage} />
       </FeatureImage>
 
       <Heading>

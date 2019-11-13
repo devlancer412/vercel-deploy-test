@@ -8,7 +8,7 @@ const Wrapper = styled.div<any>`
   background-color: #bebebe;
   grid-column: 4 / -4;
   width: 100%;
-  margin-top: 50px;
+  margin-top: 62px;
 `
 
 const Current = styled.div<any>`

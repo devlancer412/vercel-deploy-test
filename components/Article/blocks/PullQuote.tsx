@@ -6,10 +6,9 @@ const Aside = styled.aside`
   font-family: 'Adieu Light';
   font-size: 40px;
   line-height: 40px;
-  letter-spacing: -0.7px;
+  letter-spacing: 0.7px;
   grid-column: 2 / -2;
-  margin-left: -40px;
-  margin-right: -40px;
+  margin: 68px -40px 78px -40px;
   text-transform: uppercase;
 `
 
@@ -19,13 +18,14 @@ const Cite = styled.cite`
   line-height: 12px;
   letter-spacing: 0.18px;
   text-transform: uppercase;
-  vertical-align: super;
-  margin-right: 28px;
+  vertical-align: 17px;
+  margin-right: 11px;
   font-style: normal;
 `
 
 const PullQuote = ({ quote }: { quote: string }) => {
   const segments = emphasise.highlightedText(quote, Cite)
+
   return (
     <Aside>
       <p>{segments}</p>

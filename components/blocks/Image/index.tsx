@@ -41,6 +41,9 @@ const Caption = styled.div`
 
 const Clip = styled.div`
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
 
 // Clean this up

@@ -22,9 +22,6 @@ const alignMap = {
 
 export const Wrapper = styled.div<any>`
   grid-column: ${({ column }) => column};
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   margin: 112px 0 120px 0;
 `
 

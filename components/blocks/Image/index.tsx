@@ -41,9 +41,7 @@ const Caption = styled.div`
 
 const Clip = styled.div`
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 100%;
 `
 
 // Clean this up
@@ -86,16 +84,19 @@ export const Asset = ({ image, noCaption = false, cache = false, ...rest }) => {
   // 1. Extract Caption into own component
 
   return (
-    <Clip>
-      <Img
-        className="blur-up lazyload"
-        data-src={qualityUrl}
-        src={lazyUrl}
-        {...rest}
-      />
+    <>
+      <Clip>
+        <Img
+          className="blur-up lazyload"
+          data-src={qualityUrl}
+          src={lazyUrl}
+          {...rest}
+        />
+      </Clip>
+
       {caption && !noCaption && (
         <Caption>{caption.blocks.map(({ text }) => text)}</Caption>
       )}
-    </Clip>
+    </>
   )
 }

@@ -23,6 +23,10 @@ const alignMap = {
 export const Wrapper = styled.div<any>`
   grid-column: ${({ column }) => column};
   margin: 112px 0 120px 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
 
 export const Image = ({ image }) => {

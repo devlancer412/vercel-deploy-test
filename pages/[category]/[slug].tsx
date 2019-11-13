@@ -1,6 +1,7 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 import ErrorPage from 'next/error'
+import Head from 'next/head'
 import styled from 'styled-components'
 import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
@@ -92,6 +93,15 @@ const ArticlePage = () => {
 
   return (
     <Layout>
+      <Head>
+        <title>{article.heading} | Early</title>
+        <meta
+          name="viewport"
+          content="initial-scale=1.0, width=device-width"
+          key="viewport"
+        />
+      </Head>
+
       <Article.Article article={article} category={category} />
       <Footer.Footer contact={getContact} footer={getFooter} />
     </Layout>

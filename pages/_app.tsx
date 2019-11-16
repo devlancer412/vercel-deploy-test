@@ -10,16 +10,16 @@ const GlobalStyle = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
   }
 
-  a {
-    text-decoration: none;
-    color: unset;
-    transition: color 0.2s;
+  // a {
+  //   text-decoration: none;
+  //   color: unset;
+  //   transition: color 0.2s;
 
-    &:hover {
-      color: #e9e9e9;
-      transition: color 0.2s;
-    }
-  }
+  //   &:hover {
+  //     color: #e9e9e9;
+  //     transition: color 0.2s;
+  //   }
+  // }
 
   @font-face {
     font-family: "Editorial New Ultralight";

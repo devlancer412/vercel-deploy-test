@@ -85,7 +85,7 @@ const Landing = () => {
         <AboutLong.AboutLong details={aboutLong} />
         <Services.Services services={services} />
         <Contact.Contact contactDetails={getContact} />
-        <Footer.Footer contact={getContact} footer={getFooter} />
+        <Footer.Footer contact={getContact} footer={getFooter} withoutNav />
       </Layout>
     </>
   )

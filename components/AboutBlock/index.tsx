@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { H2 } from '../blocks/Header'
+import { H2 } from '../blocks/Typography/Header'
 
 const Wrapper = styled.div`
   grid-column: 4 / -1;

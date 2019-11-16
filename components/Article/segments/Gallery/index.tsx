@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import * as Img from '../../../blocks/Image'
+import * as Img from '../../../blocks/Image/Fetch'
 import * as Arrow from './Arrow'
 import * as PositionBar from './PositionBar'
 
@@ -47,7 +47,7 @@ const StabiliseWidth = styled.div`
   flex-shrink: 0;
 `
 
-const renderImage = imageRefs => (image, i) => (
+const renderImage = (imageRefs, loaded) => (image, i) => (
   <StabiliseWidth
     key={`image-${image.id}-${i}`}
     ref={instance =>
@@ -56,67 +56,65 @@ const renderImage = imageRefs => (image, i) => (
         : imageRefs.set(`${image.id}-${i}`, instance)
     }
   >
-    <Img.FromApi details={image} noCaption cache />
+    <Img.Image details={image} hideCaption cache onLoad={loaded} />
   </StabiliseWidth>
 )
 
 export const Gallery = ({ images }) => {
-  const [current, setCurrent] = React.useState(0)
-  const [rendered, setRendered] = React.useState(false)
+  const [index, setIndex] = React.useState(0)
+  const [height, setHeight] = React.useState(0)
 
-  // Use to set carousel x position
+  // Use to reference carousel x position
   const imageWrapper = React.useRef(null)
 
-  // Use to set carousel height
+  // Use to reference carousel height
   let imageRefs = React.useRef(new Map()).current
-  const imageRef = id => imageRefs.get(`${id}-${current}`)
+  const imageRef = id => imageRefs.get(`${id}-${index}`)
 
-  const length = images.length
-
-  const goForwards = () => setCurrent(c => c + 1)
-  const goBackwards = () => setCurrent(c => c - 1)
-
-  const x = imageWrapper.current
-    ? current * imageWrapper.current.clientWidth
-    : 0
-
-  const currentImage = imageRef(images[current].id) || {
-    lastChild: { clientHeight: 0 },
-  }
-  const currentHeight = currentImage.lastChild.clientHeight
-
-  // Ugly hack to get the height updated on page load
+  // Change carousel height when focus changes
   React.useEffect(() => {
-    setRendered(true)
-  }, [])
+    updateHeight()
+  }, [index])
 
-  const renderedImages = images.map(renderImage(imageRefs))
+  const nextImage = () => setIndex(i => i + 1)
+  const previousImage = () => setIndex(i => i - 1)
+
+  const x = imageWrapper.current ? index * imageWrapper.current.clientWidth : 0
+
+  const updateHeight = () => {
+    const focus = imageRef(images[index].id)
+    focus && setHeight(focus.lastChild.clientHeight)
+  }
+
+  const renderedImages = images.map(renderImage(imageRefs, updateHeight))
 
   return (
     <Wrapper>
-      <Arrow.Arrow facing="left" visible={!!current} onClick={goBackwards} />
+      <Arrow.Arrow facing="left" visible={!!index} onClick={previousImage} />
 
       <Images ref={imageWrapper}>
-        <InternalWrapper x={x} height={currentHeight}>
+        <InternalWrapper x={x} height={height}>
           {renderedImages}
         </InternalWrapper>
       </Images>
 
       <Arrow.Arrow
         facing="right"
-        visible={current < length - 1}
-        onClick={goForwards}
+        visible={index < images.length - 1}
+        onClick={nextImage}
       />
 
       <Images>
         <InternalWrapper x={x}>
           {images.map(image =>
-            image.caption.blocks.map(({ text }) => <Caption>{text}</Caption>)
+            image.caption.blocks.map(({ text }, i) => (
+              <Caption key={`caption-${text}-${i}`}>{text}</Caption>
+            ))
           )}
         </InternalWrapper>
       </Images>
 
-      <PositionBar.Bar length={length} current={current} />
+      <PositionBar.Bar length={images.length} current={index} />
     </Wrapper>
   )
 }

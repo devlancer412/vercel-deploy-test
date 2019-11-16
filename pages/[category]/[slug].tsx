@@ -12,6 +12,7 @@ import * as Loading from '../../components/Loading'
 import * as Article from '../../components/Article'
 import * as Footer from '../../components/Footer'
 import * as Contact from '../../components/About/Contact'
+import * as NextArticle from '../../components/NextArticle'
 
 const ARTICLES_QUERY = gql`
   ${Article.fragment}
@@ -103,6 +104,7 @@ const ArticlePage = () => {
       </Head>
 
       <Article.Article article={article} category={category} />
+      <NextArticle.NextArticle nextArticle={article.nextArticle} />
       <Footer.Footer contact={getContact} footer={getFooter} />
     </Layout>
   )

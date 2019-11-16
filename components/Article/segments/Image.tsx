@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/react-hooks'
 import { getImageUrl } from 'takeshape-routing'
 
 import * as Loading from '../../Loading'
-import * as Img from '../../blocks/Image'
+import * as Img from '../../blocks/Image/Fetch'
 
 const sizeMap = {
   large: 12,
@@ -37,7 +37,7 @@ export const Image = ({ image }) => {
 
   return (
     <Wrapper column={`${start[alignment || 'center']} / span ${span}`}>
-      <Img.FromApi details={image} />
+      <Img.Image details={image} />
     </Wrapper>
   )
 }

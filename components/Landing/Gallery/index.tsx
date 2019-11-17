@@ -3,6 +3,7 @@ import { gql } from 'apollo-boost'
 import styled from 'styled-components'
 
 import * as randomlyPlace from '../../../lib/randomlyPlace'
+import * as convert from '../../../lib/convert'
 
 export const fragment = gql`
   fragment LandingGallery on LandingGallery {
@@ -29,17 +30,13 @@ const Image = styled.img`
   position: absolute;
   pointer-events: none;
   z-index: 3;
-  max-width: 400px;
-  max-height: 400px;
+  max-width: ${convert.viewportUnits(40, { to: 8 }).fromRem};
+  max-height: ${convert.viewportUnits(40, { to: 8 }).fromRem};
 `
 
 const Row = styled.div`
-  text-align: center;
-  text-transform: uppercase;
-  line-height: 132px;
-  letter-spacing: -4px;
-  font-weight: 100;
   -webkit-font-smoothing: subpixel-antialiased;
+  margin: ${convert.viewportUnits(0, { to: 8 }).fromRem} auto;
 
   &:hover {
     ${Image} {
@@ -56,10 +53,19 @@ const Row = styled.div`
 
 const Wrapper = styled.div`
   grid-column: 1 / -1;
-  font-size: 160px;
+
+  font-size: ${convert.viewportUnits(16, { to: 0 }).fromRem};
   font-family: 'Adieu Light';
-  padding: 150px 0 160px 0;
-  margin: 12px 0 40px 0;
+  text-align: center;
+  text-transform: uppercase;
+  line-height: 0.825; // 132px
+  letter-spacing: ${convert.viewportUnits(-0.4, { to: 0 }).fromRem};
+  font-weight: 100;
+
+  padding-top: ${convert.viewportUnits(15, { to: 4 }).fromRem};
+  padding-bottom: ${convert.viewportUnits(16, { to: 2 }).fromRem};
+  margin-top: ${convert.viewportUnits(1.2, { to: 0.6 }).fromRem};
+  margin-bottom: ${convert.viewportUnits(4, { to: 2 }).fromRem};
   position: relative;
 `
 

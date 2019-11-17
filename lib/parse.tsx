@@ -1,8 +1,6 @@
 import React, { ReactNode } from 'react'
-import { StyledComponent } from 'styled-components'
 
-type Highlighter = StyledComponent<'span', any, {}, never>
-type HighlightedText = (r: string, h: Highlighter) => (string | ReactNode)[]
+type HighlightedText = (r: string, h: any) => (string | ReactNode)[]
 export const highlightedText: HighlightedText = (rawText, Highlighter) => {
   const inAsterisks = RegExp(/\*([^*]+)\*/g)
 

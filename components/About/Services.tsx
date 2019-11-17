@@ -1,4 +1,5 @@
 import { gql } from 'apollo-boost'
+import styled from 'styled-components'
 
 import * as Block from '../AboutBlock'
 import { Ul } from '../blocks/List'
@@ -14,6 +15,10 @@ export const fragment = gql`
   }
 `
 
+const Li = styled.li`
+  margin: 0.8rem 0;
+`
+
 export const Services = ({ services }) => {
   const columns = services.columns.map(column => (
     <Block.Column
@@ -22,7 +27,7 @@ export const Services = ({ services }) => {
     >
       <Ul>
         {column.items.map(({ item }) => (
-          <li key={`service-${item}`}>{item}</li>
+          <Li key={`service-${item}`}>{item}</Li>
         ))}
       </Ul>
     </Block.Column>

@@ -1,54 +1,108 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { gql } from 'apollo-boost'
 
-const Wrapper = styled.div`
-  grid-column: 1 / span 12;
+import * as convert from '../../lib/convert'
+
+const breakpoint = 1000
+
+const Wrapper = styled.footer`
+  grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: 1fr 80px;
-  column-gap: 40px;
-  margin-top: 209px;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto auto auto;
+  grid-template-areas: 'm' 'c' 'l' 's';
+  column-gap: ${({ theme }) => theme.grid.gap};
+  margin-top: ${convert.viewportUnits(20, { to: 6 }).fromRem};
+
+  padding-top: 2.5rem;
+  padding-left: ${({ theme }) => theme.grid.padding};
+  padding-right: ${({ theme }) => theme.grid.padding};
+
+  border-top: 1px solid #e9e9e9;
+
+  @media (min-width: ${breakpoint}px) {
+    padding-top: 0;
+    border-top: 0;
+
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 1fr 8rem;
+    grid-template-areas:
+      'l l l l l l l l l l l l'
+      's s s c c c c c c m m m';
+  }
 `
 
 const Logo = styled.img`
+  grid-area: l;
   width: 100%;
-  grid-column: 1 / span 12;
-  margin-top: 80px;
 `
 
-const Legal = styled.div`
-  grid-row: 2;
-  grid-column: 1 / span 2;
-  margin: auto 0;
+const footerDetail = css`
   font-family: 'Adieu Light';
-  font-size: 10px;
-  letter-spacing: 0.57px;
+  font-size: 1rem;
+  letter-spacing: 0.057rem;
+  text-align: center;
 `
 
-const Contact = styled.div`
-  grid-row: 2;
-  grid-column: 5 / span 4;
-  margin: auto -40px;
-  font-family: 'Adieu Light';
-  font-size: 10px;
-  letter-spacing: 0.57px;
+const Legal = styled.small`
+  grid-area: s;
+  margin: 1rem 0 5rem 0;
+  ${footerDetail}
+
   display: flex;
-  justify-content: space-between;
+
+  @media (min-width: ${breakpoint}px) {
+    margin: auto 0;
+  }
+`
+
+const Contact = styled.address`
+  grid-area: c;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-style: normal;
+  ${footerDetail}
+  line-height: 1.6;
+
+  margin: 0 auto 5rem auto;
+
+  @media (min-width: ${breakpoint}px) {
+    flex-direction: row;
+    margin: auto ${({ theme }) => css`calc(-1 * ${theme.grid.gap})`};
+  }
+
+  * {
+    margin: 0 8px;
+  }
 `
 
 const Social = styled.div`
-  grid-row: 2;
-  grid-column: 10 / -1;
-  text-align: right;
-  margin: auto 0;
-  font-family: 'Adieu Light';
-  font-size: 10px;
-  letter-spacing: 0.57px;
+  grid-area: m;
+  text-align: center;
+  margin: 0 auto 5rem auto;
+
+  ${footerDetail}
+
+  @media (min-width: ${breakpoint}px) {
+    text-align: right;
+    margin: auto 0;
+  }
 `
 
 const SocialLink = styled.a`
   margin-left: 12px;
+`
+
+const Email = styled.a`
+  margin-bottom: 0.8rem;
+
+  @media (min-width: ${breakpoint}px) {
+    margin-bottom: 0;
+  }
 `
 
 export const fragment = gql`
@@ -74,13 +128,14 @@ export const Footer = ({ contact, footer }) => {
 
   return (
     <Wrapper>
-      <Logo src="/images/early-logo.png" />
+      <Logo src="/images/early-logo-black.svg" />
 
       <Legal>{copyright}</Legal>
 
       <Contact>
-        <a href={`mailto:${email}`}>{email}</a>
+        <Email href={`mailto:${email}`}>{email}</Email>
         <a href={`tel:${phoneNumber}`}>{phoneNumber}</a>
+
         <span>
           {address.line1}, {address.line2}
         </span>

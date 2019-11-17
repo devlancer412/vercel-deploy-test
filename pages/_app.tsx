@@ -1,13 +1,27 @@
 import App from 'next/app'
 import React from 'react'
-import styled, { ThemeProvider, createGlobalStyle } from 'styled-components'
+import { ThemeProvider, createGlobalStyle } from 'styled-components'
+import * as convert from '../lib/convert'
 
-const theme = {}
+const theme = {
+  breakpoint: {
+    wide: 900,
+  },
+  grid: {
+    gap: convert.viewportUnits(40, { to: 16 }).fromPx,
+    padding: convert.viewportUnits(50, { to: 18 }).fromPx,
+  },
+}
 
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html {
+    font-size: 62.5%;
   }
 
   a {
@@ -23,35 +37,36 @@ const GlobalStyle = createGlobalStyle`
 
   @font-face {
     font-family: "Editorial New Ultralight";
-    src: url("/fonts/EditorialNew-Ultralight.otf") format("opentype");
+    src:
+      url("/fonts/EditorialNew-Ultralight/EditorialNew-Ultralight.otf") format("opentype"),
+      url("/fonts/EditorialNew-Ultralight/EditorialNew-Ultralight.eot") format("embedded-opentype"),
+      url("/fonts/EditorialNew-Ultralight/EditorialNew-Ultralight.ttf") format("truetype"),
+      url("/fonts/EditorialNew-Ultralight/EditorialNew-Ultralight.woff2") format("woff2"),
+      url("/fonts/EditorialNew-Ultralight/EditorialNew-Ultralight.woff") format("woff");
     font-weight: 200;
     font-style: normal;
   }
 
   @font-face {
     font-family: "Adieu Bold";
-    src: url("/fonts/GTFAdieuTRIAL-Bold.otf") format("opentype");
+    src: url("/fonts/GTF-Adieu-Bold/Adieu-Bold.otf") format("opentype");
     font-weight: normal;
     font-style: normal;
   }
 
   @font-face {
     font-family: "Adieu Light";
-    src: url("/fonts/GTFAdieuTRIAL-Light.otf") format("opentype");
+    src: url("/fonts/GTF-Adieu-Light/Adieu-Light.otf") format("opentype");
     font-weight: normal;
     font-style: normal;
   }
 
   @font-face {
     font-family: "Adieu Backslant";
-    src: url("/fonts/GTFAdieuTRIAL-RegularBackslant.otf") format("opentype");
+    src: url("/fonts/GTF-Adieu-Backslant/Adieu-Backslant.otf") format("opentype");
     font-weight: normal;
     font-style: normal;
   }
-`
-
-const Layout = styled.div`
-  padding: 0 50px 0 50px;
 `
 
 export default class MyApp extends App {
@@ -62,10 +77,7 @@ export default class MyApp extends App {
       <ThemeProvider theme={theme}>
         <>
           <GlobalStyle />
-
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <Component {...pageProps} />
         </>
       </ThemeProvider>
     )

@@ -1,3 +1,4 @@
+import React from 'react'
 import styled from 'styled-components'
 import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
@@ -52,10 +53,11 @@ const GET_LANDING_PAGE = gql`
   }
 `
 
-const Layout = styled.div`
+const Layout = styled.main`
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  column-gap: 40px;
+  column-gap: ${({ theme }) => theme.grid.gap};
+  padding: 0 ${({ theme }) => theme.grid.padding};
   grid-template-rows:
     [gallery] fit-content
     [aboutLong] fit-content
@@ -65,6 +67,7 @@ const Layout = styled.div`
 `
 
 const Landing = () => {
+  const main = React.useRef(null)
   const { loading, error, data } = useQuery(GET_LANDING_PAGE)
 
   if (loading) return <Loading.Loading />
@@ -74,19 +77,22 @@ const Landing = () => {
   const { aboutShort, gallery, aboutLong } = getLanding
   const { services } = getAbout
 
+  console.log(main)
+
   return (
     <>
-      <Hero>
+      <Hero scrollTo={main}>
         <AboutShort.AboutShort details={aboutShort} />
       </Hero>
 
-      <Layout>
+      <Layout ref={main}>
         <Gallery.Gallery content={gallery} />
         <AboutLong.AboutLong details={aboutLong} />
         <Services.Services services={services} />
         <Contact.Contact contactDetails={getContact} />
-        <Footer.Footer contact={getContact} footer={getFooter} />
       </Layout>
+
+      <Footer.Footer contact={getContact} footer={getFooter} />
     </>
   )
 }

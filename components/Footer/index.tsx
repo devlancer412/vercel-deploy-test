@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components'
 import { gql } from 'apollo-boost'
 
 import * as convert from '../../lib/convert'
+import EarlyLogo from '../../public/images/early-logo-black.svg'
 
 const breakpoint = 1000
 
@@ -33,9 +34,10 @@ const Wrapper = styled.footer`
   }
 `
 
-const Logo = styled.img`
+const Logo = styled(EarlyLogo)`
   grid-area: l;
   width: 100%;
+  fill: #000000;
 `
 
 const footerDetail = css`
@@ -128,8 +130,7 @@ export const Footer = ({ contact, footer }) => {
 
   return (
     <Wrapper>
-      <Logo src="/images/early-logo-black.svg" />
-
+      <Logo />
       <Legal>{copyright}</Legal>
 
       <Contact>

@@ -77,8 +77,6 @@ const Landing = () => {
   const { aboutShort, gallery, aboutLong } = getLanding
   const { services } = getAbout
 
-  console.log(main)
-
   return (
     <>
       <Hero scrollTo={main}>

@@ -26,6 +26,7 @@ const Down = styled.button`
   grid-column: 6 / span 2;
   margin: 0 auto;
   cursor: pointer;
+  padding: 0;
 
   &:hover {
     border-color: #e9e9e9;

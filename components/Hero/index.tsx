@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const Wrapper = styled.div`
-  min-height: 100vh;
+const Wrapper = styled.div<any>`
+  min-height: ${({ height }) => height};
   display: grid;
   grid-column: 1 / -1;
   grid-template-columns: repeat(12, 1fr);
@@ -34,6 +34,8 @@ const Down = styled.button`
 `
 
 export const Hero = ({ children, scrollTo }) => {
+  const [heroHeight, setHeroHeight] = React.useState('100vh')
+
   const scrollDownPage = () => {
     if (!scrollTo) return
 
@@ -41,8 +43,12 @@ export const Hero = ({ children, scrollTo }) => {
     window.scrollTo({ top, behavior: 'smooth' })
   }
 
+  React.useEffect(() => {
+    setHeroHeight(`${window.innerHeight}px`)
+  }, [])
+
   return (
-    <Wrapper>
+    <Wrapper height={heroHeight}>
       {children}
 
       <Down onClick={scrollDownPage} />

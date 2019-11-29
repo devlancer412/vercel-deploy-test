@@ -2,6 +2,7 @@ import App from 'next/app'
 import React from 'react'
 import { ThemeProvider, createGlobalStyle } from 'styled-components'
 import * as convert from '../lib/convert'
+import '../polyfills.js'
 
 const theme = {
   breakpoint: {

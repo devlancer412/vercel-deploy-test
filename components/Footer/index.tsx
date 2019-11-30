@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components'
 import { gql } from 'apollo-boost'
 
 import * as convert from '../../lib/convert'
+import { useDefaultAnimation } from '../../lib/animate'
 import EarlyLogo from '../../public/images/early-logo-black.svg'
 
 const breakpoint = 1000
@@ -116,6 +117,7 @@ export const fragment = gql`
 export const Footer = ({ contact, footer }) => {
   const { email, address, phoneNumber, socials } = contact
   const { copyright } = footer
+  const [ref, animate] = useDefaultAnimation()
 
   const socialLinks = socials.map(social => (
     <SocialLink

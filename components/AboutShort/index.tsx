@@ -2,6 +2,8 @@ import React from 'react'
 import { gql } from 'apollo-boost'
 import styled, { css } from 'styled-components'
 
+import { useDefaultAnimation } from '../../lib/animate'
+
 import * as parse from '../../lib/parse'
 import * as convert from '../../lib/convert'
 
@@ -13,7 +15,7 @@ export const fragment = gql`
 
 const column = (start, span) => css`${start} / span ${span}`
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<any>`
   font-family: 'Editorial New Ultralight';
 
   font-size: ${convert.viewportUnits(4, { to: 1.2 }).fromRem}; // 4rem
@@ -28,6 +30,8 @@ const Wrapper = styled.div`
 
   grid-column: ${column(1, 12)};
   margin: 0;
+
+  ${({ animate }) => animate}
 
   @media (min-width: 550px) {
     grid-column: ${column(2, 10)};
@@ -52,9 +56,13 @@ const CenteredParagraph = styled.p`
 export const AboutShort = ({ details }) => {
   const { content } = details
   const fancyContent = parse.highlightedText(content, Highlighted)
+  const [ref, animate] = useDefaultAnimation({
+    speed: '2s',
+    y: '40px',
+  })
 
   return (
-    <Wrapper>
+    <Wrapper ref={ref} animate={animate}>
       <CenteredParagraph>{fancyContent}</CenteredParagraph>
     </Wrapper>
   )

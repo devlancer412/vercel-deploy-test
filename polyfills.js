@@ -3,6 +3,7 @@
 import includes from 'core-js/features/string/virtual/includes'
 import repeat from 'core-js/features/string/virtual/repeat'
 import assign from 'core-js/features/object/assign'
+import 'intersection-observer'
 
 // Add your polyfills
 // This files runs at the very beginning (even before React and Next.js core)

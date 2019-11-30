@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components'
 
 import * as parse from '../../lib/parse'
 import * as convert from '../../lib/convert'
+import { useDefaultAnimation } from '../../lib/animate'
 
 import * as typography from '../blocks/typography'
 
@@ -15,12 +16,14 @@ export const fragment = gql`
 
 const column = (start, span) => css`${start} / span ${span}`
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<any>`
   ${typography.intro}
   text-align: left;
 
   grid-column: ${column(1, 12)};
   margin: 3px 0 40px 0;
+
+  ${({ animationStyle }) => animationStyle}
 
   @media (min-width: 550px) {
     grid-column: ${column(2, 10)};
@@ -52,6 +55,8 @@ const Highlighted = ({ children }) => {
 }
 
 export const AboutLong = ({ details }) => {
+  const [ref, animationStyle] = useDefaultAnimation()
+
   const paragraphs = details.content
     .split('\n\n')
     .map((paragraph, i) => (
@@ -60,5 +65,9 @@ export const AboutLong = ({ details }) => {
       </p>
     ))
 
-  return <Wrapper>{paragraphs}</Wrapper>
+  return (
+    <Wrapper ref={ref} animationStyle={animationStyle}>
+      {paragraphs}
+    </Wrapper>
+  )
 }

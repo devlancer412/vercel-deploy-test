@@ -1,9 +1,10 @@
 import React from 'react'
 import { gql } from 'apollo-boost'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
 import * as randomlyPlace from '../../../lib/randomlyPlace'
 import * as convert from '../../../lib/convert'
+import * as animation from '../../../lib/animate'
 
 export const fragment = gql`
   fragment LandingGallery on LandingGallery {
@@ -19,34 +20,36 @@ export const fragment = gql`
   }
 `
 
-const Heading = styled.span`
+const Heading = styled.div<any>`
   pointer-events: none;
   position: relative;
+  ${animation.defaultTransition}
+  mix-blend-mode: darken;
 `
 
 const Image = styled.img`
-  transition: opacity 0.4s;
+  ${animation.defaultTransition}
   opacity: 0;
   position: absolute;
   pointer-events: none;
-  z-index: 3;
   max-width: ${convert.viewportUnits(40, { to: 8 }).fromRem};
   max-height: ${convert.viewportUnits(40, { to: 8 }).fromRem};
 `
 
-const Row = styled.div`
+const Row = styled.div<any>`
   -webkit-font-smoothing: subpixel-antialiased;
   margin: ${convert.viewportUnits(0, { to: 8 }).fromRem} auto;
+  ${({ animate }) => animate}
 
   &:hover {
     ${Image} {
       opacity: 2;
-      transition: opacity 0.4s;
+      ${animation.defaultTransition}
     }
 
     ${Heading} {
-      z-index: 3;
       color: #000000;
+      ${animation.defaultTransition}
     }
   }
 `
@@ -75,7 +78,11 @@ const HoverTarget = styled.div`
   }
 `
 
-const renderGalleryItem = ({ text, images }) => {
+const GalleryRow = ({ text, images, downButtonClicked }) => {
+  const [ref, animate] = animation.useDefaultAnimation({
+    ignore: downButtonClicked,
+  })
+
   const { quadrants, positions } = randomlyPlace.get()
 
   const placedImages = images.map(({ image }, i) => {
@@ -97,17 +104,21 @@ const renderGalleryItem = ({ text, images }) => {
   })
 
   return (
-    <Row key={text}>
+    <Row key={text} ref={ref} animate={animate}>
       {placedImages}
       <Heading>{text}</Heading>
     </Row>
   )
 }
 
-export const Gallery = ({ content }) => {
-  const headers = React.useMemo(() => content.headings.map(renderGalleryItem), [
-    content,
-  ])
+export const Gallery = ({ content, downButtonClicked }) => {
+  const headers = content.headings.map(heading => (
+    <GalleryRow
+      key={`gallery-heading-${heading.text}`}
+      {...heading}
+      downButtonClicked={downButtonClicked}
+    />
+  ))
 
   return (
     <Wrapper>

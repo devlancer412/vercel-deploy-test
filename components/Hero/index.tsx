@@ -1,5 +1,7 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+
+import * as animate from '../../lib/animate'
 
 const Wrapper = styled.div<any>`
   min-height: ${({ height }) => height};
@@ -13,7 +15,7 @@ const Wrapper = styled.div<any>`
   padding-right: ${({ theme }) => theme.grid.padding};
 `
 
-const Down = styled.button`
+const Down = styled.button<any>`
   box-sizing: border-box;
   height: 1.7rem;
   width: 1.7rem;
@@ -28,17 +30,29 @@ const Down = styled.button`
   cursor: pointer;
   padding: 0;
 
+  ${({ downButtonStyle }) => downButtonStyle}
+  ${animate.defaultTransition}
+  transition-delay: 1s;
+
   &:hover {
     border-color: #e9e9e9;
   }
 `
 
-export const Hero = ({ children, scrollTo }) => {
+export const Hero = ({ children, scrollTo, onScroll }) => {
   const [heroHeight, setHeroHeight] = React.useState('100vh')
+  const [ref, inView] = animate.useCustomAnimation()
+
+  const downButtonStyle =
+    !inView &&
+    css`
+      opacity: 0;
+    `
 
   const scrollDownPage = () => {
     if (!scrollTo) return
 
+    onScroll(true)
     const top = scrollTo.current.offsetTop
     window.scrollTo({ top, behavior: 'smooth' })
   }
@@ -51,7 +65,12 @@ export const Hero = ({ children, scrollTo }) => {
     <Wrapper height={heroHeight}>
       {children}
 
-      <Down onClick={scrollDownPage} />
+      <Down
+        aria-label="Scroll down page"
+        ref={ref}
+        onClick={scrollDownPage}
+        downButtonStyle={downButtonStyle}
+      />
     </Wrapper>
   )
 }

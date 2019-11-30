@@ -2,9 +2,10 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 
 import { H2 } from '../blocks/Header'
+import * as typography from '../blocks/typography'
 
 import * as convert from '../../lib/convert'
-import * as typography from '../blocks/typography'
+import { useDefaultAnimation } from '../../lib/animate'
 
 const columns = (span, childrenSpan = 3) => css`
   grid-column: ${13 - span} / -1;
@@ -28,25 +29,33 @@ const Wrapper = styled.div`
   }
 `
 
-const RowHeader = styled(H2)`
+const RowHeader = styled(H2)<{ animate: any }>`
   grid-row: 1;
   grid-column: 1 / -1;
   margin-top: 0;
   margin-bottom: ${convert.viewportUnits(0, { to: 1.5 }).fromRem};
   line-height: 1.2; // 4.8rem
+  ${({ animate }) => animate}
 `
 
-export const Row = ({ title, children }) => (
-  <Wrapper>
-    <RowHeader>{title}</RowHeader>
-    {children}
-  </Wrapper>
-)
+export const Row = ({ title, children }) => {
+  const [ref, animate] = useDefaultAnimation()
 
-const ColumnHeader = styled.h3`
+  return (
+    <Wrapper>
+      <RowHeader ref={ref} animate={animate}>
+        {title}
+      </RowHeader>
+      {children}
+    </Wrapper>
+  )
+}
+
+const ColumnHeader = styled.h3<{ animate: any }>`
   margin-top: ${convert.viewportUnits(1.5, { to: 0 }).fromRem};
   margin-bottom: ${convert.viewportUnits(3.4, { to: 1 }).fromRem};
   ${typography.columnHeader}
+  ${({ animate }) => animate}
 `
 
 const ColumnWrapper = styled.div`
@@ -59,9 +68,19 @@ type ColumnProps = {
   children: React.ReactNode | React.ReactNode[]
 }
 
-export const Column = ({ title, children }: ColumnProps) => (
-  <ColumnWrapper>
-    {title && <ColumnHeader>{title}</ColumnHeader>}
-    {children}
-  </ColumnWrapper>
-)
+export const Column = ({ title, children }: ColumnProps) => {
+  const [ref, animate] = useDefaultAnimation()
+
+  const columnHeader = (
+    <ColumnHeader ref={ref as any} animate={animate}>
+      {title}
+    </ColumnHeader>
+  )
+
+  return (
+    <ColumnWrapper>
+      {title && columnHeader}
+      {children}
+    </ColumnWrapper>
+  )
+}

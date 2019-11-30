@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
+import Head from 'next/head'
 
 import withData from '../lib/apollo'
 
@@ -68,6 +69,7 @@ const Layout = styled.main`
 
 const Landing = () => {
   const main = React.useRef(null)
+  const [downButtonClicked, setDownButtonClicked] = useState(false)
   const { loading, error, data } = useQuery(GET_LANDING_PAGE)
 
   if (loading) return <Loading.Loading />
@@ -79,12 +81,19 @@ const Landing = () => {
 
   return (
     <>
-      <Hero scrollTo={main}>
+      <Head>
+        <title>Early</title>
+      </Head>
+
+      <Hero scrollTo={main} onScroll={setDownButtonClicked}>
         <AboutShort.AboutShort details={aboutShort} />
       </Hero>
 
       <Layout ref={main}>
-        <Gallery.Gallery content={gallery} />
+        <Gallery.Gallery
+          content={gallery}
+          downButtonClicked={downButtonClicked}
+        />
         <AboutLong.AboutLong details={aboutLong} />
         <Services.Services services={services} />
         <Contact.Contact contactDetails={getContact} />

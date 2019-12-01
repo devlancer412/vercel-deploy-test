@@ -5,6 +5,9 @@ import styled, { keyframes } from 'styled-components'
 import * as randomlyPlace from '../../../lib/randomlyPlace'
 import * as convert from '../../../lib/convert'
 import * as animation from '../../../lib/animate'
+import { generateGrid } from '../../../lib/grid'
+
+const grid = generateGrid()
 
 export const fragment = gql`
   fragment LandingGallery on LandingGallery {
@@ -25,6 +28,14 @@ const Heading = styled.div<any>`
   position: relative;
   ${animation.defaultTransition}
   mix-blend-mode: darken;
+
+  font-size: ${convert.viewportUnits(16, { to: 0 }).fromRem};
+  font-family: 'Adieu Light';
+  text-align: center;
+  text-transform: uppercase;
+  line-height: 0.825; // 132px
+  letter-spacing: ${convert.viewportUnits(-0.4, { to: 0 }).fromRem};
+  font-weight: 100;
 `
 
 const Image = styled.img`
@@ -38,7 +49,8 @@ const Image = styled.img`
 
 const Row = styled.div<any>`
   -webkit-font-smoothing: subpixel-antialiased;
-  margin: ${convert.viewportUnits(0, { to: 8 }).fromRem} auto;
+  margin: 0 auto;
+  padding: ${convert.viewportUnits(0, { to: 4 }).fromRem} 0;
   ${({ animate }) => animate}
 
   &:hover {
@@ -54,16 +66,8 @@ const Row = styled.div<any>`
   }
 `
 
-const Wrapper = styled.div`
-  grid-column: 1 / -1;
-
-  font-size: ${convert.viewportUnits(16, { to: 0 }).fromRem};
-  font-family: 'Adieu Light';
-  text-align: center;
-  text-transform: uppercase;
-  line-height: 0.825; // 132px
-  letter-spacing: ${convert.viewportUnits(-0.4, { to: 0 }).fromRem};
-  font-weight: 100;
+export const Wrapper = styled.div`
+  ${grid.placeInColumns(1, { span: 12 })}
 
   padding-top: ${convert.viewportUnits(15, { to: 4 }).fromRem};
   padding-bottom: ${convert.viewportUnits(16, { to: 2 }).fromRem};
@@ -111,7 +115,17 @@ const GalleryRow = ({ text, images, downButtonClicked }) => {
   )
 }
 
-export const Gallery = ({ content, downButtonClicked }) => {
+type GalleryProps = {
+  content: any
+  downButtonClicked: any
+  className?: any
+}
+
+export const Gallery = ({
+  content,
+  downButtonClicked,
+  className,
+}: GalleryProps) => {
   const headers = content.headings.map(heading => (
     <GalleryRow
       key={`gallery-heading-${heading.text}`}
@@ -121,7 +135,7 @@ export const Gallery = ({ content, downButtonClicked }) => {
   ))
 
   return (
-    <Wrapper>
+    <Wrapper className={className}>
       <HoverTarget>{headers}</HoverTarget>
     </Wrapper>
   )

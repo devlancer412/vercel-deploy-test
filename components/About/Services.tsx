@@ -23,23 +23,34 @@ const Li = styled.li<{ i: number; animate: any }>`
   transition-delay: 0.${({ i }) => 3 + i}s;
 `
 
-export const Services = ({ services }) => {
+type ServicesProps = {
+  services: any
+  className?: any
+}
+
+export const Wrapper = styled(Block.Row)``
+
+const ServicesColumn = ({ heading, items }) => {
   const [ref, animate] = useDefaultAnimation()
 
-  const columns = services.columns.map(column => (
-    <Block.Column
-      title={column.heading}
-      key={`services-column-${column.heading}`}
-    >
+  return (
+    <Block.Column title={heading} key={`services-column-${heading}`}>
       <Ul ref={ref}>
-        {column.items.map(({ item }, i) => (
+        {items.map(({ item }, i) => (
           <Li key={`service-${item}`} i={i} animate={animate}>
             {item}
           </Li>
         ))}
       </Ul>
     </Block.Column>
-  ))
+  )
+}
 
-  return <Block.Row title="Services">{columns}</Block.Row>
+export const Services = ({ services, className }: ServicesProps) => {
+  const columns = services.columns.map(ServicesColumn)
+  return (
+    <Wrapper title="Services" className={className}>
+      {columns}
+    </Wrapper>
+  )
 }

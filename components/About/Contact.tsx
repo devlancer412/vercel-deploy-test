@@ -37,9 +37,17 @@ const Line = styled.span`
 const P = styled.p<any>`
   margin-top: 0;
   margin-bottom: ${convert.viewportUnits(4.4, { to: 1 }).fromRem};
+  ${({ animate }) => animate}
 `
 
-export const Contact = ({ contactDetails }) => {
+type ContactProps = {
+  contactDetails: any
+  className?: any
+}
+
+export const Wrapper = styled(Block.Row)``
+
+export const Contact = ({ contactDetails, className }: ContactProps) => {
   const { email, phoneNumber, address, socials } = contactDetails
   const [addressRef, addressAnimate] = useDefaultAnimation()
   const [contactRef, contactAnimate] = useDefaultAnimation()
@@ -52,7 +60,7 @@ export const Contact = ({ contactDetails }) => {
   ))
 
   return (
-    <Block.Row title="Contact">
+    <Wrapper title="Contact" className={className}>
       <Block.Column>
         <P ref={addressRef} animate={addressAnimate}>
           <Line>{address.line1},</Line>
@@ -73,6 +81,6 @@ export const Contact = ({ contactDetails }) => {
       <Block.Column>
         <Ul ref={socialsRef}>{socialLinks}</Ul>
       </Block.Column>
-    </Block.Row>
+    </Wrapper>
   )
 }

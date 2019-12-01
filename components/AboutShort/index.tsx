@@ -6,6 +6,7 @@ import { useDefaultAnimation } from '../../lib/animate'
 
 import * as parse from '../../lib/parse'
 import * as convert from '../../lib/convert'
+import * as grid from '../../lib/grid'
 
 export const fragment = gql`
   fragment AboutShort on EmphasisedText {
@@ -13,7 +14,8 @@ export const fragment = gql`
   }
 `
 
-const column = (start, span) => css`${start} / span ${span}`
+const gridColumn = (start, span) =>
+  grid.placeInColumns(true)(start, { span: span })
 
 const Wrapper = styled.div<any>`
   font-family: 'Editorial New Ultralight';
@@ -28,13 +30,13 @@ const Wrapper = styled.div<any>`
   justify-content: center;
   align-items: center;
 
-  grid-column: ${column(1, 12)};
+  ${gridColumn(1, 12)}
   margin: 0;
 
   ${({ animate }) => animate}
 
   @media (min-width: 550px) {
-    grid-column: ${column(2, 10)};
+    ${gridColumn(1.5, 10.5)}
     margin-left: -${({ theme }) => theme.grid.gap};
     margin-right: -${({ theme }) => theme.grid.gap};
   }

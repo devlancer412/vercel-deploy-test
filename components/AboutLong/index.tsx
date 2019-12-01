@@ -5,6 +5,7 @@ import styled, { css } from 'styled-components'
 import * as parse from '../../lib/parse'
 import * as convert from '../../lib/convert'
 import { useDefaultAnimation } from '../../lib/animate'
+import * as grid from '../../lib/grid'
 
 import * as typography from '../blocks/typography'
 
@@ -14,26 +15,24 @@ export const fragment = gql`
   }
 `
 
-const column = (start, span) => css`${start} / span ${span}`
-
-const Wrapper = styled.div<any>`
+export const Wrapper = styled.div<any>`
   ${typography.intro}
   text-align: left;
 
-  grid-column: ${column(1, 12)};
+  ${grid.placeInColumns(true)(1, { span: 12 })}
   margin: 3px 0 40px 0;
 
   ${({ animationStyle }) => animationStyle}
 
   @media (min-width: 550px) {
-    grid-column: ${column(2, 10)};
-    margin-left: ${({ theme }) => convert.minus(theme.grid.gap)};
-    margin-right: ${({ theme }) => convert.minus(theme.grid.gap)};
+    ${grid.placeInColumns(true)(1.5, { span: 11 })}
   }
 
   p {
     white-space: pre-wrap;
     tab-size: ${convert.viewportUnits(2.8, { by: 0.625 }).fromRem}; // 2.8rem
+    -moz-tab-size: ${convert.viewportUnits(2.8, { by: 0.625 })
+      .fromRem}; // 2.8rem
     margin-block-start: 20px;
     margin-block-end: 20px;
   }
@@ -54,7 +53,12 @@ const Highlighted = ({ children }) => {
   ))
 }
 
-export const AboutLong = ({ details }) => {
+type AboutLongProps = {
+  details: any
+  className?: any
+}
+
+export const AboutLong = ({ details, className }: AboutLongProps) => {
   const [ref, animationStyle] = useDefaultAnimation()
 
   const paragraphs = details.content
@@ -66,8 +70,10 @@ export const AboutLong = ({ details }) => {
     ))
 
   return (
-    <Wrapper ref={ref} animationStyle={animationStyle}>
+    <Wrapper className={className} ref={ref} animationStyle={animationStyle}>
       {paragraphs}
     </Wrapper>
   )
 }
+
+export const Selector = styled(AboutLong)

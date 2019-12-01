@@ -1,4 +1,4 @@
-import { css } from 'styled-components'
+import { css, FlattenSimpleInterpolation } from 'styled-components'
 import { useInView } from 'react-intersection-observer'
 
 export const defaultTransition = css`
@@ -9,32 +9,42 @@ type UseDefaultAnimationProps = {
   speed?: string
   y?: string
   ignore?: boolean
+  threshold?: number
+  whileHidden?: string
 }
 
-export const useDefaultAnimation = (opts = {}) => {
+type RefType = (node?: Element) => void
+
+export const useDefaultAnimation = (
+  opts: UseDefaultAnimationProps = {}
+): [RefType, string] => {
   const {
     speed = '1.1s',
     y = '20px',
     ignore = false,
+    threshold = 0.2,
+    whileHidden = null,
   }: UseDefaultAnimationProps = opts
 
   const [ref, inView] = useInView({
     triggerOnce: true,
-    threshold: 0.2,
+    threshold,
   })
 
-  const whileNotInView = css`
+  const whileNotInView =
+    whileHidden ||
+    `
     opacity: 0;
     transform: translateY(${y});
   `
 
-  const animationStyle = css`
+  const animationStyle = `
     transition: opacity ${speed} cubic-bezier(0.23, 1, 0.32, 1),
       transform ${speed} cubic-bezier(0.23, 1, 0.32, 1);
     ${!inView ? whileNotInView : ''}
   `
 
-  if (ignore) return [ref, ``]
+  if (ignore) return [null, ``]
   return [ref, animationStyle]
 }
 

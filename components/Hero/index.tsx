@@ -2,15 +2,17 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 
 import * as animate from '../../lib/animate'
+import { generateGrid } from '../../lib/grid'
+
+const grid = generateGrid({})
 
 const Wrapper = styled.div<any>`
   min-height: ${({ height }) => height};
-  display: grid;
-  grid-column: 1 / -1;
-  grid-template-columns: repeat(12, 1fr);
+  ${grid.display}
+  ${grid.columns}
   grid-template-rows: 1fr 5rem;
+  -ms-grid-rows: 1fr 5em;
   box-sizing: border-box;
-  column-gap: ${({ theme }) => theme.grid.gap};
   padding-left: ${({ theme }) => theme.grid.padding};
   padding-right: ${({ theme }) => theme.grid.padding};
 `
@@ -25,7 +27,8 @@ const Down = styled.button<any>`
   border-top: 0;
   transform: rotate(45deg);
   grid-row: 2;
-  grid-column: 6 / span 2;
+  -ms-grid-row: 2;
+  ${grid.placeInColumns(6, { span: 2 })}
   margin: 0 auto;
   cursor: pointer;
   padding: 0;

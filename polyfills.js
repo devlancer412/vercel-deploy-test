@@ -3,6 +3,7 @@
 import includes from 'core-js/features/string/virtual/includes'
 import repeat from 'core-js/features/string/virtual/repeat'
 import assign from 'core-js/features/object/assign'
+import fill from 'core-js/features/array/fill'
 import 'intersection-observer'
 
 // Add your polyfills
@@ -12,3 +13,4 @@ console.log('Polyfills initialising 🚀')
 String.prototype.includes = includes
 String.prototype.repeat = repeat
 Object.assign = assign
+Array.fill = fill

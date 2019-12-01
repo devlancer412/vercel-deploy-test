@@ -5,6 +5,7 @@ import { gql } from 'apollo-boost'
 import Head from 'next/head'
 
 import withData from '../lib/apollo'
+import { generateGrid } from '../lib/grid'
 
 import { Hero } from '../components/Hero'
 import * as AboutLong from '../components/AboutLong'
@@ -54,17 +55,19 @@ const GET_LANDING_PAGE = gql`
   }
 `
 
+const grid = generateGrid({ rows: { repeat: [4, 'auto'] } })
+
 const Layout = styled.main`
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  column-gap: ${({ theme }) => theme.grid.gap};
+  ${grid.display}
+  ${grid.columns}
+  ${grid.rows}
+
   padding: 0 ${({ theme }) => theme.grid.padding};
-  grid-template-rows:
-    [gallery] fit-content
-    [aboutLong] fit-content
-    [services] fit-content
-    [contact] fit-content
-    [footer] fit-content;
+
+  ${Gallery.Wrapper} { ${grid.placeInRows(1, {})} }
+  ${AboutLong.Wrapper} { ${grid.placeInRows(2, {})} }
+  ${Services.Wrapper} { ${grid.placeInRows(3, {})} }
+  ${Contact.Wrapper} { ${grid.placeInRows(4, {})} }
 `
 
 const Landing = () => {

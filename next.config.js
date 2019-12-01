@@ -15,7 +15,14 @@ module.exports = withFonts({
 
     config.module.rules.push({
       test: /\.svg$/,
-      use: ['@svgr/webpack'],
+      use: [
+        {
+          loader: '@svgr/webpack',
+          options: {
+            ref: true,
+          },
+        },
+      ],
     })
 
     const originalEntry = config.entry

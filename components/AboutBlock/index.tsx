@@ -39,8 +39,6 @@ const layGrid = (from, to, columns = 3, rowsAfterHeader = 1) => {
   `
 }
 
-const widths = [12, 12, 8]
-
 const Wrapper = styled.div`
   margin: ${convert.viewportUnits(9.3, { to: 3 }).fromRem} 0;
 

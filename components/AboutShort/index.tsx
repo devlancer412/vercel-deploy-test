@@ -1,6 +1,6 @@
 import React from 'react'
 import { gql } from 'apollo-boost'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { useDefaultAnimation } from '../../lib/animate'
 

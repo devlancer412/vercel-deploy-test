@@ -1,6 +1,6 @@
 import React from 'react'
 import { gql } from 'apollo-boost'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import * as parse from '../../lib/parse'
 import * as convert from '../../lib/convert'

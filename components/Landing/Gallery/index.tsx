@@ -1,6 +1,6 @@
 import React from 'react'
 import { gql } from 'apollo-boost'
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 
 import * as randomlyPlace from '../../../lib/randomlyPlace'
 import * as convert from '../../../lib/convert'

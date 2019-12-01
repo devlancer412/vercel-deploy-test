@@ -1,4 +1,4 @@
-import { css, FlattenSimpleInterpolation } from 'styled-components'
+import { css } from 'styled-components'
 import { useInView } from 'react-intersection-observer'
 
 export const defaultTransition = css`

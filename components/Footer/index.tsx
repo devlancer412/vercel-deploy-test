@@ -18,7 +18,7 @@ const grid = {
   general: generateGrid(),
   small: generateGrid({
     columns: { exact: '1fr' },
-    rows: { exact: 'auto auto auto 8rem' },
+    rows: { exact: 'auto auto auto 5rem' },
   }),
   wide: generateGrid({
     columns: { repeat: [12, '1fr'] },

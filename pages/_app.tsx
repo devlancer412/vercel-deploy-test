@@ -20,6 +20,11 @@ const GlobalStyle = createGlobalStyle`
     color: unset;
     transition: color 0.2s;
 
+    &:focus {
+      outline: none;
+      font-style: italic;
+    }
+
     &:hover {
       color: #e9e9e9;
       transition: color 0.2s;

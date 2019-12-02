@@ -40,8 +40,6 @@ const Wrapper = styled.footer`
 
   border-top: 1px solid #e9e9e9;
 
-  overflow: hidden;
-
   @media (min-width: ${breakpoint}px) {
     padding-top: 0;
     border-top: 0;
@@ -51,21 +49,28 @@ const Wrapper = styled.footer`
   }
 `
 
-const Logo = styled(EarlyLogo)<WithAnimation & any>`
+const LogoMask = styled.div`
   ${grid.small.placeInColumns(1, {})}
   ${grid.small.placeInRows(3, {})}
 
-  width: 100%;
-  fill: #000000;
-  ${({ animate }) => animate}
-  transition-delay: 0.1s;
   position: relative;
-  cursor: pointer;
+  width: 100%;
+  overflow: hidden;
 
   @media (min-width: ${breakpoint}px) {
     ${grid.wide.placeInColumns(1, { span: 12 })}
     ${grid.wide.placeInRows(1, {})}
   }
+`
+
+const Logo = styled(EarlyLogo)<WithAnimation & any>`
+  width: 100%;
+  fill: #000000;
+  ${({ animate }) => animate}
+  transition-delay: 0.1s;
+  position: relative;
+
+  cursor: pointer;
 `
 
 const footerDetail = css`
@@ -121,7 +126,7 @@ const Contact = styled.address<WithAnimation>`
   }
 `
 
-const Social = styled(Ul)`
+const Social = styled(Ul)<WithAnimation>`
   ${grid.small.placeInColumns(1, {})}
   ${grid.small.placeInRows(1, {})}
 
@@ -130,6 +135,7 @@ const Social = styled(Ul)`
   display: flex;
 
   ${footerDetail}
+  ${({ animate }) => animate}
 
   @media (min-width: ${breakpoint}px) {
     justify-content: right;
@@ -141,10 +147,8 @@ const Social = styled(Ul)`
 
 const SocialLink = styled.a``
 
-const SocialLi = styled.li<WithAnimation & WithIndex>`
+const SocialLi = styled.li`
   margin-left: 12px;
-  ${({ animate }) => animate}
-  transition-delay: 0.${({ i }) => 3 + i}s;
 
   &:first-child {
     margin-left: 0;
@@ -165,9 +169,9 @@ export const fragment = gql`
   }
 `
 
-const SocialListItem = ({ name, url, acronym, i, animate }) => {
+const SocialListItem = ({ name, url, acronym }) => {
   return (
-    <SocialLi animate={animate} i={i}>
+    <SocialLi>
       <SocialLink
         key={`footer-${name}`}
         href={url}
@@ -191,7 +195,7 @@ export const Footer = ({ contact, footer, onScroll }) => {
   const [wrapperRef, logoAnimate] = useDefaultAnimation({
     threshold: 0.8,
     whileHidden: `
-      transform: translateY(calc(8rem + 100%));
+      transform: translateY(calc(100% + 4rem));
     `,
   })
 
@@ -203,18 +207,11 @@ export const Footer = ({ contact, footer, onScroll }) => {
     })
   }
 
-  const socialLinks = socials.map((social, i) => (
-    <SocialListItem
-      key={`footer-social-link-${social.acronym}`}
-      {...social}
-      i={i}
-      animate={socialsAnimate}
-    />
-  ))
-
   return (
     <Wrapper ref={wrapperRef}>
-      <Logo animate={logoAnimate} onClick={scrollUpPage} />
+      <LogoMask>
+        <Logo animate={logoAnimate} onClick={scrollUpPage} />
+      </LogoMask>
 
       <Contact ref={contactRef} animate={contactAnimate}>
         <Email href={`mailto:${email}`}>{email}</Email>
@@ -225,7 +222,14 @@ export const Footer = ({ contact, footer, onScroll }) => {
         </span>
       </Contact>
 
-      <Social ref={socialsRef}>{socialLinks}</Social>
+      <Social ref={socialsRef} animate={socialsAnimate}>
+        {socials.map((social, i) => (
+          <SocialListItem
+            key={`footer-social-link-${social.acronym}`}
+            {...social}
+          />
+        ))}
+      </Social>
 
       <Legal ref={legalRef} animate={legalAnimate}>
         {copyright}

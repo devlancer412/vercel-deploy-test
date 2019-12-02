@@ -82,9 +82,9 @@ const HoverTarget = styled.div`
   }
 `
 
-const GalleryRow = ({ text, images, downButtonClicked }) => {
+const GalleryRow = ({ text, images, pageJumped }) => {
   const [ref, animate] = animation.useDefaultAnimation({
-    ignore: downButtonClicked,
+    ignore: pageJumped,
   })
 
   const { quadrants, positions } = randomlyPlace.get()
@@ -117,20 +117,16 @@ const GalleryRow = ({ text, images, downButtonClicked }) => {
 
 type GalleryProps = {
   content: any
-  downButtonClicked: any
+  pageJumped: any
   className?: any
 }
 
-export const Gallery = ({
-  content,
-  downButtonClicked,
-  className,
-}: GalleryProps) => {
+export const Gallery = ({ content, pageJumped, className }: GalleryProps) => {
   const headers = content.headings.map(heading => (
     <GalleryRow
       key={`gallery-heading-${heading.text}`}
       {...heading}
-      downButtonClicked={downButtonClicked}
+      pageJumped={pageJumped}
     />
   ))
 

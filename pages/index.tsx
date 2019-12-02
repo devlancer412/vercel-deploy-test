@@ -72,8 +72,9 @@ const Layout = styled.main`
 
 const Landing = () => {
   const main = React.useRef(null)
-  const [downButtonClicked, setDownButtonClicked] = useState(false)
+  const [hasJumped, setHasJumped] = useState(false)
   const { loading, error, data } = useQuery(GET_LANDING_PAGE)
+  const jumpOccurred = () => setHasJumped(true)
 
   if (loading) return <Loading.Loading />
   if (error || !data) return <div>Error</div>
@@ -88,21 +89,22 @@ const Landing = () => {
         <title>Early</title>
       </Head>
 
-      <Hero scrollTo={main} onScroll={setDownButtonClicked}>
+      <Hero scrollTo={main} onScroll={jumpOccurred}>
         <AboutShort.AboutShort details={aboutShort} />
       </Hero>
 
       <Layout ref={main}>
-        <Gallery.Gallery
-          content={gallery}
-          downButtonClicked={downButtonClicked}
-        />
+        <Gallery.Gallery content={gallery} pageJumped={hasJumped} />
         <AboutLong.AboutLong details={aboutLong} />
         <Services.Services services={services} />
         <Contact.Contact contactDetails={getContact} />
       </Layout>
 
-      <Footer.Footer contact={getContact} footer={getFooter} />
+      <Footer.Footer
+        onScroll={jumpOccurred}
+        contact={getContact}
+        footer={getFooter}
+      />
     </>
   )
 }

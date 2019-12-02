@@ -31,12 +31,12 @@ export const useDefaultAnimation = (
     threshold,
   })
 
-  const whileNotInView =
-    whileHidden ||
-    `
+  const defaultTransform = `
     opacity: 0;
     transform: translateY(${y});
   `
+
+  const whileNotInView = whileHidden || defaultTransform
 
   const animationStyle = `
     transition: opacity ${speed} cubic-bezier(0.23, 1, 0.32, 1),

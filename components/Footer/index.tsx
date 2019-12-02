@@ -60,6 +60,7 @@ const Logo = styled(EarlyLogo)<WithAnimation & any>`
   ${({ animate }) => animate}
   transition-delay: 0.1s;
   position: relative;
+  cursor: pointer;
 
   @media (min-width: ${breakpoint}px) {
     ${grid.wide.placeInColumns(1, { span: 12 })}
@@ -179,7 +180,7 @@ const SocialListItem = ({ name, url, acronym, i, animate }) => {
   )
 }
 
-export const Footer = ({ contact, footer }) => {
+export const Footer = ({ contact, footer, onScroll }) => {
   const { email, address, phoneNumber, socials } = contact
   const { copyright } = footer
 
@@ -194,6 +195,14 @@ export const Footer = ({ contact, footer }) => {
     `,
   })
 
+  const scrollUpPage = () => {
+    onScroll()
+    window.scroll({
+      behavior: 'smooth',
+      top: 0,
+    })
+  }
+
   const socialLinks = socials.map((social, i) => (
     <SocialListItem
       key={`footer-social-link-${social.acronym}`}
@@ -205,7 +214,7 @@ export const Footer = ({ contact, footer }) => {
 
   return (
     <Wrapper ref={wrapperRef}>
-      <Logo animate={logoAnimate} />
+      <Logo animate={logoAnimate} onClick={scrollUpPage} />
 
       <Contact ref={contactRef} animate={contactAnimate}>
         <Email href={`mailto:${email}`}>{email}</Email>

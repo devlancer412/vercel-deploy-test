@@ -55,7 +55,7 @@ export const Hero = ({ children, scrollTo, onScroll }) => {
   const scrollDownPage = () => {
     if (!scrollTo) return
 
-    onScroll(true)
+    onScroll()
     const top = scrollTo.current.offsetTop
     window.scrollTo({ top, behavior: 'smooth' })
   }

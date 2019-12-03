@@ -1,13 +1,18 @@
 import App from 'next/app'
 import React from 'react'
-import styled, { ThemeProvider, createGlobalStyle } from 'styled-components'
+import { ThemeProvider, createGlobalStyle } from 'styled-components'
 
-const theme = {}
+import theme from '../lib/theme'
 
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html {
+    font-size: 62.5%;
   }
 
   // a {
@@ -15,43 +20,17 @@ const GlobalStyle = createGlobalStyle`
   //   color: unset;
   //   transition: color 0.2s;
 
+    // &:focus {
+    //   outline: none;
+    //   font-style: italic;
+    // }
+
+<<<<<<< HEAD
   //   &:hover {
   //     color: #e9e9e9;
   //     transition: color 0.2s;
   //   }
   // }
-
-  @font-face {
-    font-family: "Editorial New Ultralight";
-    src: url("/fonts/EditorialNew-Ultralight.otf") format("opentype");
-    font-weight: 200;
-    font-style: normal;
-  }
-
-  @font-face {
-    font-family: "Adieu Bold";
-    src: url("/fonts/GTFAdieuTRIAL-Bold.otf") format("opentype");
-    font-weight: normal;
-    font-style: normal;
-  }
-
-  @font-face {
-    font-family: "Adieu Light";
-    src: url("/fonts/GTFAdieuTRIAL-Light.otf") format("opentype");
-    font-weight: normal;
-    font-style: normal;
-  }
-
-  @font-face {
-    font-family: "Adieu Backslant";
-    src: url("/fonts/GTFAdieuTRIAL-RegularBackslant.otf") format("opentype");
-    font-weight: normal;
-    font-style: normal;
-  }
-`
-
-const Layout = styled.div`
-  padding: 0 50px 0 50px;
 `
 
 export default class MyApp extends App {
@@ -62,10 +41,7 @@ export default class MyApp extends App {
       <ThemeProvider theme={theme}>
         <>
           <GlobalStyle />
-
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <Component {...pageProps} />
         </>
       </ThemeProvider>
     )

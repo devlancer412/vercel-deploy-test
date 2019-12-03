@@ -2,9 +2,9 @@ import styled, { css } from 'styled-components'
 
 const detail = css`
   font-family: 'Adieu Light';
-  font-size: 10px;
-  line-height: 12px;
-  letter-spacing: 0.18px;
+  font-size: 1rem;
+  line-height: 1.2; // 1.2rem
+  letter-spacing: 0.018rem;
   text-transform: uppercase;
 `
 

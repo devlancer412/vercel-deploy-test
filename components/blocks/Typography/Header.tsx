@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import * as typography from '../typography'
 
 export const H1 = styled.h1`
   font-family: 'Adieu Light';
@@ -9,10 +10,6 @@ export const H1 = styled.h1`
   font-weight: 100;
 `
 
-export const H2 = styled.h2`
-  font-family: 'Adieu Bold';
-  font-size: 40px;
-  line-height: 40px;
-  letter-spacing: -0.5px;
-  text-transform: uppercase;
+export const H2 = styled.h2<any>`
+  ${typography.section}
 `

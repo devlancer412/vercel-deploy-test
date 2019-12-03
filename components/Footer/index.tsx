@@ -1,56 +1,167 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { gql } from 'apollo-boost'
 import Link from 'next/link'
 
-const Wrapper = styled.div`
-  grid-column: 1 / span 12;
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: auto 1fr 82px;
-  column-gap: 40px;
-  margin-top: 209px;
+import * as convert from '../../lib/convert'
+import { useDefaultAnimation } from '../../lib/animate'
+import { generateGrid } from '../../lib/grid'
+import EarlyLogo from '../../public/images/early-logo-black.svg'
+
+import { Ul } from '../blocks/List'
+
+const breakpoint = 1000
+
+type WithAnimation = { animate: string }
+type WithIndex = { i: number }
+
+const grid = {
+  general: generateGrid(),
+  small: generateGrid({
+    columns: { exact: '1fr' },
+    rows: { exact: 'auto auto auto 5rem' },
+  }),
+  wide: generateGrid({
+    columns: { repeat: [12, '1fr'] },
+    rows: { exact: 'auto 1fr 8rem' },
+  }),
+}
+
+const Wrapper = styled.footer`
+  ${grid.general.placeInColumns(1, { span: 12 })}
+  ${grid.general.display}
+
+  ${grid.small.columns}
+  ${grid.small.rows}
+
+  margin-top: ${convert.viewportUnits(20.9, { to: 6 }).fromRem};
+  padding-top: 2.5rem;
+  padding-left: ${({ theme }) => theme.grid.padding};
+  padding-right: ${({ theme }) => theme.grid.padding};
+
+  border-top: 1px solid #e9e9e9;
+
+  @media (min-width: ${breakpoint}px) {
+    padding-top: 0;
+    border-top: 0;
+
+    ${grid.wide.columns}
+    ${grid.wide.rows}
+  }
 `
 
-const Logo = styled.img`
+const LogoMask = styled.div`
+  ${grid.small.placeInColumns(1, {})}
+  ${grid.small.placeInRows(3, {})}
+
+  position: relative;
   width: 100%;
-  grid-column: 1 / -1;
-  grid-row: 2;
+
+  overflow: hidden;
+
+  @media (min-width: ${breakpoint}px) {
+    ${grid.wide.placeInColumns(1, { span: 12 })}
+    ${grid.wide.placeInRows(2, {})}
+  }
 `
 
-const Legal = styled.small`
-  grid-row: 3;
-  grid-column: 1 / span 2;
-  margin: auto 0 32px 0;
-  font-family: 'Adieu Light';
-  font-size: 10px;
-  letter-spacing: 0.57px;
+const Logo = styled(EarlyLogo)<WithAnimation & any>`
+  width: 100%;
+  fill: #000000;
+  ${({ animate }) => animate}
+  transition-delay: 0.1s;
+  position: relative;
+
+  cursor: pointer;
 `
 
-const Contact = styled.address`
-  grid-row: 3;
-  grid-column: 5 / span 4;
-  margin: auto -40px 32px -40px;
+const footerDetail = css`
   font-family: 'Adieu Light';
-  font-size: 10px;
-  letter-spacing: 0.57px;
+  font-size: 1rem;
+  letter-spacing: 0.057rem;
+  text-align: center;
+`
+
+const Legal = styled.small<WithAnimation>`
+  ${grid.small.placeInColumns(1, {})}
+  ${grid.small.placeInRows(4, {})}
+
+  margin: 1rem 0 5rem 0;
+  ${footerDetail}
+
   display: flex;
-  justify-content: space-between;
+  ${({ animate }) => animate}
+
+  @media (min-width: ${breakpoint}px) {
+    margin: auto 0;
+    ${grid.wide.placeInColumns(1, { span: 3 })}
+    ${grid.wide.placeInRows(2, {})}
+  }
+`
+
+const Contact = styled.address<WithAnimation>`
+  ${grid.small.placeInColumns(1, {})}
+  ${grid.small.placeInRows(2, {})}
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   font-style: normal;
+  ${footerDetail}
+  line-height: 1.6;
+
+  margin: 0 auto 5rem auto;
+
+  ${({ animate }) => animate}
+
+  @media (min-width: ${breakpoint}px) {
+    flex-direction: row;
+    margin: auto ${({ theme }) => css`calc(-1 * ${theme.grid.gap})`};
+    ${grid.wide.placeInColumns(4, { span: 6 })}
+    ${grid.wide.placeInRows(2, {})}
+  }
+
+  * {
+    margin: 0 8px;
+  }
 `
 
-const Social = styled.div`
-  grid-row: 3;
-  grid-column: 10 / -1;
-  text-align: right;
-  margin: auto 0 32px 0;
-  font-family: 'Adieu Light';
-  font-size: 10px;
-  letter-spacing: 0.57px;
+const Social = styled(Ul)<WithAnimation>`
+  ${grid.small.placeInColumns(1, {})}
+  ${grid.small.placeInRows(1, {})}
+
+  justify-content: center;
+  margin: 0 auto 5rem auto;
+  display: flex;
+
+  ${footerDetail}
+  ${({ animate }) => animate}
+
+  @media (min-width: ${breakpoint}px) {
+    justify-content: right;
+    margin: auto 0;
+    ${grid.wide.placeInColumns(10, { span: 3 })}
+    ${grid.wide.placeInRows(2, {})}
+  }
 `
 
-const SocialLink = styled.a`
+const SocialLink = styled.a``
+
+const SocialLi = styled.li`
   margin-left: 12px;
+
+  &:first-child {
+    margin-left: 0;
+  }
+`
+
+const Email = styled.a`
+  margin-bottom: 0.8rem;
+
+  @media (min-width: ${breakpoint}px) {
+    margin-bottom: 0;
+  }
 `
 
 const Nav = styled.nav`
@@ -78,23 +189,46 @@ export const fragment = gql`
   }
 `
 
-export const Footer = ({ contact, footer, withoutNav = false }) => {
+const SocialListItem = ({ name, url, acronym }) => {
+  return (
+    <SocialLi>
+      <SocialLink
+        key={`footer-${name}`}
+        href={url}
+        title={name}
+        target="_blank"
+      >
+        {acronym}
+      </SocialLink>
+    </SocialLi>
+  )
+}
+
+export const Footer = ({ contact, footer, onScroll, withoutNav = false }) => {
   const { email, address, phoneNumber, socials } = contact
   const { copyright } = footer
 
-  const socialLinks = socials.map(social => (
-    <SocialLink
-      key={`footer-${social.name}`}
-      href={social.url}
-      title={social.name}
-      target="_blank"
-    >
-      {social.acronym}
-    </SocialLink>
-  ))
+  // animation triggers
+  const [contactRef, contactAnimate] = useDefaultAnimation()
+  const [socialsRef, socialsAnimate] = useDefaultAnimation()
+  const [legalRef, legalAnimate] = useDefaultAnimation()
+  const [wrapperRef, logoAnimate] = useDefaultAnimation({
+    threshold: 0.8,
+    whileHidden: `
+      transform: translateY(calc(100% + 4rem));
+    `,
+  })
+
+  const scrollUpPage = () => {
+    onScroll()
+    window.scroll({
+      behavior: 'smooth',
+      top: 0,
+    })
+  }
 
   return (
-    <Wrapper>
+    <Wrapper ref={wrapperRef}>
       <Nav>
         <div>
           <Link href="/about">
@@ -120,19 +254,31 @@ export const Footer = ({ contact, footer, withoutNav = false }) => {
         </div>
       </Nav>
 
-      <Logo src="/images/early-logo.png" />
+      <LogoMask>
+        <Logo animate={logoAnimate} onClick={scrollUpPage} />
+      </LogoMask>
 
-      <Legal>{copyright}</Legal>
-
-      <Contact>
-        <a href={`mailto:${email}`}>{email}</a>
+      <Contact ref={contactRef} animate={contactAnimate}>
+        <Email href={`mailto:${email}`}>{email}</Email>
         <a href={`tel:${phoneNumber}`}>{phoneNumber}</a>
+
         <span>
           {address.line1}, {address.line2}
         </span>
       </Contact>
 
-      <Social>{socialLinks}</Social>
+      <Social ref={socialsRef} animate={socialsAnimate}>
+        {socials.map((social, i) => (
+          <SocialListItem
+            key={`footer-social-link-${social.acronym}`}
+            {...social}
+          />
+        ))}
+      </Social>
+
+      <Legal ref={legalRef} animate={legalAnimate}>
+        {copyright}
+      </Legal>
     </Wrapper>
   )
 }

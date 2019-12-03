@@ -1,8 +1,11 @@
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
+import Head from 'next/head'
 
 import withData from '../lib/apollo'
+import { generateGrid } from '../lib/grid'
 
 import { Hero } from '../components/Hero'
 import * as AboutLong from '../components/AboutLong'
@@ -52,20 +55,26 @@ const GET_LANDING_PAGE = gql`
   }
 `
 
-const Layout = styled.div`
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  column-gap: 40px;
-  grid-template-rows:
-    [gallery] fit-content
-    [aboutLong] fit-content
-    [services] fit-content
-    [contact] fit-content
-    [footer] fit-content;
+const grid = generateGrid({ rows: { repeat: [4, 'auto'] } })
+
+const Layout = styled.main`
+  ${grid.display}
+  ${grid.columns}
+  ${grid.rows}
+
+  padding: 0 ${({ theme }) => theme.grid.padding};
+
+  ${Gallery.Wrapper} { ${grid.placeInRows(1, {})} }
+  ${AboutLong.Wrapper} { ${grid.placeInRows(2, {})} }
+  ${Services.Wrapper} { ${grid.placeInRows(3, {})} }
+  ${Contact.Wrapper} { ${grid.placeInRows(4, {})} }
 `
 
 const Landing = () => {
+  const main = React.useRef(null)
+  const [hasJumped, setHasJumped] = useState(false)
   const { loading, error, data } = useQuery(GET_LANDING_PAGE)
+  const jumpOccurred = () => setHasJumped(true)
 
   if (loading) return <Loading.Loading />
   if (error || !data) return <div>Error</div>
@@ -76,17 +85,27 @@ const Landing = () => {
 
   return (
     <>
-      <Hero>
+      <Head>
+        <title>Early</title>
+      </Head>
+
+      <Hero scrollTo={main} onScroll={jumpOccurred}>
         <AboutShort.AboutShort details={aboutShort} />
       </Hero>
 
-      <Layout>
-        <Gallery.Gallery content={gallery} />
+      <Layout ref={main}>
+        <Gallery.Gallery content={gallery} pageJumped={hasJumped} />
         <AboutLong.AboutLong details={aboutLong} />
         <Services.Services services={services} />
         <Contact.Contact contactDetails={getContact} />
-        <Footer.Footer contact={getContact} footer={getFooter} withoutNav />
       </Layout>
+
+      <Footer.Footer
+        withoutNav
+        onScroll={jumpOccurred}
+        contact={getContact}
+        footer={getFooter}
+      />
     </>
   )
 }

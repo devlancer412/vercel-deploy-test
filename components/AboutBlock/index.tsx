@@ -1,48 +1,95 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { H2 } from '../blocks/Typography/Header'
+import * as typography from '../blocks/typography'
+
+import * as convert from '../../lib/convert'
+import { useDefaultAnimation } from '../../lib/animate'
+import * as grid from '../../lib/grid'
+
+const layGrid = (from, to, columns = 3, rowsAfterHeader = 1) => {
+  const allRows = rowsAfterHeader + 1
+
+  const wrapperGrid = grid.generateGrid({
+    columns: { repeat: [columns, '1fr'] },
+    rows: { repeat: [allRows, 'auto'] },
+    rowGap: convert.viewportUnits(3.7, { to: 1.5 }).fromRem,
+  })
+
+  const nthChild = (r, c) => `
+    > *:nth-child(${(r - 1) * columns + c - columns + 1}) {
+      ${wrapperGrid.placeInColumns(c, {})}
+      ${wrapperGrid.placeInRows(r, {})}
+    }
+  `
+
+  const matrix = Array(rowsAfterHeader).fill(Array(columns).fill(null))
+  const matrixCss = matrix
+    .map((cs, r) => cs.map((_, c) => nthChild(r + 2, c + 1)).join('\n'))
+    .join('\n')
+
+  return css`
+    ${grid.placeInColumns(true)(from, { to })}
+    ${wrapperGrid.display}
+    ${wrapperGrid.columns}
+    ${wrapperGrid.rows}
+
+    ${matrixCss}
+  `
+}
 
 const Wrapper = styled.div`
-  grid-column: 4 / -1;
-  display: grid;
-  grid-column-gap: 40px;
-  grid-row-gap: 41px;
-  grid-template-columns: repeat(9, 1fr);
-  margin: 95px 0;
+  margin: ${convert.viewportUnits(9.3, { to: 3 }).fromRem} 0;
+
+  ${layGrid(1, 13, 1, 3)}
+
+  ${({ theme }) => `@media (min-width: 700px)`} {
+    ${layGrid(1, 13, 3, 1)}
+  }
+
+  ${({ theme }) => `@media (min-width: 900px)`} {
+    ${layGrid(4, 13, 3, 1)}
+  }
 `
 
-const RowHeader = styled(H2)`
+const RowHeader = styled(H2)<{ animate: any }>`
   grid-row: 1;
-  grid-column: 1 / -1;
-  margin: 0;
-  line-height: 48px;
+  ${grid.placeInColumns(true)(1, { span: 12 })}
+
+  ${({ theme }) => `@media (min-width: 900px)`} {
+    ${grid.placeInColumns(true)(1, { span: 8 })}
+  }
+
+  margin-top: 0;
+  margin-bottom: ${convert.viewportUnits(0, { to: 1.5 }).fromRem};
+  line-height: 1.2; // 4.8rem
+  ${({ animate }) => animate}
 `
 
-export const Row = ({ title, children }) => (
-  <Wrapper>
-    <RowHeader>{title}</RowHeader>
-    {children}
-  </Wrapper>
-)
+export const Row = ({ title, children, className }) => {
+  const [ref, animate] = useDefaultAnimation()
 
-const ColumnHeader = styled.h3`
-  font-family: 'Adieu Light';
-  font-size: 14px;
-  text-transform: uppercase;
-  font-weight: 100;
-  margin: 3px 0 21px 0;
-  letter-spacing: 0.4px;
+  return (
+    <Wrapper className={className}>
+      <RowHeader ref={ref} animate={animate}>
+        {title}
+      </RowHeader>
+      {children}
+    </Wrapper>
+  )
+}
+
+const ColumnHeader = styled.h3<{ animate: any }>`
+  margin-top: ${convert.viewportUnits(1.5, { to: 0 }).fromRem};
+  margin-bottom: ${convert.viewportUnits(3.4, { to: 1 }).fromRem};
+  ${typography.columnHeader}
+  ${({ animate }) => animate}
 `
 
 const ColumnWrapper = styled.div`
-  grid-row: 2;
-  grid-column: span 3;
-  font-family: 'Editorial New Ultralight';
-  font-size: 28px;
-  line-height: 36px;
-  font-weight: 100;
-  letter-spacing: 0.5px;
+  ${typography.intro}
+  line-height: 1;
 `
 
 type ColumnProps = {
@@ -50,9 +97,19 @@ type ColumnProps = {
   children: React.ReactNode | React.ReactNode[]
 }
 
-export const Column = ({ title, children }: ColumnProps) => (
-  <ColumnWrapper>
-    {title && <ColumnHeader>{title}</ColumnHeader>}
-    {children}
-  </ColumnWrapper>
-)
+export const Column = ({ title, children }: ColumnProps) => {
+  const [ref, animate] = useDefaultAnimation()
+
+  const columnHeader = (
+    <ColumnHeader ref={ref as any} animate={animate}>
+      {title}
+    </ColumnHeader>
+  )
+
+  return (
+    <ColumnWrapper>
+      {title && columnHeader}
+      {children}
+    </ColumnWrapper>
+  )
+}

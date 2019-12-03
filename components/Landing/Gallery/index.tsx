@@ -3,6 +3,11 @@ import { gql } from 'apollo-boost'
 import styled from 'styled-components'
 
 import * as randomlyPlace from '../../../lib/randomlyPlace'
+import * as convert from '../../../lib/convert'
+import * as animation from '../../../lib/animate'
+import { generateGrid } from '../../../lib/grid'
+
+const grid = generateGrid()
 
 export const fragment = gql`
   fragment LandingGallery on LandingGallery {
@@ -18,48 +23,56 @@ export const fragment = gql`
   }
 `
 
-const Heading = styled.span`
+const Heading = styled.div<any>`
   pointer-events: none;
   position: relative;
+  ${animation.defaultTransition}
+  mix-blend-mode: darken;
+
+  font-size: ${convert.viewportUnits(16, { to: 0 }).fromRem};
+  font-family: 'Adieu Light';
+  text-align: center;
+  text-transform: uppercase;
+  line-height: 0.825; // 132px
+  letter-spacing: ${convert.viewportUnits(-0.4, { to: 0 }).fromRem};
+  font-weight: 100;
 `
 
 const Image = styled.img`
-  transition: opacity 0.4s;
+  ${animation.defaultTransition}
   opacity: 0;
   position: absolute;
   pointer-events: none;
-  z-index: 3;
-  max-width: 400px;
-  max-height: 400px;
+  max-width: ${convert.viewportUnits(40, { to: 8 }).fromRem};
+  max-height: ${convert.viewportUnits(40, { to: 8 }).fromRem};
 `
 
-const Row = styled.div`
-  text-align: center;
-  text-transform: uppercase;
-  line-height: 132px;
-  letter-spacing: -4px;
-  font-weight: 100;
+const Row = styled.div<any>`
   -webkit-font-smoothing: subpixel-antialiased;
+  margin: 0 auto;
+  padding: ${convert.viewportUnits(0, { to: 4 }).fromRem} 0;
+  ${({ animate }) => animate}
 
   &:hover {
     ${Image} {
       opacity: 2;
-      transition: opacity 0.4s;
+      ${animation.defaultTransition}
     }
 
     ${Heading} {
-      z-index: 3;
       color: #000000;
+      ${animation.defaultTransition}
     }
   }
 `
 
-const Wrapper = styled.div`
-  grid-column: 1 / -1;
-  font-size: 160px;
-  font-family: 'Adieu Light';
-  padding: 150px 0 160px 0;
-  margin: 12px 0 40px 0;
+export const Wrapper = styled.div`
+  ${grid.placeInColumns(1, { span: 12 })}
+
+  padding-top: ${convert.viewportUnits(15, { to: 4 }).fromRem};
+  padding-bottom: ${convert.viewportUnits(16, { to: 2 }).fromRem};
+  margin-top: ${convert.viewportUnits(1.2, { to: 0.6 }).fromRem};
+  margin-bottom: ${convert.viewportUnits(4, { to: 2 }).fromRem};
   position: relative;
 `
 
@@ -69,7 +82,11 @@ const HoverTarget = styled.div`
   }
 `
 
-const renderGalleryItem = ({ text, images }) => {
+const GalleryRow = ({ text, images, pageJumped }) => {
+  const [ref, animate] = animation.useDefaultAnimation({
+    ignore: pageJumped,
+  })
+
   const { quadrants, positions } = randomlyPlace.get()
 
   const placedImages = images.map(({ image }, i) => {
@@ -91,20 +108,30 @@ const renderGalleryItem = ({ text, images }) => {
   })
 
   return (
-    <Row key={text}>
+    <Row key={text} ref={ref} animate={animate}>
       {placedImages}
       <Heading>{text}</Heading>
     </Row>
   )
 }
 
-export const Gallery = ({ content }) => {
-  const headers = React.useMemo(() => content.headings.map(renderGalleryItem), [
-    content,
-  ])
+type GalleryProps = {
+  content: any
+  pageJumped: any
+  className?: any
+}
+
+export const Gallery = ({ content, pageJumped, className }: GalleryProps) => {
+  const headers = content.headings.map(heading => (
+    <GalleryRow
+      key={`gallery-heading-${heading.text}`}
+      {...heading}
+      pageJumped={pageJumped}
+    />
+  ))
 
   return (
-    <Wrapper>
+    <Wrapper className={className}>
       <HoverTarget>{headers}</HoverTarget>
     </Wrapper>
   )

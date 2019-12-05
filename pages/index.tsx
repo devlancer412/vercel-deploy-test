@@ -6,6 +6,7 @@ import Head from 'next/head'
 
 import withData from '../lib/apollo'
 import { generateGrid } from '../lib/grid'
+import * as randomlyPlace from '../lib/randomlyPlace'
 
 import { Hero } from '../components/Hero'
 import * as AboutLong from '../components/AboutLong'
@@ -70,7 +71,7 @@ const Layout = styled.main`
   ${Contact.Wrapper} { ${grid.placeInRows(4, {})} }
 `
 
-const Landing = () => {
+const Landing = ({ galleryPlacements }) => {
   const main = React.useRef(null)
   const [hasJumped, setHasJumped] = useState(false)
   const { loading, error, data } = useQuery(GET_LANDING_PAGE)
@@ -94,7 +95,11 @@ const Landing = () => {
       </Hero>
 
       <Layout ref={main}>
-        <Gallery.Gallery content={gallery} pageJumped={hasJumped} />
+        <Gallery.Gallery
+          content={gallery}
+          pageJumped={hasJumped}
+          placements={galleryPlacements}
+        />
         <AboutLong.AboutLong details={aboutLong} />
         <Services.Services services={services} />
         <Contact.Contact contactDetails={getContact} />
@@ -107,6 +112,17 @@ const Landing = () => {
       />
     </>
   )
+}
+
+Landing.getInitialProps = () => {
+  return {
+    galleryPlacements: [
+      randomlyPlace.get(),
+      randomlyPlace.get(),
+      randomlyPlace.get(),
+      randomlyPlace.get(),
+    ],
+  }
 }
 
 export default withData(Landing)

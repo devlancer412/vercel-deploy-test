@@ -4,10 +4,10 @@ import shuffle from 'lodash.shuffle'
 // Divide into 4 quadrants:
 // bottom-left, bottom-right, top-left, top-right
 const quadrants = [
-  ['left', 'bottom'],
   ['left', 'top'],
-  ['right', 'bottom'],
   ['right', 'top'],
+  ['right', 'bottom'],
+  ['left', 'bottom'],
 ]
 
 const other = {
@@ -19,13 +19,13 @@ const other = {
 
 const positions = () =>
   quadrants.reduce((acc, [xPlacement, yPlacement]) => {
-    const randomPercent = (): number => {
-      const percent = new Decimal(30).pow(Math.random() + 1).times(0.02)
+    const randomPercent = (upTo: number): number => {
+      const percent = new Decimal(upTo).pow(Math.random() + 1).times(0.02)
       return parseFloat(percent.toFixed(1))
     }
 
-    const offset = (against: number): number => {
-      const percent = randomPercent()
+    const offset = (against: number, upTo: number): number => {
+      const percent = randomPercent(upTo)
       const difference = Math.round(Math.abs(percent - against) * 10) / 10
 
       if (difference > 5) return percent
@@ -42,8 +42,8 @@ const positions = () =>
     const onXAxis = acc[`${other[xPlacement]}-${yPlacement}`]
     const onYAxis = acc[`${xPlacement}-${other[yPlacement]}`]
 
-    const x = onYAxis ? offset(onYAxis.x) : randomPercent()
-    const y = onXAxis ? offset(onXAxis.y) : randomPercent()
+    const x = onYAxis ? offset(onYAxis.x, 35) : randomPercent(35)
+    const y = onXAxis ? offset(onXAxis.y, 20) : randomPercent(20)
 
     // console.log({ current: `${xPlacement}-${yPlacement}`, x, y })
     // console.log({ xAxis: `${other[xPlacement]}-${yPlacement}`, ...(onXAxis || {}) })
@@ -53,6 +53,6 @@ const positions = () =>
   }, {})
 
 export const get = () => ({
-  quadrants: shuffle(quadrants),
+  quadrants,
   positions: positions(),
 })

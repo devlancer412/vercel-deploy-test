@@ -99,14 +99,33 @@ const Landing = ({ galleryPlacements }) => {
       <Head>
         <title>{meta.title}</title>
 
+        <meta itemProp="name" content={meta.title} />
         <meta property="og:title" content={meta.title} />
-        {meta.image && (
-          <meta property="og:image" content={getImageUrl(meta.image.path)} />
-        )}
-        {meta.description && (
-          <meta property="og:description" content={meta.description} />
-        )}
+
         <meta property="og:url" content="//veryearly.studio" />
+        <meta property="og:type" content="website" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={meta.title} />
+
+        {meta.description && (
+          <>
+            <meta property="og:description" content={meta.description} />
+            <meta itemProp="description" content={meta.description} />
+            <meta name="twitter:description" content={meta.description} />
+          </>
+        )}
+
+        {meta.image && (
+          <>
+            <meta property="og:image" content={getImageUrl(meta.image.path)} />
+            <meta itemProp="image" content={meta.image.path} />
+            <meta name="twitter:image" content={meta.image.path} />
+            {meta.image.description && (
+              <meta name="twitter:image:alt" content={meta.image.description} />
+            )}
+          </>
+        )}
       </Head>
 
       <Hero scrollTo={main} onScroll={jumpOccurred}>

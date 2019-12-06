@@ -3,9 +3,11 @@ import styled from 'styled-components'
 import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 import Head from 'next/head'
+import { getImageUrl } from 'takeshape-routing'
 
 import withData from '../lib/apollo'
 import { generateGrid } from '../lib/grid'
+import * as randomlyPlace from '../lib/randomlyPlace'
 
 import { Hero } from '../components/Hero'
 import * as AboutLong from '../components/AboutLong'
@@ -26,6 +28,15 @@ const GET_LANDING_PAGE = gql`
 
   query getLanding {
     getLanding {
+      meta {
+        title
+        description
+        image {
+          _id
+          path
+        }
+      }
+
       aboutShort {
         ...AboutShort
       }
@@ -70,7 +81,7 @@ const Layout = styled.main`
   ${Contact.Wrapper} { ${grid.placeInRows(4, {})} }
 `
 
-const Landing = () => {
+const Landing = ({ galleryPlacements }) => {
   const main = React.useRef(null)
   const [hasJumped, setHasJumped] = useState(false)
   const { loading, error, data } = useQuery(GET_LANDING_PAGE)
@@ -80,13 +91,41 @@ const Landing = () => {
   if (error || !data) return <div>Error</div>
 
   const { getLanding, getContact, getAbout, getFooter } = data
-  const { aboutShort, gallery, aboutLong } = getLanding
+  const { aboutShort, gallery, aboutLong, meta } = getLanding
   const { services } = getAbout
 
   return (
     <>
       <Head>
-        <title>Early</title>
+        <title>{meta.title}</title>
+
+        <meta itemProp="name" content={meta.title} />
+        <meta property="og:title" content={meta.title} />
+
+        <meta property="og:url" content="//veryearly.studio" />
+        <meta property="og:type" content="website" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={meta.title} />
+
+        {meta.description && (
+          <>
+            <meta property="og:description" content={meta.description} />
+            <meta itemProp="description" content={meta.description} />
+            <meta name="twitter:description" content={meta.description} />
+          </>
+        )}
+
+        {meta.image && (
+          <>
+            <meta property="og:image" content={getImageUrl(meta.image.path)} />
+            <meta itemProp="image" content={meta.image.path} />
+            <meta name="twitter:image" content={meta.image.path} />
+            {meta.image.description && (
+              <meta name="twitter:image:alt" content={meta.image.description} />
+            )}
+          </>
+        )}
       </Head>
 
       <Hero scrollTo={main} onScroll={jumpOccurred}>
@@ -94,7 +133,11 @@ const Landing = () => {
       </Hero>
 
       <Layout ref={main}>
-        <Gallery.Gallery content={gallery} pageJumped={hasJumped} />
+        <Gallery.Gallery
+          content={gallery}
+          pageJumped={hasJumped}
+          placements={galleryPlacements}
+        />
         <AboutLong.AboutLong details={aboutLong} />
         <Services.Services services={services} />
         <Contact.Contact contactDetails={getContact} />
@@ -108,6 +151,17 @@ const Landing = () => {
       />
     </>
   )
+}
+
+Landing.getInitialProps = () => {
+  return {
+    galleryPlacements: [
+      randomlyPlace.get(),
+      randomlyPlace.get(),
+      randomlyPlace.get(),
+      randomlyPlace.get(),
+    ],
+  }
 }
 
 export default withData(Landing)

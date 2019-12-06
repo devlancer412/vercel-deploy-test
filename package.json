@@ -71,6 +71,7 @@
     "react-dom": "^16.11.0",
     "takeshape-routing": "^4.86.0",
     "react-intersection-observer": "^8.25.2",
-    "styled-components": "^4.4.1"
+    "styled-components": "^4.4.1",
+    "takeshape-routing": "^4.86.0"
   }
 }

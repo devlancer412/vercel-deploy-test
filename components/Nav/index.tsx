@@ -40,8 +40,6 @@ export const Nav = ({ footerVisible }) => {
   `
     : ``
 
-  console.log({ footerVisible })
-
   return (
     <Wrapper styles={styles}>
       <NavLinks.Left />

@@ -1,21 +1,23 @@
 import { gql } from 'apollo-boost'
 import styled from 'styled-components'
 
+import { generateGrid } from '../../lib/grid'
+
 import * as ArticlePreview from '../ArticlePreview'
 
 import * as Image from '../blocks/Image'
 import * as Content from './Content'
 
 import {
-  Wrapper,
   FeatureImage,
   Heading,
   Category,
   Time,
   H1,
-  Dl,
-  Dt,
-  Dd,
+  Attributions,
+  Attribution,
+  Contributed,
+  Person,
   SubHeading,
   Intro,
 } from './Article.styles'
@@ -28,11 +30,14 @@ export const fragment = gql`
     featureImage {
       path
     }
-    textBy {
-      name
-    }
-    photographyBy {
-      name
+    contributions {
+      contributionType {
+        value
+      }
+
+      contributedBy {
+        name
+      }
     }
     subHeading
     intro
@@ -44,6 +49,14 @@ export const fragment = gql`
   }
 `
 
+const grid = generateGrid()
+
+export const Wrapper = styled.article`
+  ${grid.placeInColumns(1, { span: 12 })}
+  ${grid.display}
+  ${grid.columns}
+`
+
 export const Article = ({ article, category }) => {
   const {
     heading,
@@ -52,8 +65,7 @@ export const Article = ({ article, category }) => {
     intro,
     content,
     createdAt,
-    textBy,
-    photographyBy,
+    contributions,
   } = article
 
   const [createdAtDate] = createdAt.split('T')
@@ -75,13 +87,16 @@ export const Article = ({ article, category }) => {
 
         <H1>{heading}</H1>
 
-        <Dl>
-          <Dt>Text</Dt>
-          <Dd>{textBy.name}</Dd>
-
-          <Dt>Photography</Dt>
-          <Dd>{photographyBy.name}</Dd>
-        </Dl>
+        <Attributions>
+          {contributions.map(({ contributionType, contributedBy }) => (
+            <Attribution
+              key={`${contributionType.value}-${contributedBy.name}`}
+            >
+              <Contributed>{contributionType.value}</Contributed>
+              <Person>{contributedBy.name}</Person>
+            </Attribution>
+          ))}
+        </Attributions>
       </Heading>
       <SubHeading>{subHeading}</SubHeading>
       <Intro>{intro}</Intro>

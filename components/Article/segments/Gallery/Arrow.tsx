@@ -1,11 +1,18 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 const otherDirection = ({ facing }) => (facing === 'left' ? 'right' : 'left')
 
 const direction = ({ facing }) => facing
 
-const translateX = ({ visible, facing }) =>
-  visible ? '0' : facing === 'left' ? '50vw' : '-50vw'
+const animate = ({ visible, facing }) =>
+  visible
+    ? css`
+        opacity: 1;
+      `
+    : css`
+        opacity: 0;
+        transform: translateX(${facing === 'left' ? '50vw' : '-50vw'});
+      `
 
 const Head = styled.div<any>`
   width: 47px;
@@ -26,11 +33,10 @@ const Tail = styled.div`
 
 const Wrapper = styled.div<any>`
   display: flex;
-  // width: 100px;
   grid-column: span 2;
   position: relative;
   align-items: center;
-  transform: translate(${translateX}, 0);
+  ${animate}
   margin-${direction}: auto;
   margin-${otherDirection}: -16px;
   transition: 0.4s ease-in all;

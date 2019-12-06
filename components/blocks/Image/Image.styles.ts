@@ -14,9 +14,10 @@ const blurUp = css`
   }
 `
 
-export const Img = styled.img`
+export const Img = styled.img<{ objectFit?: string }>`
   width: 100%;
   display: block;
+  ${({ objectFit }) => objectFit && `object-fit: ${objectFit};`}
 
   ${blurUp}
 `
@@ -30,4 +31,6 @@ export const Caption = styled(Detail.Block)`
 export const Clip = styled.div`
   overflow: hidden;
   width: 100%;
+  height: 100%;
+  display: flex;
 `

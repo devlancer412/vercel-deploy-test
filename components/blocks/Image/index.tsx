@@ -10,6 +10,7 @@ type ImageProps = {
   cache?: boolean
   onLoad?: () => void
   imgix?: Record<any, string | number>
+  objectFit?: string
 }
 
 type ImageComponent = (props: ImageProps) => React.ReactElement
@@ -19,6 +20,7 @@ export const Image = ({
   cache,
   onLoad,
   imgix,
+  objectFit,
 }: ImageProps) => {
   const lazyOptions = {
     fit: 'clip',
@@ -48,6 +50,7 @@ export const Image = ({
           data-src={qualityUrl}
           src={lazyUrl}
           onLoad={onLoad}
+          objectFit={objectFit}
         />
       </Styled.Clip>
 

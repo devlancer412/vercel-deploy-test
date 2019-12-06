@@ -57,6 +57,7 @@ export const ArticlePreview = ({ articlePreview, width }) => {
             <Image.Image
               image={previewImage}
               imgix={{ ar: aspectRatio[width], fit: 'crop' }}
+              objectFit="cover"
             />
           </FeatureImage>
 

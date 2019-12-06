@@ -22,12 +22,12 @@ const Images = styled.div`
 `
 
 const InternalWrapper = styled.div<any>`
-  transform: translate(-${({ x }) => x}px, 0);
-  transition: 0.4s ease-out transform, 0.4s ease-out height;
+  transform: translate(-${({ transformX }) => transformX}px, 0);
+  transition: 0.4s ease-out transform;
   will-change: transform;
   display: flex;
   width: 100%;
-  height: ${({ height }) => height}px;
+  height: ${({ maxHeight }) => maxHeight}px;
 `
 
 const Caption = styled.div`
@@ -42,58 +42,64 @@ const Caption = styled.div`
   text-transform: uppercase;
 `
 
-const StabiliseWidth = styled.div`
+const StabiliseImage = styled.div<any>`
   flex-basis: 100%;
   flex-shrink: 0;
+  height: ${({ heightNum }) => heightNum}px;
 `
-
-const renderImage = (imageRefs, loaded) => (image, i) => (
-  <StabiliseWidth
-    key={`image-${image.id}-${i}`}
-    ref={instance =>
-      instance === null
-        ? imageRefs.delete(`${image.id}-${i}`)
-        : imageRefs.set(`${image.id}-${i}`, instance)
-    }
-  >
-    <Img.Image details={image} hideCaption cache onLoad={loaded} />
-  </StabiliseWidth>
-)
 
 export const Gallery = ({ images }) => {
   const [index, setIndex] = React.useState(0)
-  const [height, setHeight] = React.useState(0)
+  const [initialHeight, setInitialHeight] = React.useState(0)
 
   // Use to reference carousel x position
   const imageWrapper = React.useRef(null)
 
-  // Use to reference carousel height
+  // Use to reference image dimensions
   let imageRefs = React.useRef(new Map()).current
   const imageRef = id => imageRefs.get(`${id}-${index}`)
-
-  // Change carousel height when focus changes
-  React.useEffect(() => {
-    updateHeight()
-  }, [index])
 
   const nextImage = () => setIndex(i => i + 1)
   const previousImage = () => setIndex(i => i - 1)
 
-  const x = imageWrapper.current ? index * imageWrapper.current.clientWidth : 0
+  const transformX = imageWrapper.current
+    ? index * imageWrapper.current.clientWidth
+    : 0
 
   const updateHeight = () => {
-    const focus = imageRef(images[index].id)
-    focus && setHeight(focus.lastChild.clientHeight)
+    const focus = imageRef(images[0].id)
+    const focusedImage = focus.lastChild.lastChild
+    const widthRatio = focusedImage.clientWidth / focusedImage.naturalWidth
+    const height = focusedImage.naturalHeight * widthRatio
+    focus && setInitialHeight(height)
   }
 
-  const renderedImages = images.map(renderImage(imageRefs, updateHeight))
+  const renderedImages = images.map((image, i) => (
+    <StabiliseImage
+      heightNum={initialHeight}
+      key={`image-${image.id}-${i}`}
+      ref={instance =>
+        instance === null
+          ? imageRefs.delete(`${image.id}-${i}`)
+          : imageRefs.set(`${image.id}-${i}`, instance)
+      }
+    >
+      <Img.Image
+        details={image}
+        hideCaption
+        cache
+        onLoad={updateHeight}
+        objectFit="scale-down"
+      />
+    </StabiliseImage>
+  ))
 
   return (
     <Wrapper>
       <Arrow.Arrow facing="left" visible={!!index} onClick={previousImage} />
 
       <Images ref={imageWrapper}>
-        <InternalWrapper x={x} height={height}>
+        <InternalWrapper transformX={transformX} maxHeight={initialHeight}>
           {renderedImages}
         </InternalWrapper>
       </Images>
@@ -105,7 +111,7 @@ export const Gallery = ({ images }) => {
       />
 
       <Images>
-        <InternalWrapper x={x}>
+        <InternalWrapper transformX={transformX}>
           {images.map(image =>
             image.caption.blocks.map(({ text }, i) => (
               <Caption key={`caption-${text}-${i}`}>{text}</Caption>

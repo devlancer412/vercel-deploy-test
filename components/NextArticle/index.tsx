@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import * as ArticlePreview from '../ArticlePreview'
 import * as Header from '../blocks/Typography/Header'
 
-const Wrapper = styled.section`
+export const Wrapper = styled.section`
   grid-column: 1 / -1;
   border-top: 1px solid #000000;
   padding-top: 56px;
@@ -11,7 +11,6 @@ const Wrapper = styled.section`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   column-gap: 40px;
-  margin-bottom: -236px;
 `
 
 const Title = styled(Header.H1)`

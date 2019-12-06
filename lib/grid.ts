@@ -28,10 +28,13 @@ const create = createType => ({ repeat = null, exact = null }, gutter) => {
 export const columns = create('columns')
 export const rows = create('rows')
 
-const placeIn = placementType => gutter => (
-  from,
-  { to = null, span = null }
-) => {
+type PlaceInOpts = {
+  span?: number
+  to?: number
+}
+
+const placeIn = placementType => gutter => (from, opts: PlaceInOpts = {}) => {
+  const { to = null, span = null } = opts
   // If span exists, else if to exists, else only span 1
   const withoutGap = num => (gutter ? num * 2 - 1 : num)
   const start = withoutGap(from)

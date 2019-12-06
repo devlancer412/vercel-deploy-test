@@ -15,22 +15,21 @@ const GlobalStyle = createGlobalStyle`
     font-size: 62.5%;
   }
 
-  // a {
-  //   text-decoration: none;
-  //   color: unset;
-  //   transition: color 0.2s;
+  a {
+    text-decoration: none;
+    color: unset;
+    transition: color 0.2s;
 
-    // &:focus {
-    //   outline: none;
-    //   font-style: italic;
-    // }
+    &:focus {
+      outline: none;
+      font-style: italic;
+    }
 
-<<<<<<< HEAD
-  //   &:hover {
-  //     color: #e9e9e9;
-  //     transition: color 0.2s;
-  //   }
-  // }
+    &:hover {
+      color: #e9e9e9;
+      transition: color 0.2s;
+    }
+  }
 `
 
 export default class MyApp extends App {

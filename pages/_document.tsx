@@ -49,7 +49,7 @@ export default class MyDocument extends Document {
 
               @font-face {
                 font-family: 'Adieu Backslant';
-                src: url('/fonts/GTF-Adieu-Backslant/Adieu-Backslant.otf') format('opentype');
+                src: url('/fonts/GTF-Adieu-Light-Backslant/Adieu-LightBackslant.otf') format('opentype');
                 font-weight: normal;
                 font-style: normal;
               }

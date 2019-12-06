@@ -4,11 +4,17 @@ import { gql } from 'apollo-boost'
 import Link from 'next/link'
 
 import * as convert from '../../lib/convert'
-import { useDefaultAnimation } from '../../lib/animate'
+import {
+  useDefaultAnimation,
+  useCustomAnimation,
+  defaultTransition,
+} from '../../lib/animate'
 import { generateGrid } from '../../lib/grid'
+
 import EarlyLogo from '../../public/images/early-logo-black.svg'
 
 import { Ul } from '../blocks/List'
+import * as NavLinks from '../Nav/Links'
 
 const breakpoint = 1000
 
@@ -50,6 +56,12 @@ const Wrapper = styled.footer`
   }
 `
 
+const LogoAnimation = styled.div<WithAnimation>`
+  width: 100%;
+  ${defaultTransition}
+  ${({ animate }) => animate}
+`
+
 const LogoMask = styled.div`
   ${grid.small.placeInColumns(1, {})}
   ${grid.small.placeInRows(3, {})}
@@ -65,10 +77,10 @@ const LogoMask = styled.div`
   }
 `
 
-const Logo = styled(EarlyLogo)<WithAnimation & any>`
+const Logo = styled(EarlyLogo)`
   width: 100%;
   fill: #000000;
-  ${({ animate }) => animate}
+  ${defaultTransition}
   transition-delay: 0.1s;
   position: relative;
 
@@ -95,7 +107,7 @@ const Legal = styled.small<WithAnimation>`
   @media (min-width: ${breakpoint}px) {
     margin: auto 0;
     ${grid.wide.placeInColumns(1, { span: 3 })}
-    ${grid.wide.placeInRows(2, {})}
+    ${grid.wide.placeInRows(3, {})}
   }
 `
 
@@ -119,7 +131,7 @@ const Contact = styled.address<WithAnimation>`
     flex-direction: row;
     margin: auto ${({ theme }) => css`calc(-1 * ${theme.grid.gap})`};
     ${grid.wide.placeInColumns(4, { span: 6 })}
-    ${grid.wide.placeInRows(2, {})}
+    ${grid.wide.placeInRows(3, {})}
   }
 
   * {
@@ -142,7 +154,7 @@ const Social = styled(Ul)<WithAnimation>`
     justify-content: right;
     margin: auto 0;
     ${grid.wide.placeInColumns(10, { span: 3 })}
-    ${grid.wide.placeInRows(2, {})}
+    ${grid.wide.placeInRows(3, {})}
   }
 `
 
@@ -164,22 +176,15 @@ const Email = styled.a`
   }
 `
 
+const navGrid = generateGrid()
+
 const Nav = styled.nav`
-  grid-column: 1 / -1;
-  display: flex;
-  justify-content: space-between;
   padding-bottom: 8px;
-`
+  display: none;
 
-const NavItem = styled.a`
-  font-family: 'Adieu Light';
-  font-size: 12px;
-  line-height: 32px;
-  text-transform: uppercase;
-  margin-left: 80px;
-
-  &:first-child {
-    margin-left: 0;
+  @media (min-width: ${breakpoint}px) {
+    ${navGrid.display}
+    ${navGrid.columns}
   }
 `
 
@@ -204,7 +209,21 @@ const SocialListItem = ({ name, url, acronym }) => {
   )
 }
 
-export const Footer = ({ contact, footer, onScroll, withoutNav = false }) => {
+type FooterProps = {
+  contact: any
+  footer: any
+  withoutNav?: boolean
+  onScroll?: () => void
+  onVisibility?: (v: boolean) => void
+}
+
+export const Footer = ({
+  contact,
+  footer,
+  onScroll,
+  onVisibility,
+  withoutNav = false,
+}: FooterProps) => {
   const { email, address, phoneNumber, socials } = contact
   const { copyright } = footer
 
@@ -212,15 +231,23 @@ export const Footer = ({ contact, footer, onScroll, withoutNav = false }) => {
   const [contactRef, contactAnimate] = useDefaultAnimation()
   const [socialsRef, socialsAnimate] = useDefaultAnimation()
   const [legalRef, legalAnimate] = useDefaultAnimation()
-  const [wrapperRef, logoAnimate] = useDefaultAnimation({
+  const [wrapperRef, inView] = useCustomAnimation({
+    triggerOnce: false,
     threshold: 0.8,
-    whileHidden: `
-      transform: translateY(calc(100% + 4rem));
-    `,
   })
 
+  const logoStyle =
+    !inView &&
+    `
+      transform: translateY(calc(100% + 4rem));
+    `
+
+  React.useEffect(() => {
+    onVisibility && onVisibility(inView)
+  }, [inView])
+
   const scrollUpPage = () => {
-    onScroll()
+    onScroll && onScroll()
     window.scroll({
       behavior: 'smooth',
       top: 0,
@@ -229,33 +256,17 @@ export const Footer = ({ contact, footer, onScroll, withoutNav = false }) => {
 
   return (
     <Wrapper ref={wrapperRef}>
-      <Nav>
-        <div>
-          <Link href="/about">
-            <NavItem>Case Studies</NavItem>
-          </Link>
-          <Link href="/about">
-            <NavItem>About</NavItem>
-          </Link>
-        </div>
-
-        <div>
-          <Link href="/news">
-            <NavItem>News</NavItem>
-          </Link>
-
-          <Link href="/features">
-            <NavItem>Features</NavItem>
-          </Link>
-
-          <Link href="/opinions">
-            <NavItem>Opinions</NavItem>
-          </Link>
-        </div>
-      </Nav>
-
       <LogoMask>
-        <Logo animate={logoAnimate} onClick={scrollUpPage} />
+        <LogoAnimation animate={logoStyle}>
+          {!withoutNav && (
+            <Nav>
+              <NavLinks.Left />
+              <NavLinks.Right />
+            </Nav>
+          )}
+
+          <Logo onClick={scrollUpPage} />
+        </LogoAnimation>
       </LogoMask>
 
       <Contact ref={contactRef} animate={contactAnimate}>

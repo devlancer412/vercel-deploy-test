@@ -48,9 +48,10 @@ export const useDefaultAnimation = (
   return [ref, animationStyle]
 }
 
-export const useCustomAnimation = () => {
+export const useCustomAnimation = (opts = {}) => {
   return useInView({
     triggerOnce: true,
     threshold: 0.2,
+    ...opts,
   })
 }

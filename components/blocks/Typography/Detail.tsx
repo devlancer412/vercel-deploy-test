@@ -12,6 +12,10 @@ export const Detail = styled.span`
   ${detail}
 `
 
+export const Link = styled.a`
+  ${detail}
+`
+
 export const Time = styled.time`
   ${detail}
 `

@@ -7,8 +7,10 @@ import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 
 import withData from '../../lib/apollo'
+import { generateGrid } from '../../lib/grid'
 
 import * as Loading from '../../components/Loading'
+import * as Nav from '../../components/Nav'
 import * as Article from '../../components/Article'
 import * as Footer from '../../components/Footer'
 import * as Contact from '../../components/About/Contact'
@@ -45,19 +47,23 @@ const ARTICLES_QUERY = gql`
   }
 `
 
+const grid = generateGrid({ rows: { repeat: [3, 'auto'] } })
+
 const Layout = styled.div`
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  column-gap: 40px;
-  grid-template-rows:
-    [header] fit-content
-    [subHeader] fit-content
-    [intro] fit-content
-    [content] fit-content
-    [footer] fit-content;
+  ${grid.display}
+  ${grid.columns}
+  ${grid.rows}
+
+  padding: 0 ${({ theme }) => theme.grid.padding};
+
+  ${Nav.Wrapper} { ${grid.placeInRows(1, {})} }
+  ${Article.Wrapper} { ${grid.placeInRows(2, {})} }
+  ${NextArticle.Wrapper} { ${grid.placeInRows(3, {})} }
 `
 
 const ArticlePage = () => {
+  const [footerVisible, setFooterVisible] = React.useState(false)
+
   const router = useRouter()
   const { category, slug } = router.query
 
@@ -93,7 +99,7 @@ const ArticlePage = () => {
   }, [])
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>{article.heading} | Early</title>
         <meta
@@ -103,10 +109,18 @@ const ArticlePage = () => {
         />
       </Head>
 
-      <Article.Article article={article} category={category} />
-      <NextArticle.NextArticle nextArticle={article.nextArticle} />
-      <Footer.Footer contact={getContact} footer={getFooter} />
-    </Layout>
+      <Layout>
+        <Nav.Nav footerVisible={footerVisible} />
+        <Article.Article article={article} category={category} />
+        <NextArticle.NextArticle nextArticle={article.nextArticle} />
+      </Layout>
+
+      <Footer.Footer
+        contact={getContact}
+        footer={getFooter}
+        onVisibility={setFooterVisible}
+      />
+    </>
   )
 }
 

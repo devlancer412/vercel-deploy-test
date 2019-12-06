@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 import Head from 'next/head'
+import { getImageUrl } from 'takeshape-routing'
 
 import withData from '../lib/apollo'
 import { generateGrid } from '../lib/grid'
@@ -27,6 +28,15 @@ const GET_LANDING_PAGE = gql`
 
   query getLanding {
     getLanding {
+      meta {
+        title
+        description
+        image {
+          _id
+          path
+        }
+      }
+
       aboutShort {
         ...AboutShort
       }
@@ -81,13 +91,22 @@ const Landing = ({ galleryPlacements }) => {
   if (error || !data) return <div>Error</div>
 
   const { getLanding, getContact, getAbout, getFooter } = data
-  const { aboutShort, gallery, aboutLong } = getLanding
+  const { aboutShort, gallery, aboutLong, meta } = getLanding
   const { services } = getAbout
 
   return (
     <>
       <Head>
-        <title>Early</title>
+        <title>{meta.title}</title>
+
+        <meta property="og:title" content={meta.title} />
+        {meta.image && (
+          <meta property="og:image" content={getImageUrl(meta.image.path)} />
+        )}
+        {meta.description && (
+          <meta property="og:description" content={meta.description} />
+        )}
+        <meta property="og:url" content="//veryearly.studio" />
       </Head>
 
       <Hero scrollTo={main} onScroll={jumpOccurred}>

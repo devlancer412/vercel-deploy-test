@@ -24,7 +24,6 @@ const Images = styled.div`
 const InternalWrapper = styled.div<any>`
   transform: translate(-${({ transformX }) => transformX}px, 0);
   transition: 0.4s ease-out transform;
-  will-change: transform;
   display: flex;
   width: 100%;
   height: ${({ maxHeight }) => maxHeight}px;

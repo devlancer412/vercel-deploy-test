@@ -7,27 +7,20 @@ import { getImageUrl } from 'takeshape-routing'
 
 import withData from '../lib/apollo'
 import { generateGrid } from '../lib/grid'
-import * as randomlyPlace from '../lib/randomlyPlace'
 
-import { Hero } from '../components/Hero'
-import * as AboutLong from '../components/AboutLong'
-import * as AboutShort from '../components/AboutShort'
-import * as Gallery from '../components/Landing/Gallery'
+import * as Nav from '../components/Nav'
 import * as Footer from '../components/Footer'
+import * as Home from '../components/Home'
 import * as Contact from '../components/About/Contact'
-import * as Services from '../components/About/Services'
 import * as Loading from '../components/Loading'
 
-const GET_LANDING_PAGE = gql`
-  ${Gallery.fragment}
-  ${AboutLong.fragment}
-  ${AboutShort.fragment}
-  ${Contact.fragment}
-  ${Services.fragment}
+const GET_HOME_PAGE = gql`
+  ${Home.fragment}
   ${Footer.fragment}
+  ${Contact.fragment}
 
-  query getLanding {
-    getLanding {
+  query GetHomePage($filterArticles: JSON!, $sortArticles: [TSSearchSort]!) {
+    getHomePage {
       meta {
         title
         description
@@ -37,23 +30,7 @@ const GET_LANDING_PAGE = gql`
         }
       }
 
-      aboutShort {
-        ...AboutShort
-      }
-
-      gallery {
-        ...LandingGallery
-      }
-
-      aboutLong {
-        ...AboutLong
-      }
-    }
-
-    getAbout {
-      services {
-        ...Services
-      }
+      ...Home
     }
 
     getContact {
@@ -66,7 +43,7 @@ const GET_LANDING_PAGE = gql`
   }
 `
 
-const grid = generateGrid({ rows: { repeat: [4, 'auto'] } })
+const grid = generateGrid({ rows: { repeat: [2, 'auto'] } })
 
 const Layout = styled.main`
   ${grid.display}
@@ -75,24 +52,31 @@ const Layout = styled.main`
 
   padding: 0 ${({ theme }) => theme.grid.padding};
 
-  ${Gallery.Wrapper} { ${grid.placeInRows(1, {})} }
-  ${AboutLong.Wrapper} { ${grid.placeInRows(2, {})} }
-  ${Services.Wrapper} { ${grid.placeInRows(3, {})} }
-  ${Contact.Wrapper} { ${grid.placeInRows(4, {})} }
+  ${Nav.Wrapper} { ${grid.placeInRows(1)} }
+  ${Home.Wrapper} { ${grid.placeInRows(2)} }
 `
 
-const Landing = ({ galleryPlacements }) => {
-  const main = React.useRef(null)
-  const [hasJumped, setHasJumped] = useState(false)
-  const { loading, error, data } = useQuery(GET_LANDING_PAGE)
-  const jumpOccurred = () => setHasJumped(true)
+const HomePage = () => {
+  const [footerVisible, setFooterVisible] = React.useState(false)
+  const { loading, error, data } = useQuery(GET_HOME_PAGE, {
+    variables: Home.variables,
+  })
+
+  React.useEffect(() => {
+    if (window) {
+      require('lazysizes')
+      // @ts-ignore
+      window.lazySizesConfig = window.lazySizesConfig || {}
+      // @ts-ignore
+      window.lazySizesConfig.expand = 0
+    }
+  }, [])
 
   if (loading) return <Loading.Loading />
   if (error || !data) return <div>Error</div>
 
-  const { getLanding, getContact, getAbout, getFooter } = data
-  const { aboutShort, gallery, aboutLong, meta } = getLanding
-  const { services } = getAbout
+  const { getHomePage, getContact, getFooter } = data
+  const { meta, ...home } = getHomePage
 
   return (
     <>
@@ -128,40 +112,18 @@ const Landing = ({ galleryPlacements }) => {
         )}
       </Head>
 
-      <Hero scrollTo={main} onScroll={jumpOccurred}>
-        <AboutShort.AboutShort details={aboutShort} />
-      </Hero>
-
-      <Layout ref={main}>
-        <Gallery.Gallery
-          content={gallery}
-          pageJumped={hasJumped}
-          placements={galleryPlacements}
-        />
-        <AboutLong.AboutLong details={aboutLong} />
-        <Services.Services services={services} />
-        <Contact.Contact contactDetails={getContact} />
+      <Layout>
+        <Nav.Nav footerVisible={footerVisible} />
+        <Home.Home home={home} />
       </Layout>
 
       <Footer.Footer
-        withoutNav
-        onScroll={jumpOccurred}
         contact={getContact}
         footer={getFooter}
+        onVisibility={setFooterVisible}
       />
     </>
   )
 }
 
-Landing.getInitialProps = () => {
-  return {
-    galleryPlacements: [
-      randomlyPlace.get(),
-      randomlyPlace.get(),
-      randomlyPlace.get(),
-      randomlyPlace.get(),
-    ],
-  }
-}
-
-export default withData(Landing)
+export default withData(HomePage)

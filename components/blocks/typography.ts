@@ -4,9 +4,11 @@ import * as convert from '../../lib/convert'
 
 export const bodyCopy = css`
   font-family: 'Editorial New Ultralight';
-  font-size: 20px;
-  line-height: 26px;
-  letter-spacing: 0.36px;
+  //font-size: 2rem;
+  font-size: ${convert.viewportUnits(2, { by: 0.625 }).fromRem}; // 2rem
+  line-height: 1.3; // 2.6rem
+  letter-spacing: ${convert.viewportUnits(0.036, { by: 0.625 })
+    .fromRem}; // 0.036rem
   font-weight: 100;
 `
 
@@ -40,18 +42,21 @@ export const intro = css`
 
 export const articleTitle = css`
   font-family: 'Adieu Light';
-  font-size: 20px;
-  line-height: 20px;
-  letter-spacing: 0.36px;
+  // font-size: 2rem;
+  font-size: ${convert.viewportUnits(2, { by: 0.625 }).fromRem}; // 2rem
+  line-height: 1; // 2rem
+  // letter-spacing: 0.036rem;
+  letter-spacing: ${convert.viewportUnits(0.036, { by: 0.625 })
+    .fromRem}; // 0.036rem
   font-weight: 100;
   text-transform: uppercase;
 `
 
 export const detail = css`
   font-family: 'Adieu Light';
-  font-size: 10px;
-  line-height: 12px;
-  letter-spacing: 0.18px;
+  font-size: 1rem;
+  line-height: 1.2; // 1.2rem
+  letter-spacing: 0.018rem;
   font-weight: 100;
   text-transform: uppercase;
 `

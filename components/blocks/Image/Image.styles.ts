@@ -14,10 +14,11 @@ const blurUp = css`
   }
 `
 
-export const Img = styled.img<{ objectFit?: string }>`
+export const Img = styled.img<{ objectFit?: string; setPosition?: string }>`
   width: 100%;
   display: block;
   ${({ objectFit }) => objectFit && `object-fit: ${objectFit};`}
+  ${({ setPosition }) => setPosition && `position: ${setPosition};`}
 
   ${blurUp}
 `
@@ -28,9 +29,11 @@ export const Caption = styled(Detail.Block)`
 
 // Stops the blur up effect from spilling over image boundaries
 // and looking messy
-export const Clip = styled.div`
+export const Clip = styled.div<{ setPadding?: number }>`
   overflow: hidden;
   width: 100%;
-  height: 100%;
   display: flex;
+  position: relative;
+  background-color: #e9e9e9;
+  ${({ setPadding }) => setPadding && `padding-bottom: ${setPadding}%;`}
 `

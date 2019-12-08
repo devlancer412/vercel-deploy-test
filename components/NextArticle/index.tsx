@@ -30,7 +30,7 @@ export const NextArticle = ({ nextArticle }) => {
       <ArticlePreview.ArticlePreview
         articlePreview={nextArticle}
         width={4}
-        headingWidth={4}
+        headingWidth={8}
       />
     </Wrapper>
   )

@@ -81,8 +81,12 @@ const LoadMore = styled.a`
   font-weight: 100;
   text-align: center;
   ${grid.placeInRows(4)}
-  ${grid.placeInColumns(6, { span: 2 })}
+  ${grid.placeInColumns(4, { span: 6 })}
   margin-top: ${convert.viewportUnits(11.9, { by: 0.625 }).fromRem}; // 11.9rem
+
+  ${({ theme }) => `@media (min-width: 1015px)`} {
+    ${grid.placeInColumns(6, { span: 2 })}
+  }
 `
 
 export const CategorySection = ({ categorySection }) => {

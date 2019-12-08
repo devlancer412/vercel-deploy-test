@@ -36,6 +36,7 @@ export const Wrapper = styled.nav<{ styles: string }>`
 const Logo = styled(EarlyLogo)`
   width: ${convert.viewportUnits(17.2, { by: 0.6 }).fromRem}; // 17.2
   z-index: 2;
+  height: intrinsic;
 `
 
 const LogoLink = styled.a`
@@ -43,14 +44,12 @@ const LogoLink = styled.a`
   ${grid.placeInRows(1)}
   display: flex;
   justify-content: center;
+  z-index: 2;
 
   ${`@media (min-width: ${breakpoint}px)`} {
     ${grid.placeInColumns(6, { span: 2 })}
     ${grid.placeInRows(1)}
   }
-
-  display: flex;
-  z-index: 2;
 `
 
 export const Nav = ({ footerVisible }) => {

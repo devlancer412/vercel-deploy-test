@@ -47,7 +47,7 @@ const LogoLink = styled.a`
   z-index: 2;
 
   ${`@media (min-width: ${breakpoint}px)`} {
-    ${grid.placeInColumns(6, { span: 2 })}
+    ${grid.placeInColumns(1, { span: 12 })}
     ${grid.placeInRows(1)}
   }
 `

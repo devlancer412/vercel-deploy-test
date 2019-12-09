@@ -51,6 +51,7 @@ const TopArticleHeader = styled.h2`
   font-weight: 100;
   text-transform: uppercase;
   display: inline;
+  vertical-align: bottom;
 
   text-align: center;
 

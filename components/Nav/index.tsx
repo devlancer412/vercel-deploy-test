@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
 
 import { generateGrid } from '../../lib/grid'
 import * as convert from '../../lib/convert'
@@ -61,7 +62,18 @@ const LogoLink = styled.a`
   z-index: 2;
 `
 
-export const Nav = ({ footerVisible, hamburgerOpen, toggleHamburgerOpen }) => {
+export const Nav = ({ footerVisible }) => {
+  const [hamburgerOpen, setHamburgerOpen] = React.useState(false)
+  const toggleHamburgerOpen = () => setHamburgerOpen(e => !e)
+
+  React.useEffect(() => {
+    if (hamburgerOpen) {
+      disableBodyScroll()
+    } else {
+      enableBodyScroll()
+    }
+  }, [hamburgerOpen])
+
   const styles =
     footerVisible && !hamburgerOpen
       ? 'transform: translateY(-100%);'

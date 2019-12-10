@@ -4,6 +4,11 @@ import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 import Head from 'next/head'
 import { getImageUrl } from 'takeshape-routing'
+import {
+  disableBodyScroll,
+  enableBodyScroll,
+  clearAllBodyScrollLocks,
+} from 'body-scroll-lock'
 
 import withData from '../lib/apollo'
 import { generateGrid } from '../lib/grid'
@@ -57,7 +62,21 @@ const Layout = styled.main`
 `
 
 const HomePage = () => {
+  const [scrollPosition, setScrollPosition] = React.useState(0)
   const [footerVisible, setFooterVisible] = React.useState(false)
+  const [hamburgerOpen, setHamburgerOpen] = React.useState(false)
+  const toggleHamburgerOpen = () => {
+    setHamburgerOpen(e => !e)
+  }
+
+  React.useEffect(() => {
+    if (hamburgerOpen) {
+      disableBodyScroll()
+    } else {
+      enableBodyScroll()
+    }
+  }, [hamburgerOpen])
+
   const { loading, error, data } = useQuery(GET_HOME_PAGE, {
     variables: Home.variables,
   })
@@ -113,7 +132,11 @@ const HomePage = () => {
       </Head>
 
       <Layout>
-        <Nav.Nav footerVisible={footerVisible} />
+        <Nav.Nav
+          hamburgerOpen={hamburgerOpen}
+          toggleHamburgerOpen={toggleHamburgerOpen}
+          footerVisible={footerVisible}
+        />
         <Home.Home home={home} />
       </Layout>
 

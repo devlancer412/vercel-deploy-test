@@ -62,7 +62,12 @@ const Layout = styled.div`
 `
 
 const ArticlePage = () => {
+  const [scrollPosition, setScrollPosition] = React.useState(0)
+  const [hamburgerOpen, setHamburgerOpen] = React.useState(false)
   const [footerVisible, setFooterVisible] = React.useState(false)
+  const toggleHamburgerOpen = () => {
+    setHamburgerOpen(e => !e)
+  }
 
   const router = useRouter()
   const { category, slug } = router.query
@@ -110,7 +115,11 @@ const ArticlePage = () => {
       </Head>
 
       <Layout>
-        <Nav.Nav footerVisible={footerVisible} />
+        <Nav.Nav
+          hamburgerOpen={hamburgerOpen}
+          toggleHamburgerOpen={toggleHamburgerOpen}
+          footerVisible={footerVisible}
+        />
         <Article.Article article={article} category={category} />
         <NextArticle.NextArticle nextArticle={article.nextArticle} />
       </Layout>

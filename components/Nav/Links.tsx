@@ -68,7 +68,7 @@ const hiddenStyle = `
   pointer-events: none;
 `
 
-const AllWrapper = styled.div<any>`
+const AllWrapper = styled.nav<any>`
   ${grid.placeInColumns(1, { span: 12 })}
   ${grid.placeInRows(1)}
   ${grid.display}

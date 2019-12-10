@@ -20,7 +20,6 @@ const Wrapper = styled.div`
   ${grid.placeInRows(1)}
   padding: ${hamburgerPaddingY} ${hamburgerPaddingX};
   display: flex;
-  position: absolute;
 
   transition-property: opacity, filter;
   transition-duration: 0.15s;

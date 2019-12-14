@@ -6,7 +6,10 @@ import * as animate from '../../lib/animate'
 import * as typography from '../blocks/typography'
 import * as Detail from '../blocks/Typography/Detail'
 
-export const Heading = styled.h2<{ width: number }>`
+type WithAnimation = { animation: string }
+
+type HeadingProps = { width: number } & WithAnimation
+export const Heading = styled.h2<HeadingProps>`
   ${typography.articleTitle}
 
   ${({ width }) => `width: ${width}0%;`}
@@ -16,6 +19,8 @@ export const Heading = styled.h2<{ width: number }>`
   ${animate.defaultTransition}
   transition-property: color;
   transition-speed: 0.4s;
+
+  ${({ animation }) => animation}
 `
 
 export const Wrapper = styled.a`
@@ -38,11 +43,13 @@ export const Category = styled(Detail.Detail)`
 
 export const Time = styled(Detail.Time)``
 
-export const Details = styled(Detail.Block)`
+export const Details = styled(Detail.Block)<WithAnimation>`
   span {
     margin-right: ${convert.viewportUnits(3.8, { by: 0.625 })
       .fromRem}; // 3.8rem
   }
+
+  ${({ animation }) => animation}
 `
 
 const shortenedIntro = `
@@ -54,7 +61,8 @@ const shortenedIntro = `
   text-overflow: ellipsis;
 `
 
-export const Intro = styled.p<{ fullIntro: boolean }>`
+type IntroProps = { fullIntro: boolean } & WithAnimation
+export const Intro = styled.p<IntroProps>`
   ${typography.bodyCopy}
   text-indent: ${convert.viewportUnits(5.6, { by: 0.625 }).fromRem}; // 5.6rem
 
@@ -62,10 +70,13 @@ export const Intro = styled.p<{ fullIntro: boolean }>`
   padding-left: 0.3rem;
 
   ${({ fullIntro }) => !fullIntro && shortenedIntro}
+  ${({ animation }) => animation}
 `
 
-export const FeatureImage = styled.div`
+export const FeatureImage = styled.div<WithAnimation>`
   margin-bottom: ${convert.viewportUnits(1.2, { by: 0.625 }).fromRem}; // 1.2rem
   background-color: #e9e9e9;
   position: relative;
+
+  // ${({ animation }) => animation}
 `

@@ -3,6 +3,7 @@ import Link from 'next/link'
 
 import { generateGrid } from '../../../lib/grid'
 import * as convert from '../../../lib/convert'
+import * as animate from '../../../lib/animate'
 
 import * as ArticlePreview from '../../ArticlePreview'
 
@@ -42,7 +43,7 @@ const TopArticle = styled.a`
   }
 `
 
-const TopArticleHeader = styled.h2`
+const TopArticleHeader = styled.h2<{ animation: string }>`
   font-family: 'Adieu Light';
   font-size: ${convert.viewportUnits(4, { by: 0.24 }).fromRem}; // 4rem
   line-height: 1; // 4rem
@@ -54,6 +55,7 @@ const TopArticleHeader = styled.h2`
   vertical-align: bottom;
 
   text-align: center;
+  ${({ animation }) => animation}
 
   ${({ theme }) => `@media (min-width: ${theme.breakpoint.home}px)`} {
     text-align: left;
@@ -69,6 +71,8 @@ export const usingArticles = articles => {
 }
 
 export const Section = ({ title, first }) => {
+  const [ref, animation] = animate.useDefaultAnimation()
+
   return (
     <Link href={`/${first.category.title}/${first.slug}`} passHref>
       <TopArticle>
@@ -80,7 +84,9 @@ export const Section = ({ title, first }) => {
           <ArticlePreview.Splash previewImage={first.previewImage} width={1} />
         </TopArticleDetails>
 
-        <TopArticleHeader>{first.heading}</TopArticleHeader>
+        <TopArticleHeader ref={ref} animation={animation}>
+          {first.heading}
+        </TopArticleHeader>
       </TopArticle>
     </Link>
   )

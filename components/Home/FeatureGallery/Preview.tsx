@@ -21,11 +21,11 @@ export const Body = ({ article, i }) => {
   )
 }
 
-export const Heading = ({ article, i }) => {
+export const Heading = ({ article, i, animation }) => {
   return (
     <Link href={`/${article.category.title}/${article.slug}`} passHref>
       <Stabilise as="a">
-        <ArticlePreview.Heading width={8}>
+        <ArticlePreview.Heading animation={animation} width={8}>
           {article.heading}
         </ArticlePreview.Heading>
       </Stabilise>

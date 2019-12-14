@@ -91,6 +91,9 @@ export const FeatureGallery = ({ featured }) => {
     ? index * previewsWrapper.current.clientWidth
     : 0
 
+  // animations
+  const [headingsRef, headingsAnimation] = animate.useDefaultAnimation()
+
   const renderedPreviews = featured.map((article, i) => (
     <Preview.Body
       key={`preview-body-${article._id}-${i}`}
@@ -101,6 +104,7 @@ export const FeatureGallery = ({ featured }) => {
 
   const renderedHeadings = featured.map((article, i) => (
     <Preview.Heading
+      animation={headingsAnimation}
       key={`preview-header-${article._id}-${i}`}
       article={article}
       i={i}
@@ -131,7 +135,7 @@ export const FeatureGallery = ({ featured }) => {
         </PreviewBodies>
 
         <PreviewHeadings>
-          <InternalWrapper transformX={transformX}>
+          <InternalWrapper ref={headingsRef} transformX={transformX}>
             {renderedHeadings}
           </InternalWrapper>
         </PreviewHeadings>

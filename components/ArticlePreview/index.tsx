@@ -2,6 +2,8 @@ import React from 'react'
 import { gql } from 'apollo-boost'
 import NextLink from 'next/link'
 
+import * as animate from '../../lib/animate'
+
 import * as styles from './ArticlePreview.styles'
 
 import * as Image from '../blocks/Image'
@@ -31,12 +33,14 @@ export const aspectRatio = {
 }
 
 export const Details = ({ category, createdAt }) => {
+  const [ref, animation] = animate.useDefaultAnimation()
+
   const [createdAtDate] = createdAt.split('T')
   const [yearLong, month, day] = createdAtDate.split('-')
   const yearShort = yearLong.slice(2)
 
   return (
-    <styles.Details>
+    <styles.Details animation={animation} ref={ref}>
       <span>{category.title}</span>
       <time>28.09.19</time>
     </styles.Details>
@@ -71,14 +75,29 @@ export const Body = ({
 }) => {
   const { heading, intro, category, createdAt, slug } = articlePreview
 
+  const [introRef, introAnimation] = animate.useDefaultAnimation()
+  const [headerRef, headerAnimation] = animate.useDefaultAnimation()
+
   return (
     <>
       <Details category={category} createdAt={createdAt} />
       {!withoutHeading && (
-        <styles.Heading width={headingWidth}>{heading}</styles.Heading>
+        <styles.Heading
+          width={headingWidth}
+          animation={headerAnimation}
+          ref={headerRef}
+        >
+          {heading}
+        </styles.Heading>
       )}
       {!withoutIntro && (
-        <styles.Intro fullIntro={fullIntro}>{intro}</styles.Intro>
+        <styles.Intro
+          fullIntro={fullIntro}
+          animation={introAnimation}
+          ref={introRef}
+        >
+          {intro}
+        </styles.Intro>
       )}
     </>
   )
@@ -87,13 +106,15 @@ export const Body = ({
 export const ArticlePreview = ({ articlePreview, width, ...bodyProps }) => {
   const { previewImage, category, slug } = articlePreview
 
+  const [imageRef, imageAnimation] = animate.useDefaultAnimation()
+
   const [widthRatio, heightRatio] = aspectRatio[width]
   const scale = (heightRatio * 100) / widthRatio
 
   return (
     <Link category={category} slug={slug}>
       <styles.Wrapper>
-        <styles.FeatureImage>
+        <styles.FeatureImage ref={imageRef} animation={imageAnimation}>
           <Splash
             previewImage={previewImage}
             width={width}

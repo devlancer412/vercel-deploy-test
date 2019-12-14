@@ -4,6 +4,7 @@ import Link from 'next/link'
 
 import { generateGrid } from '../../../lib/grid'
 import * as convert from '../../../lib/convert'
+import * as animate from '../../../lib/animate'
 
 import * as NewsSection from './NewsSection'
 import * as FeaturesSection from './FeaturesSection'
@@ -59,19 +60,20 @@ export const Wrapper = styled.section`
   border-bottom: 1px solid #000000;
 `
 
-const Header = styled.h2`
+const Header = styled.h2<{ animation: string }>`
   ${grid.placeInRows(1)}
   ${grid.placeInColumns(1, { span: 12 })}
   text-align: center;
   margin-bottom: ${convert.viewportUnits(11, { by: 0.625 }).fromRem}; // 11rem
   ${typography.section}
+  ${({ animation }) => animation}
 `
 
 const TopRow = styled.div`
   width: 100%;
 `
 
-const LoadMore = styled.a`
+const LoadMore = styled.a<{ animation: string }>`
   font-family: 'Adieu Light';
   font-size: ${convert.viewportUnits(2, { by: 0.625 }).fromRem}; // 2rem
   letter-spacing: ${
@@ -84,6 +86,8 @@ const LoadMore = styled.a`
   ${grid.placeInColumns(4, { span: 6 })}
   margin-top: ${convert.viewportUnits(11.9, { by: 0.625 }).fromRem}; // 11.9rem
 
+  ${({ animation }) => animation}
+
   ${({ theme }) => `@media (min-width: 1015px)`} {
     ${grid.placeInColumns(6, { span: 2 })}
   }
@@ -92,6 +96,9 @@ const LoadMore = styled.a`
 export const CategorySection = ({ categorySection }) => {
   const { title, articleSet } = categorySection
   const { total } = articleSet
+
+  const [headerRef, headerAnimation] = animate.useDefaultAnimation()
+  const [loadMoreRef, loadMoreAnimation] = animate.useDefaultAnimation()
 
   const SectionComponent = mapCategorySections[title]
   if (!SectionComponent) return null
@@ -108,7 +115,9 @@ export const CategorySection = ({ categorySection }) => {
 
   return (
     <Wrapper>
-      <Header>{title}</Header>
+      <Header ref={headerRef} animation={headerAnimation}>
+        {title}
+      </Header>
       <SectionComponent.Section title={title} {...topRow} />
       <Remaining.Remaining
         withoutIntros={!includeIntros}
@@ -117,7 +126,9 @@ export const CategorySection = ({ categorySection }) => {
 
       {showLoadMore && (
         <Link href={`/${title}`} passHref>
-          <LoadMore>Load More</LoadMore>
+          <LoadMore ref={loadMoreRef} animation={loadMoreAnimation}>
+            Load More
+          </LoadMore>
         </Link>
       )}
     </Wrapper>

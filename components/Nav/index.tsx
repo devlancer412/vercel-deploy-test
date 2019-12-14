@@ -63,14 +63,15 @@ const LogoLink = styled.a`
 `
 
 export const Nav = ({ footerVisible }) => {
+  const wrapperRef = React.useRef()
   const [hamburgerOpen, setHamburgerOpen] = React.useState(false)
   const toggleHamburgerOpen = () => setHamburgerOpen(e => !e)
 
   React.useEffect(() => {
     if (hamburgerOpen) {
-      disableBodyScroll()
+      disableBodyScroll(wrapperRef.current)
     } else {
-      enableBodyScroll()
+      enableBodyScroll(wrapperRef.current)
     }
   }, [hamburgerOpen])
 
@@ -80,7 +81,7 @@ export const Nav = ({ footerVisible }) => {
       : 'transform: none;'
 
   return (
-    <Wrapper styles={styles} expanded={hamburgerOpen}>
+    <Wrapper ref={wrapperRef} styles={styles} expanded={hamburgerOpen}>
       <Header>
         <Hamburger.Hamburger
           onClick={toggleHamburgerOpen}

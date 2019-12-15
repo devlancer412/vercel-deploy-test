@@ -218,6 +218,7 @@ type FooterProps = {
   withoutNav?: boolean
   onScroll?: () => void
   onVisibility?: (v: boolean) => void
+  active?: string
 }
 
 export const Footer = ({
@@ -226,6 +227,7 @@ export const Footer = ({
   onScroll,
   onVisibility,
   withoutNav = false,
+  active = null,
 }: FooterProps) => {
   const { email, address, phoneNumber, socials } = contact
   const { copyright } = footer
@@ -263,7 +265,7 @@ export const Footer = ({
         <LogoAnimation animate={logoStyle}>
           {!withoutNav && (
             <Nav>
-              <NavLinks.All />
+              <NavLinks.All active={active} />
             </Nav>
           )}
 

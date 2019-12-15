@@ -113,7 +113,7 @@ const CategoryPage = () => {
       </Head>
 
       <Layout>
-        <Nav.Nav footerVisible={footerVisible} />
+        <Nav.Nav footerVisible={footerVisible} active={category} />
         <CategorySection.CategorySection
           categorySection={firstCategory}
           initialRows={1}
@@ -122,6 +122,7 @@ const CategoryPage = () => {
       </Layout>
 
       <Footer.Footer
+        active={category}
         contact={getContact}
         footer={getFooter}
         onVisibility={setFooterVisible}

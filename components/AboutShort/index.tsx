@@ -17,7 +17,7 @@ export const fragment = gql`
 const gridColumn = (start, span) =>
   grid.placeInColumns(true)(start, { span: span })
 
-const Wrapper = styled.div<any>`
+export const Wrapper = styled.div<any>`
   font-family: 'Editorial New Ultralight';
 
   font-size: ${convert.viewportUnits(4, { to: 1.2 }).fromRem}; // 4rem
@@ -36,7 +36,7 @@ const Wrapper = styled.div<any>`
   ${({ animate }) => animate}
 
   @media (min-width: 550px) {
-    ${gridColumn(1.5, 10.5)}
+    ${gridColumn(1.5, 11)}
     margin-left: -${({ theme }) => theme.grid.gap};
     margin-right: -${({ theme }) => theme.grid.gap};
   }

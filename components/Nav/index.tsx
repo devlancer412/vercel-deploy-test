@@ -63,7 +63,7 @@ const LogoLink = styled.a`
   z-index: 2;
 `
 
-export const Nav = ({ footerVisible }) => {
+export const Nav = ({ footerVisible, active = null }) => {
   const wrapperRef = React.useRef()
   const [hamburgerOpen, setHamburgerOpen] = React.useState(false)
   const toggleHamburgerOpen = () => setHamburgerOpen(e => !e)
@@ -94,7 +94,7 @@ export const Nav = ({ footerVisible }) => {
           </LogoLink>
         </Link>
       </Header>
-      <NavLinks.All expanded={hamburgerOpen} />
+      <NavLinks.All expanded={hamburgerOpen} active={active} />
     </Wrapper>
   )
 }

@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import Link from 'next/link'
 
 import * as convert from '../../lib/convert'
 import * as animate from '../../lib/animate'
@@ -10,7 +11,7 @@ const grid = generateGrid()
 
 const breakpoint = 800
 
-const Link = styled(Detail.Link)`
+const NavLink = styled(Detail.Link)<{ isActive: boolean }>`
   font-size: ${convert.viewportUnits(1.2, { to: 1 }).fromRem}; // 1.2rem
 
   margin-bottom: ${convert.viewportUnits(3, { by: 0.15 }).fromRem};
@@ -26,6 +27,14 @@ const Link = styled(Detail.Link)`
       }
     }
   }
+
+  ${({ isActive }) =>
+    isActive &&
+    `
+    font-family: 'Adieu Backslant';
+    font-weight: bold;
+
+  `}
 
   &:hover {
     color: #000000;
@@ -104,29 +113,47 @@ const AllWrapper = styled.nav<any>`
   }
 `
 
-export const All = ({ expanded = false }) => {
+const NavItem = ({ path, match, title, active }) => {
+  return (
+    <Link href={path} passHref>
+      <NavLink isActive={active === match}>{title}</NavLink>
+    </Link>
+  )
+}
+
+export const All = ({ expanded = false, active = null }) => {
   return (
     <AllWrapper expanded={expanded}>
-      <Left />
-      <Right />
+      <Left active={active} />
+      <Right active={active} />
     </AllWrapper>
   )
 }
 
-export const Left = () => {
+export const Left = ({ active }) => {
   return (
     <Wrapper align="left">
-      <Link href="/about">About</Link>
+      <NavItem path="/about" active={active} match={'about'} title="About" />
     </Wrapper>
   )
 }
 
-export const Right = () => {
+export const Right = ({ active }) => {
   return (
     <Wrapper align="right">
-      <Link href="/news">News</Link>
-      <Link href="/features">Features</Link>
-      <Link href="/opinions">Opinions</Link>
+      <NavItem path="/news" active={active} match={'news'} title="News" />
+      <NavItem
+        path="/features"
+        active={active}
+        match={'features'}
+        title="Features"
+      />
+      <NavItem
+        path="/opinions"
+        active={active}
+        match={'opinions'}
+        title="Opinions"
+      />
     </Wrapper>
   )
 }

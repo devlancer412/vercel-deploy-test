@@ -8,6 +8,7 @@ import { getImageUrl } from 'takeshape-routing'
 
 import withData from '../lib/apollo'
 import { generateGrid } from '../lib/grid'
+import * as convert from '../lib/convert'
 
 import * as AboutLong from '../components/AboutLong'
 import * as AboutShort from '../components/AboutShort'
@@ -63,20 +64,28 @@ const Layout = styled.main`
 
   ${AboutShort.Wrapper} {
     ${grid.placeInRows(2, {})}
-    margin-top: 18.3rem;
-    margin-bottom: 12.6rem;
+    margin-top: ${
+      convert.viewportUnits(18.3, { by: 0.625 }).fromRem
+    }; // 18.3rem
+    margin-bottom: ${
+      convert.viewportUnits(12.6, { by: 0.625 }).fromRem
+    }; // 12.6rem
   }
 
   ${AboutLong.Wrapper} {
     ${grid.placeInRows(3, {})}
-    margin-bottom: 4.3rem;
+    margin-bottom: ${
+      convert.viewportUnits(4.3, { by: 0.625 }).fromRem
+    }; // 4.3rem
   }
 
   ${Services.Wrapper} { ${grid.placeInRows(4, {})} }
 
   ${Contact.Wrapper} {
     ${grid.placeInRows(5, {})}
-    margin-bottom: 25.8rem;
+    margin-bottom: ${
+      convert.viewportUnits(25.8, { by: 0.625 }).fromRem
+    }; // 25.8rem
   }
 `
 

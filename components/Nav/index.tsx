@@ -69,6 +69,8 @@ export const Nav = ({ footerVisible, active = null }) => {
   const toggleHamburgerOpen = () => setHamburgerOpen(e => !e)
 
   React.useEffect(() => {
+    enableBodyScroll(wrapperRef.current)
+
     if (hamburgerOpen) {
       disableBodyScroll(wrapperRef.current)
     } else {

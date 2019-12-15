@@ -26,12 +26,15 @@ export const Wrapper = styled.nav<{ styles: string; expanded: boolean }>`
   ${grid.all.columns}
   ${grid.all.rows}
 
+  width: calc(100% + 1px);
   position: sticky;
   top: 0;
   z-index: 4;
   ${animate.defaultTransition}
 
   box-sizing: border-box;
+  padding: 3.1rem 0 2.3rem 0;
+  background-color: #ffffff;
 
   ${({ styles }) => styles}
 `
@@ -43,8 +46,6 @@ export const Header = styled.header`
   ${grid.all.columns}
   ${grid.all.rows}
 
-  padding: 3.1rem 0 2.3rem 0;
-  background-color: #ffffff;
   align-items: center;
 `
 
@@ -78,7 +79,7 @@ export const Nav = ({ footerVisible }) => {
   const styles =
     footerVisible && !hamburgerOpen
       ? 'transform: translateY(-100%);'
-      : 'transform: none;'
+      : 'transform: translateY(0);'
 
   return (
     <Wrapper ref={wrapperRef} styles={styles} expanded={hamburgerOpen}>

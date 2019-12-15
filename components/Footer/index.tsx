@@ -184,7 +184,8 @@ const Nav = styled.nav`
   padding-bottom: 1.7rem;
   display: none;
 
-  @media (min-width: ${breakpoint}px) {
+  @media (min-width: 800px) {
+    // Nav breakpoint
     ${navGrid.display}
     ${navGrid.columns}
   }
@@ -262,8 +263,7 @@ export const Footer = ({
         <LogoAnimation animate={logoStyle}>
           {!withoutNav && (
             <Nav>
-              <NavLinks.Left />
-              <NavLinks.Right />
+              <NavLinks.All />
             </Nav>
           )}
 

@@ -61,8 +61,9 @@ type GridProps = {
 }
 
 export function generateGrid(opts: GridProps = {}) {
-  const columnGap = opts.columnGap || theme.grid.gap
-  const rowGap = opts.rowGap || null
+  const columnGap =
+    opts.columnGap !== undefined ? opts.columnGap : theme.grid.gap
+  const rowGap = opts.rowGap !== undefined ? opts.rowGap : null
   const columnsConfig = opts.columns || { repeat: [12, '1fr'] }
   const rowsConfig = opts.rows || { exact: '1fr' }
 

@@ -3,8 +3,16 @@ import styled from 'styled-components'
 import { useQuery } from '@apollo/react-hooks'
 import { getImageUrl } from 'takeshape-routing'
 
+import { generateGrid } from '../../../lib/grid'
+import * as convert from '../../../lib/convert'
+
 import * as Loading from '../../Loading'
 import * as Img from '../../blocks/Image/Fetch'
+
+const grid = generateGrid()
+
+const gridColumn = (start: number, span: number) =>
+  grid.placeInColumns(start, { span })
 
 const sizeMap = {
   large: 12,
@@ -20,9 +28,12 @@ const alignMap = {
   default: { left: 3, right: 7, center: 5 },
 }
 
+const topMargin = convert.viewportUnits(11.2, { by: 0.625 }).fromRem
+const bottomMargin = convert.viewportUnits(12, { by: 0.625 }).fromRem
+
 export const Wrapper = styled.div<any>`
-  grid-column: ${({ column }) => column};
-  margin: 112px 0 120px 0;
+  ${({ start, span }) => gridColumn(start, span)};
+  margin: ${topMargin} 0 ${bottomMargin} 0;
 
   display: flex;
   flex-direction: column;
@@ -36,8 +47,8 @@ export const Image = ({ image }) => {
   const start = alignMap[size] || alignMap.default
 
   return (
-    <Wrapper column={`${start[alignment || 'center']} / span ${span}`}>
-      <Img.Image details={image} />
+    <Wrapper start={start[alignment || 'center']} span={span}>
+      <Img.Image details={image} intrinsicHeight />
     </Wrapper>
   )
 }

@@ -11,6 +11,7 @@ type ImageProps = {
   onLoad?: () => void
   imgix?: Record<any, string | number>
   objectFit?: string
+  intrinsicHeight?: boolean
   setRatio?: [number, number]
   inColumns?: number
 }
@@ -23,6 +24,7 @@ export const Image = ({
   onLoad,
   imgix,
   objectFit,
+  intrinsicHeight,
   setRatio,
   inColumns,
 }: ImageProps) => {
@@ -76,6 +78,7 @@ export const Image = ({
           src={lazyUrl}
           onLoad={onLoad}
           objectFit={objectFit}
+          intrinsicHeight={intrinsicHeight}
           setPosition={padding ? 'absolute' : null}
           data-srcset={`
             ${xxs.url} ${xxs.size}w,

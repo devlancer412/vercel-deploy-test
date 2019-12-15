@@ -79,8 +79,8 @@ const AllWrapper = styled.nav<any>`
   position: fixed;
   height: 100vh;
   width: 100vw;
-  top: 0;
-  left: 0;
+  top: -3.1rem; // same as parent padding
+  left: calc(-1 * ${({ theme }) => theme.grid.padding});
   display: flex;
   align-items: center;
   justify-content: center;

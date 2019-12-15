@@ -36,7 +36,7 @@ const Wrapper = styled.div<any>`
   ${({ animate }) => animate}
 
   @media (min-width: 550px) {
-    ${gridColumn(1.5, 10.5)}
+    ${gridColumn(1.5, 11)}
     margin-left: -${({ theme }) => theme.grid.gap};
     margin-right: -${({ theme }) => theme.grid.gap};
   }

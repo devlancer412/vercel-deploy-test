@@ -94,7 +94,7 @@ export const Contributed = styled(Detail.Detail)`
 export const Person = styled.span`
   ${typography.editorialDetail}
   display: inline;
-  margin-right: 0.18rem;
+  margin-right: 1.8rem;
   margin-left: 0;
 `
 

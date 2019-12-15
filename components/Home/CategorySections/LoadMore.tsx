@@ -18,7 +18,6 @@ const loadMoreCss = css<{ animation?: string }>`
   ${grid.placeInRows(4)}
   ${grid.placeInColumns(4, { span: 6 })}
   margin-top: ${convert.viewportUnits(11.9, { by: 0.625 }).fromRem}; // 11.9rem
-  cursor: default;
   border: 0;
   padding: 0;
   background-color: transparent;
@@ -33,7 +32,7 @@ const loadMoreCss = css<{ animation?: string }>`
   }
 `
 
-const LoadMoreButton = styled.button<{ animation: string }>`
+const LoadMoreButton = styled.button<{ animation?: string }>`
   ${loadMoreCss}
   ${({ animation }) => animation}
 `

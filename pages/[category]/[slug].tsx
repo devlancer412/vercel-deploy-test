@@ -78,7 +78,7 @@ const ArticlePage = () => {
   })
 
   if (loading) return <Loading.Loading />
-  if (error || !data) return <ErrorPage statusCode={404} />
+  if (error || !data) return <ErrorPage statusCode={400} />
 
   const { getCategoryList, getContact, getFooter } = data
   if (!getCategoryList.total) return <ErrorPage statusCode={404} />

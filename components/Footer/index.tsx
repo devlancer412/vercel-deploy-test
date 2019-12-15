@@ -29,7 +29,7 @@ const grid = {
   }),
   wide: generateGrid({
     columns: { repeat: [12, '1fr'] },
-    rows: { exact: 'auto 1fr 8rem' },
+    rows: { exact: 'auto 1fr 7.8rem' },
   }),
 }
 
@@ -40,8 +40,7 @@ const Wrapper = styled.footer`
   ${grid.small.columns}
   ${grid.small.rows}
 
-  margin-top: ${convert.viewportUnits(20.9, { to: 6 }).fromRem};
-  padding-top: 2.5rem;
+  padding-top: 2.4rem;
   padding-left: ${({ theme }) => theme.grid.padding};
   padding-right: ${({ theme }) => theme.grid.padding};
 
@@ -106,6 +105,7 @@ const Legal = styled.small<WithAnimation>`
 
   @media (min-width: ${breakpoint}px) {
     margin: auto 0;
+    margin-bottom: 2.8rem;
     ${grid.wide.placeInColumns(1, { span: 3 })}
     ${grid.wide.placeInRows(3, {})}
   }
@@ -130,6 +130,7 @@ const Contact = styled.address<WithAnimation>`
   @media (min-width: ${breakpoint}px) {
     flex-direction: row;
     margin: auto ${({ theme }) => css`calc(-1 * ${theme.grid.gap})`};
+    margin-bottom: 2.8rem;
     ${grid.wide.placeInColumns(4, { span: 6 })}
     ${grid.wide.placeInRows(3, {})}
   }
@@ -153,6 +154,7 @@ const Social = styled(Ul)<WithAnimation>`
   @media (min-width: ${breakpoint}px) {
     justify-content: right;
     margin: auto 0;
+    margin-bottom: 2.8rem;
     ${grid.wide.placeInColumns(10, { span: 3 })}
     ${grid.wide.placeInRows(3, {})}
   }
@@ -179,10 +181,11 @@ const Email = styled.a`
 const navGrid = generateGrid()
 
 const Nav = styled.nav`
-  padding-bottom: 8px;
+  padding-bottom: 1.7rem;
   display: none;
 
-  @media (min-width: ${breakpoint}px) {
+  @media (min-width: 800px) {
+    // Nav breakpoint
     ${navGrid.display}
     ${navGrid.columns}
   }
@@ -215,6 +218,7 @@ type FooterProps = {
   withoutNav?: boolean
   onScroll?: () => void
   onVisibility?: (v: boolean) => void
+  active?: string
 }
 
 export const Footer = ({
@@ -223,6 +227,7 @@ export const Footer = ({
   onScroll,
   onVisibility,
   withoutNav = false,
+  active = null,
 }: FooterProps) => {
   const { email, address, phoneNumber, socials } = contact
   const { copyright } = footer
@@ -260,8 +265,7 @@ export const Footer = ({
         <LogoAnimation animate={logoStyle}>
           {!withoutNav && (
             <Nav>
-              <NavLinks.Left />
-              <NavLinks.Right />
+              <NavLinks.All active={active} />
             </Nav>
           )}
 

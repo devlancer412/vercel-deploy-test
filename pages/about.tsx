@@ -3,38 +3,41 @@ import styled from 'styled-components'
 import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 import Head from 'next/head'
+import ErrorPage from 'next/error'
 import { getImageUrl } from 'takeshape-routing'
 
 import withData from '../lib/apollo'
 import { generateGrid } from '../lib/grid'
 
+import * as AboutLong from '../components/AboutLong'
+import * as AboutShort from '../components/AboutShort'
+
 import * as Nav from '../components/Nav'
 import * as Footer from '../components/Footer'
-import * as Home from '../components/Home'
 import * as Contact from '../components/About/Contact'
+import * as Services from '../components/About/Services'
 import * as Loading from '../components/Loading'
 
-const GET_HOME_PAGE = gql`
-  ${Home.fragment}
-  ${Footer.fragment}
+const GET_ABOUT_PAGE = gql`
+  ${AboutLong.fragment}
+  ${AboutShort.fragment}
   ${Contact.fragment}
+  ${Services.fragment}
+  ${Footer.fragment}
 
-  query GetHomePage(
-    $filterArticles: JSON!
-    $sortArticles: [TSSearchSort]!
-    $size: Int!
-  ) {
-    getHomePage {
-      meta {
-        title
-        description
-        image {
-          _id
-          path
-        }
+  query GetAboutPage {
+    getAbout {
+      shortIntro {
+        ...AboutShort
       }
 
-      ...Home
+      longIntro {
+        ...AboutLong
+      }
+
+      services {
+        ...Services
+      }
     }
 
     getContact {
@@ -47,7 +50,7 @@ const GET_HOME_PAGE = gql`
   }
 `
 
-const grid = generateGrid({ rows: { repeat: [2, 'auto'] } })
+const grid = generateGrid({ rows: { repeat: [5, 'auto'] } })
 
 const Layout = styled.main`
   ${grid.display}
@@ -56,46 +59,52 @@ const Layout = styled.main`
 
   padding: 0 ${({ theme }) => theme.grid.padding};
 
-  ${Nav.Wrapper} { ${grid.placeInRows(1)} }
-  ${Home.Wrapper} { ${grid.placeInRows(2)} }
+  ${Nav.Wrapper} { ${grid.placeInRows(1, {})} }
+
+  ${AboutShort.Wrapper} {
+    ${grid.placeInRows(2, {})}
+    margin-top: 18.3rem;
+    margin-bottom: 12.6rem;
+  }
+
+  ${AboutLong.Wrapper} {
+    ${grid.placeInRows(3, {})}
+    margin-bottom: 4.3rem;
+  }
+
+  ${Services.Wrapper} { ${grid.placeInRows(4, {})} }
+
+  ${Contact.Wrapper} {
+    ${grid.placeInRows(5, {})}
+    margin-bottom: 25.8rem;
+  }
 `
 
-const HomePage = () => {
+const AboutPage = ({ galleryPlacements }) => {
   const [footerVisible, setFooterVisible] = React.useState(false)
-
-  const { loading, error, data } = useQuery(GET_HOME_PAGE, {
-    variables: Home.variables,
-  })
-
-  React.useEffect(() => {
-    if (window) {
-      require('lazysizes')
-      // @ts-ignore
-      window.lazySizesConfig = window.lazySizesConfig || {}
-      // @ts-ignore
-      window.lazySizesConfig.expand = 0
-    }
-  }, [])
+  const { loading, error, data } = useQuery(GET_ABOUT_PAGE)
 
   if (loading) return <Loading.Loading />
-  if (error || !data) return <div>Error</div>
+  if (error || !data) return <ErrorPage statusCode={400} />
 
-  const { getHomePage, getContact, getFooter } = data
-  const { meta, ...home } = getHomePage
+  const { getAbout, getContact, getFooter } = data
+  const { shortIntro, longIntro, services, meta = {} } = getAbout
+
+  const pageTitle = 'About | Early'
 
   return (
     <>
       <Head>
-        <title>{meta.title}</title>
+        <title>{pageTitle}</title>
 
-        <meta itemProp="name" content={meta.title} />
-        <meta property="og:title" content={meta.title} />
+        <meta itemProp="name" content={pageTitle} />
+        <meta property="og:title" content={pageTitle} />
 
-        <meta property="og:url" content="//veryearly.studio" />
+        <meta property="og:url" content="//veryearly.studio/about" />
         <meta property="og:type" content="website" />
 
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={meta.title} />
+        <meta name="twitter:title" content={pageTitle} />
 
         {meta.description && (
           <>
@@ -118,11 +127,15 @@ const HomePage = () => {
       </Head>
 
       <Layout>
-        <Nav.Nav footerVisible={footerVisible} />
-        <Home.Home home={home} />
+        <Nav.Nav footerVisible={footerVisible} active="about" />
+        <AboutShort.AboutShort details={shortIntro} />
+        <AboutLong.AboutLong details={longIntro} />
+        <Services.Services services={services} />
+        <Contact.Contact contactDetails={getContact} />
       </Layout>
 
       <Footer.Footer
+        active="about"
         contact={getContact}
         footer={getFooter}
         onVisibility={setFooterVisible}
@@ -131,4 +144,4 @@ const HomePage = () => {
   )
 }
 
-export default withData(HomePage)
+export default withData(AboutPage)

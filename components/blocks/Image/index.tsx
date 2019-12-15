@@ -11,6 +11,9 @@ type ImageProps = {
   onLoad?: () => void
   imgix?: Record<any, string | number>
   objectFit?: string
+  intrinsicHeight?: boolean
+  setRatio?: [number, number]
+  inColumns?: number
 }
 
 type ImageComponent = (props: ImageProps) => React.ReactElement
@@ -21,6 +24,9 @@ export const Image = ({
   onLoad,
   imgix,
   objectFit,
+  intrinsicHeight,
+  setRatio,
+  inColumns,
 }: ImageProps) => {
   const lazyOptions = {
     fit: 'clip',
@@ -30,8 +36,27 @@ export const Image = ({
     auto: 'format',
     ...imgix,
   }
+
   const lazyUrl = getImageUrl(image.path, lazyOptions)
-  const qualityUrl = getImageUrl(image.path, imgix)
+
+  const genImageDetails = (imageSize: number) => {
+    return {
+      url: getImageUrl(image.path, {
+        q: 75,
+        auto: 'format',
+        w: imageSize,
+        ...imgix,
+      }),
+      size: imageSize,
+    }
+  }
+
+  const xxs = genImageDetails(300)
+  const xs = genImageDetails(500)
+  const small = genImageDetails(900)
+  const medium = genImageDetails(1200)
+  const large = genImageDetails(1600)
+  const xl = genImageDetails(2000)
 
   // Optionally preload images in an attempt to stop page jump
   React.useEffect(() => {
@@ -41,16 +66,29 @@ export const Image = ({
   }, [])
 
   const caption = image.caption && image.caption.blocks.map(b => b.text)
+  const padding = setRatio && (setRatio[1] * 100) / setRatio[0]
+  const imageVw = inColumns ? Math.ceil((inColumns * 100) / 12) : 100
 
   return (
     <>
-      <Styled.Clip>
+      <Styled.Clip setPadding={padding}>
         <Styled.Img
           className="blur-up lazyload"
-          data-src={qualityUrl}
+          data-src={large.url}
           src={lazyUrl}
           onLoad={onLoad}
           objectFit={objectFit}
+          intrinsicHeight={intrinsicHeight}
+          setPosition={padding ? 'absolute' : null}
+          data-srcset={`
+            ${xxs.url} ${xxs.size}w,
+            ${xs.url} ${xs.size}w,
+            ${small.url} ${small.size}w,
+            ${medium.url} ${medium.size}w,
+            ${large.url} ${large.size}w,
+            ${xl.url} ${xl.size}w
+          `}
+          sizes={`${imageVw}vw`}
         />
       </Styled.Clip>
 

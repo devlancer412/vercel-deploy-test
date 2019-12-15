@@ -1,30 +1,39 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { generateGrid } from '../../../../lib/grid'
+import * as convert from '../../../../lib/convert'
+
+import * as typography from '../../../blocks/typography'
+
 import * as Img from '../../../blocks/Image/Fetch'
 import * as Arrow from './Arrow'
 import * as PositionBar from './PositionBar'
 
+const grid = generateGrid()
+
+const breakpoint = 950
+
 const Wrapper = styled.div<any>`
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  column-gap: 40px;
-  margin-bottom: 121px;
-  margin-top: 112px;
+  ${grid.placeInColumns(1, { span: 12 })}
+  ${grid.display}
+  ${grid.columns}
+
+  margin-bottom: ${convert.viewportUnits(12.1, { by: 0.625 }).fromRem}; // 121px
+  margin-top: ${convert.viewportUnits(11.2, { by: 0.625 }).fromRem}; // 112px
 `
 
 const Images = styled.div`
+  ${grid.placeInColumns(3, { span: 8 })}
+
   display: flex;
   overflow: hidden;
-  grid-column: 3 / -3;
   z-index: 2;
 `
 
 const InternalWrapper = styled.div<any>`
   transform: translate(-${({ transformX }) => transformX}px, 0);
   transition: 0.4s ease-out transform;
-  will-change: transform;
   display: flex;
   width: 100%;
   height: ${({ maxHeight }) => maxHeight}px;
@@ -34,17 +43,15 @@ const Caption = styled.div`
   flex-shrink: 0;
   flex-basis: 100%;
   text-align: center;
-  margin: 23px auto 0 auto;
-  font-family: 'Adieu Light';
-  font-size: 10px;
-  line-height: 12px;
-  letter-spacing: 0.18px;
-  text-transform: uppercase;
+  margin: ${convert.viewportUnits(2.3, { by: 0.625 }).fromRem} auto 0 auto;
+
+  ${typography.detail}
 `
 
 const StabiliseImage = styled.div<any>`
   flex-basis: 100%;
   flex-shrink: 0;
+  display: flex;
   height: ${({ heightNum }) => heightNum}px;
 `
 
@@ -89,7 +96,7 @@ export const Gallery = ({ images }) => {
         hideCaption
         cache
         onLoad={updateHeight}
-        objectFit="scale-down"
+        objectFit="contain"
       />
     </StabiliseImage>
   ))
@@ -113,7 +120,7 @@ export const Gallery = ({ images }) => {
       <Images>
         <InternalWrapper transformX={transformX}>
           {images.map(image =>
-            image.caption.blocks.map(({ text }, i) => (
+            (image.caption.blocks || []).map(({ text }, i) => (
               <Caption key={`caption-${text}-${i}`}>{text}</Caption>
             ))
           )}

@@ -1,29 +1,23 @@
 import styled, { css } from 'styled-components'
 
-const detail = css`
-  font-family: 'Adieu Light';
-  font-size: 1rem;
-  line-height: 1.2; // 1.2rem
-  letter-spacing: 0.018rem;
-  text-transform: uppercase;
-`
+import * as typography from '../typography'
 
 export const Detail = styled.span`
-  ${detail}
+  ${typography.detail}
 `
 
 export const Link = styled.a`
-  ${detail}
+  ${typography.detail}
 `
 
 export const Time = styled.time`
-  ${detail}
+  ${typography.detail}
 `
 
 export const Block = styled.div`
-  ${detail}
+  ${typography.detail}
 `
 
 export const Dt = styled.dt`
-  ${detail}
+  ${typography.detail}
 `

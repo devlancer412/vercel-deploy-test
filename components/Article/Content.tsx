@@ -1,13 +1,18 @@
 import { gql } from 'apollo-boost'
 import styled from 'styled-components'
 
+import { generateGrid } from '../../lib/grid'
+
 import * as Block from './blocks'
 
+const grid = generateGrid()
+
 const Wrapper = styled.div`
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  column-gap: 40px;
-  grid-column: 1 / -1;
+  ${grid.placeInColumns(1, { span: 12 })}
+  ${grid.placeInRows(5)}
+  ${grid.display}
+  ${grid.columns}
+  ${grid.rows}
 `
 
 export const Content = ({ content }) => {

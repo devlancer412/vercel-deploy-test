@@ -95,6 +95,7 @@ const AllWrapper = styled.nav<any>`
     height: auto;
     width: auto;
     top: auto;
+    pointer-events: all;
     left: auto;
     display: grid;
     background-color: transparent;

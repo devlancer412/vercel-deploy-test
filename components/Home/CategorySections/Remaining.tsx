@@ -39,13 +39,12 @@ const layGrid = (from, to, columns = 3, rows = 1) => {
 }
 
 export const Wrapper = styled.section`
-  ${grid.placeInRows(false)(3)}
   ${layGrid(1, 13, 1, 3)}
   margin-top: ${({ theme }) => theme.home.rowGap};
 
   ${({ theme }) => `@media (min-width: ${theme.breakpoint.home}px)`} {
     ${layGrid(1, 13, 3, 1)}
-    margin-top: 7.4rem;
+    margin-top: ${convert.viewportUnits(7, { by: 0.625 }).fromRem}; // 2.6rem
   }
 `
 

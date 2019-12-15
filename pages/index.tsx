@@ -19,7 +19,11 @@ const GET_HOME_PAGE = gql`
   ${Footer.fragment}
   ${Contact.fragment}
 
-  query GetHomePage($filterArticles: JSON!, $sortArticles: [TSSearchSort]!) {
+  query GetHomePage(
+    $filterArticles: JSON!
+    $sortArticles: [TSSearchSort]!
+    $size: Int!
+  ) {
     getHomePage {
       meta {
         title

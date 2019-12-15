@@ -16,6 +16,7 @@ const onFocus = `
   border: 0;
 
   &:before, &:after {
+    color: #000;
     outline-width: 1px;
     outline-style: dotted;
     outline-offset: 1px;

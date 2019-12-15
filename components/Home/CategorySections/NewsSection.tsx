@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 import { generateGrid } from '../../../lib/grid'
 import theme from '../../../lib/theme'
+import * as convert from '../../../lib/convert'
 
 import * as ArticlePreview from '../../ArticlePreview'
 
@@ -21,6 +22,8 @@ const Wrapper = styled.div`
   ${grid.small.display}
   ${grid.small.columns}
   ${grid.small.rows}
+
+  margin-bottom: 0;
 
   ${({ theme }) => `@media (min-width: ${theme.breakpoint.home}px)`} {
     ${grid.wide.display}

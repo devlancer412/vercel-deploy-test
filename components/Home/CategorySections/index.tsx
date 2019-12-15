@@ -1,5 +1,7 @@
-import styled from 'styled-components'
+import React from 'react'
+import styled, { css } from 'styled-components'
 import { gql } from 'apollo-boost'
+import * as apollo from '@apollo/react-hooks'
 import Link from 'next/link'
 
 import { generateGrid } from '../../../lib/grid'
@@ -10,26 +12,32 @@ import * as NewsSection from './NewsSection'
 import * as FeaturesSection from './FeaturesSection'
 import * as OpinionsSection from './OpinionsSection'
 import * as Remaining from './Remaining'
+import * as LoadMore from './LoadMore'
 import * as ArticlePreview from '../../ArticlePreview'
 
 import * as typography from '../../blocks/typography'
 
-export const variables = {
-  filterArticles: { bool: { allowOnHomepage: true } },
+export const variables = (initialRows: number) => ({
   sortArticles: [
     {
       field: '_updatedAt',
       order: 'desc',
     },
   ],
-}
+  size: initialRows * 3 + 2, // 2 being the max currently shown in a top row (News)
+})
 
 export const fragment = gql`
   ${ArticlePreview.fragment}
 
   fragment CategorySection on Category {
+    _id
     title
-    articleSet(filter: $filterArticles, sort: $sortArticles, size: 5) {
+    initialArticleSet: articleSet(
+      filter: $filterArticles
+      sort: $sortArticles
+      size: $size
+    ) {
       total
       items {
         ...ArticlePreview
@@ -73,45 +81,110 @@ const TopRow = styled.div`
   width: 100%;
 `
 
-const LoadMore = styled.a<{ animation: string }>`
-  font-family: 'Adieu Light';
-  font-size: ${convert.viewportUnits(2, { by: 0.625 }).fromRem}; // 2rem
-  letter-spacing: ${
-    convert.viewportUnits(-0.05, { by: 0.625 }).fromRem
-  }; // -0.05rem
-  text-transform: uppercase;
-  font-weight: 100;
-  text-align: center;
-  ${grid.placeInRows(4)}
-  ${grid.placeInColumns(4, { span: 6 })}
-  margin-top: ${convert.viewportUnits(11.9, { by: 0.625 }).fromRem}; // 11.9rem
+const FETCH_MORE = gql`
+  ${ArticlePreview.fragment}
 
-  ${({ animation }) => animation}
-
-  ${({ theme }) => `@media (min-width: 1015px)`} {
-    ${grid.placeInColumns(6, { span: 2 })}
+  query GetCategoryArticles(
+    $id: ID!
+    $from: Int!
+    $size: Int!
+    $sortArticles: [TSSearchSort]!
+  ) {
+    getCategory(_id: $id) {
+      articleSet(from: $from, size: $size, sort: $sortArticles) {
+        items {
+          ...ArticlePreview
+        }
+      }
+    }
   }
 `
 
-export const CategorySection = ({ categorySection }) => {
-  const { title, articleSet } = categorySection
-  const { total } = articleSet
+const RemainingRows = ({
+  initialRows,
+  totalArticles,
+  categoryId,
+  initialLength,
+  includeIntros,
+}) => {
+  const [rows, setRows] = React.useState(0)
+  const [articles, setArticles] = React.useState([])
+  const newRows = () => setRows(r => r + initialRows)
+
+  const [fetchMoreArticles, { loading, data }] = apollo.useLazyQuery(FETCH_MORE)
+
+  React.useEffect(() => {
+    // Once the new articles are fetched, this effect adds the newly
+    // fetched articles to the articles in the component state.
+    if (!data) return
+    const loadedArticles = data.getCategory.articleSet.items
+    setArticles(a => [...a, ...loadedArticles])
+  }, [data])
+
+  React.useEffect(() => {
+    if (rows === 0) return
+
+    // When more rows are added, this effect sends a query to TakeShape
+    // asking for more articles.
+    fetchMoreArticles({
+      variables: {
+        id: categoryId,
+        from: initialLength + (rows - initialRows) * 3,
+        size: initialRows * 3,
+        sortArticles: [
+          {
+            field: '_updatedAt',
+            order: 'desc',
+          },
+        ],
+      },
+    })
+  }, [rows])
+
+  const showLoadMore = initialLength + articles.length < totalArticles
+
+  return (
+    <>
+      {Array(rows)
+        .fill(null)
+        .map((_, i) => {
+          const row = articles.slice(i * 3, i * 3 + 3)
+          return row.length ? (
+            <Remaining.Remaining
+              withoutIntros={!includeIntros}
+              articles={row}
+            />
+          ) : null
+        })}
+
+      {showLoadMore && (
+        <LoadMore.LoadMore loading={loading} fetchRows={newRows} />
+      )}
+    </>
+  )
+}
+
+export const CategorySection = ({
+  categorySection,
+  initialRows = 1,
+  showIntros = false,
+}) => {
+  const { title, initialArticleSet } = categorySection
+  const { total } = initialArticleSet
 
   const [headerRef, headerAnimation] = animate.useDefaultAnimation()
-  const [loadMoreRef, loadMoreAnimation] = animate.useDefaultAnimation()
 
   const SectionComponent = mapCategorySections[title]
   if (!SectionComponent) return null
 
-  const articles = SectionComponent.usingArticles(articleSet.items)
+  const articles = SectionComponent.usingArticles(initialArticleSet.items)
   if (!articles) return null
-  const { remaining, ...topRow } = articles
+  const { remaining: initialRemaining, ...topRow } = articles
 
-  const includeIntros = SectionComponent.includeRemainingIntros
+  const includeIntros = showIntros || SectionComponent.includeRemainingIntros
 
-  const remainingArticles = remaining.slice(0, 3)
+  const visibleInitialRemaining = initialRemaining.slice(0, initialRows * 3)
   const topRowLength = Object.keys(topRow).length
-  const showLoadMore = remainingArticles.length + topRowLength < total
 
   return (
     <Wrapper>
@@ -119,18 +192,26 @@ export const CategorySection = ({ categorySection }) => {
         {title}
       </Header>
       <SectionComponent.Section title={title} {...topRow} />
-      <Remaining.Remaining
-        withoutIntros={!includeIntros}
-        articles={remainingArticles}
-      />
 
-      {showLoadMore && (
-        <Link href={`/${title}`} passHref>
-          <LoadMore ref={loadMoreRef} animation={loadMoreAnimation}>
-            Load More
-          </LoadMore>
-        </Link>
-      )}
+      {Array(initialRows)
+        .fill(null)
+        .map((_, i) => {
+          const articles = initialRemaining.slice(i * 3, i * 3 + 3)
+          return articles.length ? (
+            <Remaining.Remaining
+              withoutIntros={!includeIntros}
+              articles={articles}
+            />
+          ) : null
+        })}
+
+      <RemainingRows
+        initialRows={initialRows}
+        totalArticles={total}
+        categoryId={categorySection._id}
+        initialLength={visibleInitialRemaining.length + topRowLength}
+        includeIntros={includeIntros}
+      />
     </Wrapper>
   )
 }

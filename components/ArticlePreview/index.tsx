@@ -33,16 +33,22 @@ export const aspectRatio = {
 }
 
 export const Details = ({ category, createdAt }) => {
-  const [ref, animation] = animate.useDefaultAnimation()
+  const [ref, animation] = animate.useDefaultAnimation({
+    // On the homepage gallery because the default translate puts
+    // the details beyond the overflow: hidden, it would never trigger
+    whileHidden: 'opacity: 0; transform: translateY(5px);',
+  })
 
   const [createdAtDate] = createdAt.split('T')
   const [yearLong, month, day] = createdAtDate.split('-')
   const yearShort = yearLong.slice(2)
 
   return (
-    <styles.Details animation={animation} ref={ref}>
+    <styles.Details ref={ref} animation={animation}>
       <span>{category.title}</span>
-      <time>28.09.19</time>
+      <time>
+        {day}.{month}.{yearShort}
+      </time>
     </styles.Details>
   )
 }

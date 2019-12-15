@@ -10,7 +10,10 @@ import * as convert from '../../lib/convert'
 
 const grid = generateGrid({ rows: { repeat: [4, 'auto'] } })
 
-export const variables = CategorySection.variables
+export const variables = {
+  ...CategorySection.variables(1),
+  filterArticles: { bool: { allowOnHomepage: true } },
+}
 
 export const fragment = gql`
   ${ArticlePreview.fragment}

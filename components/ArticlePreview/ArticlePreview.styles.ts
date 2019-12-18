@@ -18,7 +18,6 @@ export const Heading = styled.h2<HeadingProps>`
   margin-bottom: ${convert.viewportUnits(0.3, { by: 0.625 }).fromRem};
   ${animate.defaultTransition}
   transition-property: color;
-  transition-speed: 0.4s;
 
   ${({ animation }) => animation}
 `
@@ -32,6 +31,7 @@ export const Wrapper = styled.a`
 
   &:hover {
     ${Heading} {
+      ${animate.defaultTransition}
       color: #e9e9e9;
     }
   }

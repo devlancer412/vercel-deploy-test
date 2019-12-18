@@ -23,11 +23,6 @@ const GlobalStyle = createGlobalStyle`
     transition-property: color;
     transition-speed: 0.4s;
 
-    &:focus {
-      outline: none;
-      font-style: italic;
-    }
-
     &:hover {
       color: #e9e9e9;
       ${animate.defaultTransition}

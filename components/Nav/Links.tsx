@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import Link from 'next/link'
 
 import * as convert from '../../lib/convert'
@@ -11,7 +11,20 @@ const grid = generateGrid()
 
 const breakpoint = 800
 
-const NavLink = styled(Detail.Link)<{ isActive: boolean }>`
+const activeLink = css<{ onHover: number; isActive: boolean }>`
+  color: #000000;
+  font-family: 'Adieu Backslant';
+  // The Backslant font causes the width of the word
+  // to change, resulting in jumps if not accounted for
+  ${({ onHover }) => onHover && `letter-spacing: ${onHover}rem;`}
+`
+
+const currentPage = css<{ onHover: number; isActive: boolean }>`
+  ${activeLink}
+  font-weight: bold;
+`
+
+const NavLink = styled(Detail.Link)<{ onHover: number; isActive: boolean }>`
   font-size: ${convert.viewportUnits(1.2, { to: 1 }).fromRem}; // 1.2rem
 
   margin-bottom: ${convert.viewportUnits(3, { by: 0.15 }).fromRem};
@@ -20,25 +33,12 @@ const NavLink = styled(Detail.Link)<{ isActive: boolean }>`
   ${`@media (min-width: ${breakpoint}px)`} {
     margin-left: ${convert.viewportUnits(6.5, { by: 0.15 }).fromRem}; // 6.5rem
     margin-bottom 0;
-
-    &:hover {
-      &:first-child {
-        margin-left: 0.05rem;
-      }
-    }
   }
 
-  ${({ isActive }) =>
-    isActive &&
-    `
-    font-family: 'Adieu Backslant';
-    font-weight: bold;
+  ${({ isActive }) => isActive && currentPage}
 
-  `}
-
-  &:hover {
-    color: #000000;
-    font-family: 'Adieu Backslant';
+  &:hover, &:focus {
+    ${activeLink}
   }
 
   &:first-child {
@@ -119,14 +119,18 @@ const navItems = {
   right: [
     { path: 'news', title: 'News' },
     { path: 'features', title: 'Features' },
-    { path: 'opinions', title: 'Opinions' },
+    { path: 'opinions', title: 'Opinions', onHover: 0.025 },
   ],
 }
 
-const NavItem = ({ path, match, title, active, onLinkClick }) => {
+const NavItem = ({ path, title, active, onLinkClick, onHover = null }) => {
   return (
     <Link href={path} passHref>
-      <NavLink isActive={active === match} onClick={onLinkClick || (() => {})}>
+      <NavLink
+        onHover={onHover}
+        isActive={active === path}
+        onClick={onLinkClick || (() => {})}
+      >
         {title}
       </NavLink>
     </Link>
@@ -136,14 +140,8 @@ const NavItem = ({ path, match, title, active, onLinkClick }) => {
 const Left = ({ active, onLinkClick }) => {
   return (
     <Wrapper align="left">
-      {navItems.left.map(({ path, title }) => (
-        <NavItem
-          path={`/${path}`}
-          active={active}
-          match={path}
-          title={title}
-          onLinkClick={onLinkClick}
-        />
+      {navItems.left.map(linkDetails => (
+        <NavItem {...linkDetails} active={active} onLinkClick={onLinkClick} />
       ))}
     </Wrapper>
   )
@@ -152,14 +150,8 @@ const Left = ({ active, onLinkClick }) => {
 const Right = ({ active, onLinkClick }) => {
   return (
     <Wrapper align="right">
-      {navItems.right.map(({ path, title }) => (
-        <NavItem
-          path={`/${path}`}
-          active={active}
-          match={path}
-          title={title}
-          onLinkClick={onLinkClick}
-        />
+      {navItems.right.map(linkDetails => (
+        <NavItem {...linkDetails} active={active} onLinkClick={onLinkClick} />
       ))}
     </Wrapper>
   )

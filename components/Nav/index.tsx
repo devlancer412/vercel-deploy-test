@@ -68,14 +68,17 @@ export const Nav = ({ footerVisible, active = null }) => {
   const [hamburgerOpen, setHamburgerOpen] = React.useState(false)
   const toggleHamburgerOpen = () => setHamburgerOpen(e => !e)
 
-  React.useEffect(() => {
+  const onLinkClick = () => {
+    // body-scroll-lock sets an overflow hidden on the body
+    // Without this, Next retains the body style on page
+    // switch, but body-scroll-lock loses in memory history
+    // and doesn't re enable scroll
     enableBodyScroll(wrapperRef.current)
+  }
 
-    if (hamburgerOpen) {
-      disableBodyScroll(wrapperRef.current)
-    } else {
-      enableBodyScroll(wrapperRef.current)
-    }
+  React.useEffect(() => {
+    if (hamburgerOpen) disableBodyScroll(wrapperRef.current)
+    else enableBodyScroll(wrapperRef.current)
   }, [hamburgerOpen])
 
   const styles =
@@ -96,7 +99,11 @@ export const Nav = ({ footerVisible, active = null }) => {
           </LogoLink>
         </Link>
       </Header>
-      <NavLinks.All expanded={hamburgerOpen} active={active} />
+      <NavLinks.All
+        expanded={hamburgerOpen}
+        active={active}
+        onLinkClick={onLinkClick}
+      />
     </Wrapper>
   )
 }

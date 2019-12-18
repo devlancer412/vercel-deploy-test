@@ -113,47 +113,67 @@ const AllWrapper = styled.nav<any>`
   }
 `
 
-const NavItem = ({ path, match, title, active }) => {
+const navItems = {
+  left: [{ path: 'about', title: 'About' }],
+
+  right: [
+    { path: 'news', title: 'News' },
+    { path: 'features', title: 'Features' },
+    { path: 'opinions', title: 'Opinions' },
+  ],
+}
+
+const NavItem = ({ path, match, title, active, onLinkClick }) => {
   return (
     <Link href={path} passHref>
-      <NavLink isActive={active === match}>{title}</NavLink>
+      <NavLink isActive={active === match} onClick={onLinkClick || (() => {})}>
+        {title}
+      </NavLink>
     </Link>
   )
 }
 
-export const All = ({ expanded = false, active = null }) => {
-  return (
-    <AllWrapper expanded={expanded}>
-      <Left active={active} />
-      <Right active={active} />
-    </AllWrapper>
-  )
-}
-
-export const Left = ({ active }) => {
+const Left = ({ active, onLinkClick }) => {
   return (
     <Wrapper align="left">
-      <NavItem path="/about" active={active} match={'about'} title="About" />
+      {navItems.left.map(({ path, title }) => (
+        <NavItem
+          path={`/${path}`}
+          active={active}
+          match={path}
+          title={title}
+          onLinkClick={onLinkClick}
+        />
+      ))}
     </Wrapper>
   )
 }
 
-export const Right = ({ active }) => {
+const Right = ({ active, onLinkClick }) => {
   return (
     <Wrapper align="right">
-      <NavItem path="/news" active={active} match={'news'} title="News" />
-      <NavItem
-        path="/features"
-        active={active}
-        match={'features'}
-        title="Features"
-      />
-      <NavItem
-        path="/opinions"
-        active={active}
-        match={'opinions'}
-        title="Opinions"
-      />
+      {navItems.right.map(({ path, title }) => (
+        <NavItem
+          path={`/${path}`}
+          active={active}
+          match={path}
+          title={title}
+          onLinkClick={onLinkClick}
+        />
+      ))}
     </Wrapper>
+  )
+}
+
+export const All = ({
+  expanded = false,
+  active = null,
+  onLinkClick = null,
+}) => {
+  return (
+    <AllWrapper expanded={expanded}>
+      <Left active={active} onLinkClick={onLinkClick} />
+      <Right active={active} onLinkClick={onLinkClick} />
+    </AllWrapper>
   )
 }

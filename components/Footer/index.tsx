@@ -58,6 +58,7 @@ const Wrapper = styled.footer`
 
 const LogoAnimation = styled.div<WithAnimation>`
   width: 100%;
+  opacity: 1;
   ${defaultTransition}
   ${({ animate }) => animate}
 `
@@ -252,6 +253,7 @@ export const Footer = ({
   const logoStyle =
     !inView &&
     `
+      opacity: 0;
       transform: translateY(calc(100% + 4rem));
     `
 

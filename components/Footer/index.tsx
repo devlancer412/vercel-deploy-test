@@ -189,9 +189,13 @@ const PhoneNumber = styled.a`
 
 const navGrid = generateGrid()
 
-const Nav = styled.nav`
+const Nav = styled.nav<WithAnimation>`
   padding-bottom: 1.7rem;
   display: none;
+  ${defaultTransition}
+  transition-delay: 1.1s;
+  opacity: 1;
+  ${({ animate }) => animate}
 
   @media (min-width: 800px) {
     // Nav breakpoint
@@ -257,6 +261,13 @@ export const Footer = ({
       transform: translateY(calc(100% + 4rem));
     `
 
+  const navStyle =
+    !inView &&
+    `
+      opacity: 0;
+      transition-delay: 0s;
+    `
+
   React.useEffect(() => {
     onVisibility && onVisibility(inView)
   }, [inView])
@@ -274,7 +285,7 @@ export const Footer = ({
       <LogoMask>
         <LogoAnimation animate={logoStyle}>
           {!withoutNav && (
-            <Nav>
+            <Nav animate={navStyle}>
               <NavLinks.All active={active} />
             </Nav>
           )}

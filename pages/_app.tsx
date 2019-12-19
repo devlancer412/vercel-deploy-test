@@ -29,6 +29,7 @@ export default class MyApp extends App {
     return (
       <ThemeProvider theme={theme}>
         <>
+          <span style={{ fontFamily: 'Adieu Backslant' }}></span>
           <GlobalStyle />
           <Component {...pageProps} />
         </>

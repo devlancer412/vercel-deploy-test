@@ -31,6 +31,7 @@ export default class MyDocument extends Document {
                   url('/fonts/EditorialNew-Ultralight/EditorialNew-Ultralight.woff') format('woff');
                 font-weight: 200;
                 font-style: normal;
+                font-display: swap;
               }
 
               @font-face {
@@ -38,6 +39,7 @@ export default class MyDocument extends Document {
                 src: url('/fonts/GTF-Adieu-Bold/Adieu-Bold.otf') format('opentype');
                 font-weight: normal;
                 font-style: normal;
+                font-display: block;
               }
 
               @font-face {
@@ -45,6 +47,7 @@ export default class MyDocument extends Document {
                 src: url('/fonts/GTF-Adieu-Light/Adieu-Light.otf') format('opentype');
                 font-weight: normal;
                 font-style: normal;
+                font-display: block;
               }
 
               @font-face {
@@ -52,6 +55,7 @@ export default class MyDocument extends Document {
                 src: url('/fonts/GTF-Adieu-Light-Backslant/Adieu-LightBackslant.otf') format('opentype');
                 font-weight: normal;
                 font-style: normal;
+                font-display: block;
               }
             `,
               }}

@@ -68,6 +68,7 @@ const shortenedIntro = `
 type IntroProps = { fullIntro: boolean } & WithAnimation
 export const Intro = styled.p<IntroProps>`
   ${typography.bodyCopy}
+  color: #7e7e7e;
   text-indent: ${convert.viewportUnits(5.6, { by: 0.625 }).fromRem}; // 5.6rem
 
   margin-top: ${convert.viewportUnits(2, { by: 0.625 }).fromRem}; // 2rem

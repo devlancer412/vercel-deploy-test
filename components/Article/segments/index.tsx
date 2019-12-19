@@ -1,12 +1,14 @@
 import * as Image from './Image'
 import * as Gallery from './Gallery'
+import * as Link from './Link'
 
 export const map = {
   // TO-DO:
   // inline code
 
-  LINK({ text }) {
-    return <a href="">{text}</a>
+  LINK({ text, entity }) {
+    const { url, target } = entity.data
+    return <Link.Link text={text} url={url} target={target} />
   },
 
   BOLD({ text }) {

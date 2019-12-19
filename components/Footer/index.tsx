@@ -14,6 +14,7 @@ import { generateGrid } from '../../lib/grid'
 import EarlyLogo from '../../public/images/early-logo-black.svg'
 
 import { Ul } from '../blocks/List'
+import * as link from '../blocks/link'
 import * as NavLinks from '../Nav/Links'
 
 const breakpoint = 1000
@@ -160,7 +161,9 @@ const Social = styled(Ul)<WithAnimation>`
   }
 `
 
-const SocialLink = styled.a``
+const SocialLink = styled.a`
+  ${link.gray}
+`
 
 const SocialLi = styled.li`
   margin-left: 12px;
@@ -172,10 +175,15 @@ const SocialLi = styled.li`
 
 const Email = styled.a`
   margin-bottom: 0.8rem;
+  ${link.gray}
 
   @media (min-width: ${breakpoint}px) {
     margin-bottom: 0;
   }
+`
+
+const PhoneNumber = styled.a`
+  ${link.gray}
 `
 
 const navGrid = generateGrid()
@@ -275,7 +283,7 @@ export const Footer = ({
 
       <Contact ref={contactRef} animate={contactAnimate}>
         <Email href={`mailto:${email}`}>{email}</Email>
-        <a href={`tel:${phoneNumber}`}>{phoneNumber}</a>
+        <PhoneNumber href={`tel:${phoneNumber}`}>{phoneNumber}</PhoneNumber>
 
         <span>
           {address.line1}, {address.line2}

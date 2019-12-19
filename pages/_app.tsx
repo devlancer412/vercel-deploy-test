@@ -18,17 +18,7 @@ const GlobalStyle = createGlobalStyle`
 
   a {
     text-decoration: none;
-    color: unset;
-    ${animate.defaultTransition}
-    transition-property: color;
-    transition-speed: 0.4s;
-
-    &:hover {
-      color: #e9e9e9;
-      ${animate.defaultTransition}
-      transition-property: color;
-      transition-speed: 0.4s;
-    }
+    color: #000000;
   }
 `
 

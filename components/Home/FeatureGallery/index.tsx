@@ -10,6 +10,7 @@ import * as PositionBar from './PositionBar'
 import * as Preview from './Preview'
 import * as Arrow from './Arrow'
 import * as Img from '../../blocks/Image/Fetch'
+import * as ArticlePreview from '../../ArticlePreview'
 
 const grid = generateGrid({
   columns: { repeat: [11, '1fr'] },
@@ -46,8 +47,15 @@ const HoverTarget = styled.div`
   ${grid.columns}
   ${grid.rows}
 
+  ${ArticlePreview.Heading} {
+    ${animate.defaultTransition}
+  }
+
   &:hover {
-    a { color: #e9e9e9; }
+    ${ArticlePreview.Heading} {
+      ${animate.defaultTransition}
+      color: #e9e9e9;
+    }
   }
 `
 
@@ -62,7 +70,6 @@ const Arrows = styled.div`
   &:hover {
     // hahhahahahahahahaha
     ~ * {
-      a,
       h2 {
         color: #000000 !important;
       }

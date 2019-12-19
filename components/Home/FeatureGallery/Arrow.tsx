@@ -34,8 +34,8 @@ const arrowButtonSide = (width, height) => css`
 `
 
 const ArrowButton = styled.button<any>`
-  height: 1.7rem; // 1.7rem
-  width: 1.7rem; // 1.7rem
+  height: ${convert.viewportUnits(1.7, { by: 1.3 }).fromRem}; // 1.7rem
+  width: ${convert.viewportUnits(1.7, { by: 1.3 }).fromRem}; // 1.7rem
   background-color: transparent;
   border: none;
   z-index: 2;

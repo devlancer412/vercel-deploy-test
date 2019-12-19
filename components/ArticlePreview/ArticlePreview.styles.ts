@@ -29,6 +29,10 @@ export const Wrapper = styled.a`
   color: #000;
   text-decoration: none;
 
+  ${Heading} {
+    ${animate.defaultTransition}
+  }
+
   &:hover {
     ${Heading} {
       ${animate.defaultTransition}

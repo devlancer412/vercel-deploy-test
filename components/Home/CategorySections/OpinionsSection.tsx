@@ -27,22 +27,6 @@ const TopArticleDetails = styled.div`
   }
 `
 
-const TopArticle = styled.a`
-  ${grid.parent.placeInColumns(1.5, { span: 11 })}
-  ${grid.parent.placeInRows(2)}
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  margin-top: ${convert.viewportUnits(0.7, { by: 0.625 }).fromRem}; // 0.7rem
-  margin-bottom: ${convert.viewportUnits(2.6, { by: 0.625 }).fromRem}; // 2.6rem
-
-  ${({ theme }) => `@media (min-width: ${theme.breakpoint.home}px)`} {
-    display: inline;
-  }
-`
-
 const TopArticleHeader = styled.h2<{ animation: string }>`
   font-family: 'Adieu Light';
   font-size: ${convert.viewportUnits(4, { by: 0.24 }).fromRem}; // 4rem
@@ -59,6 +43,33 @@ const TopArticleHeader = styled.h2<{ animation: string }>`
 
   ${({ theme }) => `@media (min-width: ${theme.breakpoint.home}px)`} {
     text-align: left;
+  }
+`
+
+const TopArticle = styled.a`
+  ${grid.parent.placeInColumns(1.5, { span: 11 })}
+  ${grid.parent.placeInRows(2)}
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin-top: ${convert.viewportUnits(0.7, { by: 0.625 }).fromRem}; // 0.7rem
+  margin-bottom: ${convert.viewportUnits(2.6, { by: 0.625 }).fromRem}; // 2.6rem
+
+  ${TopArticleHeader} {
+    ${animate.defaultTransition}
+  }
+
+  &:hover {
+    ${TopArticleHeader} {
+      ${animate.defaultTransition}
+      color: #e9e9e9;
+    }
+  }
+
+  ${({ theme }) => `@media (min-width: ${theme.breakpoint.home}px)`} {
+    display: inline;
   }
 `
 

@@ -3,6 +3,7 @@ import Link from 'next/link'
 
 import { generateGrid } from '../../../lib/grid'
 import * as convert from '../../../lib/convert'
+import * as animate from '../../../lib/animate'
 
 import * as ArticlePreview from '../../ArticlePreview'
 
@@ -19,6 +20,17 @@ const Wrapper = styled.a`
   ${grid.small.display}
   ${grid.small.columns}
   ${grid.small.rows}
+
+  ${ArticlePreview.Heading} {
+    ${animate.defaultTransition}
+  }
+
+  &:hover {
+    ${ArticlePreview.Heading} {
+      ${animate.defaultTransition}
+      color: #e9e9e9;
+    }
+  }
 
   ${({ theme }) => `@media (min-width: ${theme.breakpoint.home}px)`} {
     ${grid.wide.display}

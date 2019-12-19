@@ -83,10 +83,8 @@ export const Nav = ({ footerVisible, active = null }) => {
 
   const styles =
     footerVisible && !hamburgerOpen
-      ? 'transform: translateY(-100%);' +
-        'transition-delay: 1.1s;' +
-        'opacity: 0;'
-      : 'transform: translateY(0);' + 'transition-delay: 0s;' + 'opacity: 1;'
+      ? 'transform: translateY(-100%);' + 'opacity: 0;'
+      : 'transform: translateY(0);' + 'opacity: 1;'
 
   return (
     <Wrapper ref={wrapperRef} styles={styles} expanded={hamburgerOpen}>

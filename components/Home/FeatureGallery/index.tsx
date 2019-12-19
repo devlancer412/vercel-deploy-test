@@ -87,12 +87,19 @@ const InternalWrapper = styled.div<any>`
 
 export const FeatureGallery = ({ featured }) => {
   const [index, setIndex] = React.useState(0)
+  const length = featured.length
 
   // Use to reference carousel x position
   const previewsWrapper = React.useRef(null)
 
-  const nextPreview = () => setIndex(i => i + 1)
-  const previousPreview = () => setIndex(i => i - 1)
+  const nextPreview = () => setIndex(i => Math.min(i + 1, length - 1))
+  const previousPreview = () => setIndex(i => Math.max(0, i - 1))
+  const scroll = () => (index < length - 1 ? nextPreview() : setIndex(0))
+
+  React.useEffect(() => {
+    const timeout = setTimeout(scroll, 6000)
+    return () => clearTimeout(timeout)
+  }, [index])
 
   const transformX = previewsWrapper.current
     ? index * previewsWrapper.current.clientWidth

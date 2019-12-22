@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import Link from 'next/link'
 
 import * as ArticlePreview from '../../ArticlePreview'
+import * as Image from '../../blocks/Image'
 
 const Stabilise = styled.div`
   flex-basis: 100%;
@@ -9,14 +10,20 @@ const Stabilise = styled.div`
 `
 
 export const Body = ({ article, i }) => {
+  const { previewImage, category, createdAt } = article
+
   return (
     <Stabilise>
-      <ArticlePreview.ArticlePreview
-        articlePreview={article}
-        width={12}
-        withoutIntro
-        withoutHeading
-      />
+      <ArticlePreview.FeatureImage>
+        <Image.Image
+          image={previewImage}
+          objectFit="cover"
+          inColumns={12}
+          imgix={{ ar: '1105:503', fit: 'crop' }}
+        />
+      </ArticlePreview.FeatureImage>
+
+      <ArticlePreview.Details category={category} createdAt={createdAt} />
     </Stabilise>
   )
 }

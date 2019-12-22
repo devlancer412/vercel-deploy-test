@@ -11,6 +11,7 @@ import { generateGrid } from '../lib/grid'
 import * as Nav from '../components/Nav'
 import * as Footer from '../components/Footer'
 import * as Home from '../components/Home'
+import * as Featured from '../components/Home/FeatureGallery'
 import * as Contact from '../components/About/Contact'
 import * as Loading from '../components/Loading'
 
@@ -47,17 +48,34 @@ const GET_HOME_PAGE = gql`
   }
 `
 
-const grid = generateGrid({ rows: { repeat: [2, 'auto'] } })
+const grid = {
+  layout: generateGrid({ rows: { repeat: [1, 'auto'] } }),
+  hero: generateGrid({ rows: { exact: 'auto minmax(0, 1fr)' } }),
+}
 
 const Layout = styled.main`
-  ${grid.display}
-  ${grid.columns}
-  ${grid.rows}
+  ${grid.layout.display}
+  ${grid.layout.columns}
+  ${grid.layout.rows}
 
   padding: 0 ${({ theme }) => theme.grid.padding};
 
-  ${Nav.Wrapper} { ${grid.placeInRows(1)} }
-  ${Home.Wrapper} { ${grid.placeInRows(2)} }
+  ${Home.Wrapper} { ${grid.layout.placeInRows(1)} }
+`
+
+const Hero = styled.section`
+  ${grid.hero.display}
+  ${grid.hero.columns}
+  ${grid.hero.rows}
+
+  padding: 0 ${({ theme }) => theme.grid.padding};
+
+  ${Nav.Wrapper} { ${grid.hero.placeInRows(1)} }
+  ${Featured.Wrapper} { ${grid.hero.placeInRows(2)} }
+
+  @media (orientation: landscape) and (min-height: 640px) {
+    height: 100vh;
+  }
 `
 
 const HomePage = () => {
@@ -81,7 +99,7 @@ const HomePage = () => {
   if (error || !data) return <div>Error</div>
 
   const { getHomePage, getContact, getFooter } = data
-  const { meta, ...home } = getHomePage
+  const { meta, featured, ...home } = getHomePage
 
   return (
     <>
@@ -117,8 +135,12 @@ const HomePage = () => {
         )}
       </Head>
 
-      <Layout>
+      <Hero>
         <Nav.Nav footerVisible={footerVisible} />
+        <Featured.FeatureGallery featured={featured} />
+      </Hero>
+
+      <Layout>
         <Home.Home home={home} />
       </Layout>
 

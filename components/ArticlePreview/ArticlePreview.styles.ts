@@ -78,10 +78,8 @@ export const Intro = styled.p<IntroProps>`
   ${({ animation }) => animation}
 `
 
-export const FeatureImage = styled.div<WithAnimation>`
+export const FeatureImage = styled.div`
   margin-bottom: ${convert.viewportUnits(1.2, { by: 0.625 }).fromRem}; // 1.2rem
   background-color: #e9e9e9;
   position: relative;
-
-  // ${({ animation }) => animation}
 `

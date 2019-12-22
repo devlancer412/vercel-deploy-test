@@ -44,11 +44,10 @@ export const Wrapper = styled.main`
 `
 
 export const Home = ({ home }) => {
-  const { featured, categorySections } = home
+  const { categorySections } = home
 
   return (
     <Wrapper>
-      <FeatureGallery.FeatureGallery featured={featured} />
       {categorySections.map(categorySection => (
         <CategorySection.CategorySection
           key={`category-section-${categorySection.title}`}

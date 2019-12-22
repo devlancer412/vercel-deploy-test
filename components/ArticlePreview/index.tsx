@@ -65,6 +65,8 @@ export const Splash = ({ previewImage, width, position = null }) => (
 
 export const Intro = styles.Intro
 export const Heading = styles.Heading
+export const Wrapper = styles.Wrapper
+export const FeatureImage = styles.FeatureImage
 
 const Link = ({ category, slug, children }) => (
   <NextLink href={`/${category.title}/${slug}`} passHref>
@@ -112,15 +114,13 @@ export const Body = ({
 export const ArticlePreview = ({ articlePreview, width, ...bodyProps }) => {
   const { previewImage, category, slug } = articlePreview
 
-  const [imageRef, imageAnimation] = animate.useDefaultAnimation()
-
   const [widthRatio, heightRatio] = aspectRatio[width]
   const scale = (heightRatio * 100) / widthRatio
 
   return (
     <Link category={category} slug={slug}>
       <styles.Wrapper>
-        <styles.FeatureImage ref={imageRef} animation={imageAnimation}>
+        <styles.FeatureImage>
           <Splash
             previewImage={previewImage}
             width={width}

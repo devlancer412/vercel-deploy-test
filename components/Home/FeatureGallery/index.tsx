@@ -19,8 +19,10 @@ const grid = generateGrid({
 
 export const Wrapper = styled.article`
   ${grid.placeInColumns(1.5, { span: 11 })}
-  ${grid.display}
-  ${grid.columns}
+  // ${grid.display}
+  // ${grid.columns}
+  display: flex;
+  flex-direction: column;
   margin-bottom: ${convert.viewportUnits(12, { by: 0.4 }).fromRem}; // 12rem
 `
 
@@ -46,6 +48,8 @@ const HoverTarget = styled.div`
   ${grid.display}
   ${grid.columns}
   ${grid.rows}
+
+  height: 100%;
 
   ${ArticlePreview.Heading} {
     ${animate.defaultTransition}

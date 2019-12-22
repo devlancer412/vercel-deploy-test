@@ -17,7 +17,7 @@ import { Ul } from '../blocks/List'
 import * as link from '../blocks/link'
 import * as NavLinks from '../Nav/Links'
 
-const breakpoint = 1000
+const breakpoint = 1035
 
 type WithAnimation = { animate: string }
 type WithIndex = { i: number }

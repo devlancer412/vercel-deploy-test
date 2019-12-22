@@ -3,10 +3,17 @@ import Link from 'next/link'
 
 import * as ArticlePreview from '../../ArticlePreview'
 import * as Image from '../../blocks/Image'
+import * as ImageComponents from '../../blocks/Image/Image.styles'
 
 const Stabilise = styled.div`
   flex-basis: 100%;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+
+  ${ArticlePreview.FeatureImage} {
+    flex-grow: 1;
+  }
 `
 
 export const Body = ({ article, i }) => {
@@ -21,6 +28,7 @@ export const Body = ({ article, i }) => {
             objectFit="cover"
             inColumns={12}
             imgix={{ ar: '1105:503', fit: 'crop' }}
+            overrideClip="height: 100%; max-height: auto;"
           />
         </ArticlePreview.FeatureImage>
 

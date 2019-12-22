@@ -14,13 +14,11 @@ import * as ArticlePreview from '../../ArticlePreview'
 
 const grid = generateGrid({
   columns: { repeat: [11, '1fr'] },
-  rows: { repeat: [2, 'auto'] },
+  rows: { exact: '1fr auto' },
 })
 
 export const Wrapper = styled.article`
   ${grid.placeInColumns(1.5, { span: 11 })}
-  // ${grid.display}
-  // ${grid.columns}
   display: flex;
   flex-direction: column;
   margin-bottom: ${convert.viewportUnits(12, { by: 0.4 }).fromRem}; // 12rem

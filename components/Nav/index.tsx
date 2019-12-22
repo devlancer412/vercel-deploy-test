@@ -93,15 +93,11 @@ const NavTarget = styled.div`
 
 export const Nav = ({ footerVisible, active = null }) => {
   const wrapperRef = React.useRef()
-  const [firstRender, setFirstRender] = React.useState(true)
   const [targetRef, targetInView, targetEntry] = useInView({
     threshold: 1,
   })
 
-  const isSmall = firstRender ? false : !targetInView
-  React.useEffect(() => {
-    setFirstRender(false)
-  }, [])
+  const isSmall = targetEntry === undefined ? false : !targetInView
 
   const [hamburgerOpen, setHamburgerOpen] = React.useState(false)
   const toggleHamburgerOpen = () => setHamburgerOpen(e => !e)

@@ -64,7 +64,7 @@ const Layout = styled.main`
   ${Featured.Wrapper} { ${grid.layout.placeInRows(2)} }
   ${Home.Wrapper} { ${grid.layout.placeInRows(3)} }
 
-  @media (orientation: landscape) and (min-height: 640px) {
+  @media (orientation: landscape) and (min-height: 540px) {
     ${grid.fill.rows}
   }
 `

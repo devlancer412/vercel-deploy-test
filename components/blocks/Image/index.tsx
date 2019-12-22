@@ -14,6 +14,7 @@ type ImageProps = {
   intrinsicHeight?: boolean
   setRatio?: [number, number]
   inColumns?: number
+  overrideClip?: string
 }
 
 type ImageComponent = (props: ImageProps) => React.ReactElement
@@ -27,6 +28,7 @@ export const Image = ({
   intrinsicHeight,
   setRatio,
   inColumns,
+  overrideClip,
 }: ImageProps) => {
   const lazyOptions = {
     fit: 'clip',
@@ -71,7 +73,7 @@ export const Image = ({
 
   return (
     <>
-      <Styled.Clip setPadding={padding}>
+      <Styled.Clip setPadding={padding} overrideClip={overrideClip}>
         <Styled.Img
           className="blur-up lazyload"
           data-src={large.url}

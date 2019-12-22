@@ -36,9 +36,8 @@ export const Caption = styled(Detail.Block)`
 
 // Stops the blur up effect from spilling over image boundaries
 // and looking messy
-export const Clip = styled.div<{ setPadding?: number }>`
+export const Clip = styled.div<{ setPadding?: number; overrideClip?: string }>`
   overflow: hidden;
-  //width: 100%;
 
   width: 100%;
   max-height: 100%;
@@ -47,4 +46,5 @@ export const Clip = styled.div<{ setPadding?: number }>`
   position: relative;
   ${({ setPadding }) => setPadding && `background-color: #e9e9e9;`}
   ${({ setPadding }) => setPadding && `padding-bottom: ${setPadding}%;`}
+  ${({ overrideClip }) => overrideClip}
 `

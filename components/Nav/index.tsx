@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
+import { useInView } from 'react-intersection-observer'
 
 import { generateGrid } from '../../lib/grid'
 import * as convert from '../../lib/convert'
@@ -18,6 +19,13 @@ const grid = {
 }
 
 const breakpoint = 800
+
+const wrapperTransform = ({ isSmall, footerVisible, hamburgerOpen }) => {
+  if (footerVisible && !hamburgerOpen)
+    return 'transform: translateY(-100%); opacity: 0;'
+  if (!isSmall) return `transform: translateY(0); opacity: 1;`
+  return `transform: translateY(-1rem); opacity: 1;`
+}
 
 export const Wrapper = styled.nav<{ styles: string; expanded: boolean }>`
   ${grid.parent.placeInColumns(1, { span: 12 })}
@@ -49,8 +57,15 @@ export const Header = styled.header`
   align-items: center;
 `
 
-const Logo = styled(EarlyLogo)`
-  width: ${convert.viewportUnits(17.2, { by: 0.6 }).fromRem}; // 17.2
+const logoScale = ({ isSmall, hamburgerOpen }) => {
+  if (isSmall && !hamburgerOpen) return `scale(0.6)`
+  return `scale(1)`
+}
+
+const Logo = styled(({ scaleBy, ...rest }) => <EarlyLogo {...rest} />)<any>`
+  ${animate.defaultTransition}
+  width: ${convert.viewportUnits(17.2, { by: 0.6 }).fromRem};
+  transform: ${({ scaleBy }) => scaleBy};
   z-index: 2;
   height: intrinsic;
 `
@@ -63,8 +78,27 @@ const LogoLink = styled.a`
   z-index: 2;
 `
 
+// used as a reference to calculate nav scroll intersection
+const NavTarget = styled.div`
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+`
+
 export const Nav = ({ footerVisible, active = null }) => {
   const wrapperRef = React.useRef()
+  const [firstRender, setFirstRender] = React.useState(true)
+  const [targetRef, targetInView, targetEntry] = useInView({
+    threshold: 1,
+  })
+
+  const isSmall = firstRender ? false : !targetInView
+  React.useEffect(() => {
+    setFirstRender(false)
+  }, [])
+
   const [hamburgerOpen, setHamburgerOpen] = React.useState(false)
   const toggleHamburgerOpen = () => setHamburgerOpen(e => !e)
 
@@ -81,29 +115,35 @@ export const Nav = ({ footerVisible, active = null }) => {
     else enableBodyScroll(wrapperRef.current)
   }, [hamburgerOpen])
 
-  const styles =
-    footerVisible && !hamburgerOpen
-      ? 'transform: translateY(-100%);' + 'opacity: 0;'
-      : 'transform: translateY(0);' + 'opacity: 1;'
+  const wrapperStyle = wrapperTransform({
+    isSmall,
+    footerVisible,
+    hamburgerOpen,
+  })
+  const logoStyle = logoScale({ isSmall, hamburgerOpen })
 
   return (
-    <Wrapper ref={wrapperRef} styles={styles} expanded={hamburgerOpen}>
-      <Header>
-        <Hamburger.Hamburger
-          onClick={toggleHamburgerOpen}
+    <>
+      <NavTarget ref={targetRef} />
+
+      <Wrapper ref={wrapperRef} styles={wrapperStyle} expanded={hamburgerOpen}>
+        <Header>
+          <Hamburger.Hamburger
+            onClick={toggleHamburgerOpen}
+            expanded={hamburgerOpen}
+          />
+          <Link href="/" passHref>
+            <LogoLink>
+              <Logo scaleBy={logoStyle} />
+            </LogoLink>
+          </Link>
+        </Header>
+        <NavLinks.All
           expanded={hamburgerOpen}
+          active={active}
+          onLinkClick={onLinkClick}
         />
-        <Link href="/" passHref>
-          <LogoLink>
-            <Logo />
-          </LogoLink>
-        </Link>
-      </Header>
-      <NavLinks.All
-        expanded={hamburgerOpen}
-        active={active}
-        onLinkClick={onLinkClick}
-      />
-    </Wrapper>
+      </Wrapper>
+    </>
   )
 }

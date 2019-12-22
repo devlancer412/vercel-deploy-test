@@ -50,7 +50,6 @@ const GET_HOME_PAGE = gql`
 
 const grid = {
   layout: generateGrid({ rows: { repeat: [3, 'auto'] } }),
-  hero: generateGrid({ rows: { exact: 'auto minmax(0, 1fr)' } }),
   fill: generateGrid({ rows: { exact: 'auto 100vh auto' } }),
 }
 
@@ -61,28 +60,12 @@ const Layout = styled.main`
 
   padding: 0 ${({ theme }) => theme.grid.padding};
 
-  ${Nav.Wrapper} { ${grid.hero.placeInRows(1)} }
-  ${Featured.Wrapper} { ${grid.hero.placeInRows(2)} }
+  ${Nav.Wrapper} { ${grid.layout.placeInRows(1)} }
+  ${Featured.Wrapper} { ${grid.layout.placeInRows(2)} }
   ${Home.Wrapper} { ${grid.layout.placeInRows(3)} }
 
   @media (orientation: landscape) and (min-height: 640px) {
     ${grid.fill.rows}
-  }
-`
-
-const Hero = styled.section`
-  ${grid.hero.display}
-  ${grid.hero.columns}
-  ${grid.hero.rows}
-
-  padding: 0 ${({ theme }) => theme.grid.padding};
-
-  ${Nav.Wrapper} { ${grid.hero.placeInRows(1)} }
-  ${Featured.Wrapper} { ${grid.hero.placeInRows(2)} }
-  ${Home.Wrapper} { ${grid.layout.placeInRows(3)} }
-
-  @media (orientation: landscape) and (min-height: 640px) {
-    height: 100vh;
   }
 `
 

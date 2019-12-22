@@ -71,11 +71,15 @@ const Logo = styled(({ scaleBy, ...rest }) => <EarlyLogo {...rest} />)<any>`
 `
 
 const LogoLink = styled.a`
-  ${grid.all.placeInColumns(5, { span: 4 })}
+  ${grid.all.placeInColumns(4, { span: 6 })}
   ${grid.all.placeInRows(1)}
   display: flex;
   justify-content: center;
   z-index: 2;
+
+  @media (min-width: ${breakpoint}px) {
+    ${grid.all.placeInColumns(5, { span: 4 })}
+  }
 `
 
 // used as a reference to calculate nav scroll intersection

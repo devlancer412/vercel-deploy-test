@@ -10,30 +10,34 @@ const Stabilise = styled.div`
 `
 
 export const Body = ({ article, i }) => {
-  const { previewImage, category, createdAt } = article
+  const { previewImage, category, createdAt, slug } = article
 
   return (
-    <Stabilise>
-      <ArticlePreview.FeatureImage>
-        <Image.Image
-          image={previewImage}
-          objectFit="cover"
-          inColumns={12}
-          imgix={{ ar: '1105:503', fit: 'crop' }}
-        />
-      </ArticlePreview.FeatureImage>
+    <Link href={`/${category.title}/${slug}`} passHref>
+      <Stabilise as="a">
+        <ArticlePreview.FeatureImage>
+          <Image.Image
+            image={previewImage}
+            objectFit="cover"
+            inColumns={12}
+            imgix={{ ar: '1105:503', fit: 'crop' }}
+          />
+        </ArticlePreview.FeatureImage>
 
-      <ArticlePreview.Details category={category} createdAt={createdAt} />
-    </Stabilise>
+        <ArticlePreview.Details category={category} createdAt={createdAt} />
+      </Stabilise>
+    </Link>
   )
 }
 
 export const Heading = ({ article, i, animation }) => {
+  const { heading, category, slug } = article
+
   return (
-    <Link href={`/${article.category.title}/${article.slug}`} passHref>
+    <Link href={`/${category.title}/${slug}`} passHref>
       <Stabilise as="a">
         <ArticlePreview.Heading animation={animation} width={8}>
-          {article.heading}
+          {heading}
         </ArticlePreview.Heading>
       </Stabilise>
     </Link>

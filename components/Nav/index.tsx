@@ -137,7 +137,7 @@ export const Nav = ({ footerVisible, active = null }) => {
             expanded={hamburgerOpen}
           />
           <Link href="/" passHref>
-            <LogoLink>
+            <LogoLink onClick={onLinkClick}>
               <Logo scaleBy={logoStyle} />
             </LogoLink>
           </Link>

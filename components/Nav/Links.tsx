@@ -86,7 +86,7 @@ const AllWrapper = styled.nav<any>`
   ${animate.defaultTransition}
 
   position: fixed;
-  height: 100vh;
+  height: calc(100vh + 1rem); // 1rem how much the nav is transformed back when small
   width: 100vw;
   top: -3.1rem; // same as parent padding
   left: calc(-1 * ${({ theme }) => theme.grid.padding});

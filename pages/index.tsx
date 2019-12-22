@@ -49,8 +49,9 @@ const GET_HOME_PAGE = gql`
 `
 
 const grid = {
-  layout: generateGrid({ rows: { repeat: [1, 'auto'] } }),
+  layout: generateGrid({ rows: { repeat: [3, 'auto'] } }),
   hero: generateGrid({ rows: { exact: 'auto minmax(0, 1fr)' } }),
+  fill: generateGrid({ rows: { exact: 'auto 100vh auto' } }),
 }
 
 const Layout = styled.main`
@@ -60,7 +61,13 @@ const Layout = styled.main`
 
   padding: 0 ${({ theme }) => theme.grid.padding};
 
-  ${Home.Wrapper} { ${grid.layout.placeInRows(1)} }
+  ${Nav.Wrapper} { ${grid.hero.placeInRows(1)} }
+  ${Featured.Wrapper} { ${grid.hero.placeInRows(2)} }
+  ${Home.Wrapper} { ${grid.layout.placeInRows(3)} }
+
+  @media (orientation: landscape) and (min-height: 640px) {
+    ${grid.fill.rows}
+  }
 `
 
 const Hero = styled.section`
@@ -72,6 +79,7 @@ const Hero = styled.section`
 
   ${Nav.Wrapper} { ${grid.hero.placeInRows(1)} }
   ${Featured.Wrapper} { ${grid.hero.placeInRows(2)} }
+  ${Home.Wrapper} { ${grid.layout.placeInRows(3)} }
 
   @media (orientation: landscape) and (min-height: 640px) {
     height: 100vh;
@@ -135,12 +143,9 @@ const HomePage = () => {
         )}
       </Head>
 
-      <Hero>
+      <Layout>
         <Nav.Nav footerVisible={footerVisible} />
         <Featured.FeatureGallery featured={featured} />
-      </Hero>
-
-      <Layout>
         <Home.Home home={home} />
       </Layout>
 

@@ -10,7 +10,7 @@ import * as Img from '../../../blocks/Image/Fetch'
 import * as Arrow from './Arrow'
 import * as PositionBar from './PositionBar'
 
-const grid = generateGrid()
+const grid = generateGrid({ rows: { repeat: [3, 'auto'] } })
 
 const breakpoint = 950
 
@@ -18,13 +18,34 @@ const Wrapper = styled.div<any>`
   ${grid.placeInColumns(1, { span: 12 })}
   ${grid.display}
   ${grid.columns}
+  ${grid.rows}
 
   margin-bottom: ${convert.viewportUnits(12.1, { by: 0.625 }).fromRem}; // 121px
   margin-top: ${convert.viewportUnits(11.2, { by: 0.625 }).fromRem}; // 112px
 `
 
-const Images = styled.div`
+const LeftTarget = styled.div<any>`
+  ${grid.placeInColumns(1, { span: 6.5 })}
+  ${grid.placeInRows(1)}
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  margin-right: calc(0.5 * ${p => p.theme.grid.padding});
+  cursor: url(http://www.rw-designer.com/cursor-view/27667.png), auto;
+`
+const RightTarget = styled.div<any>`
+  ${grid.placeInColumns(6.5, { span: 6.5 })}
+  ${grid.placeInRows(1)}
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  margin-left: calc(0.5 * ${p => p.theme.grid.padding});
+  cursor: url(http://www.rw-designer.com/cursor-view/27589.png), auto;
+`
+
+const Images = styled.div<any>`
   ${grid.placeInColumns(3, { span: 8 })}
+  ${p => grid.placeInRows(p.row)}
 
   display: flex;
   overflow: hidden;
@@ -103,9 +124,12 @@ export const Gallery = ({ images }) => {
 
   return (
     <Wrapper>
+      <LeftTarget onClick={previousImage} />
+      <RightTarget onClick={nextImage} />
+
       <Arrow.Arrow facing="left" visible={!!index} onClick={previousImage} />
 
-      <Images ref={imageWrapper}>
+      <Images ref={imageWrapper} row={1}>
         <InternalWrapper transformX={transformX} maxHeight={initialHeight}>
           {renderedImages}
         </InternalWrapper>
@@ -117,7 +141,7 @@ export const Gallery = ({ images }) => {
         onClick={nextImage}
       />
 
-      <Images>
+      <Images row={2}>
         <InternalWrapper transformX={transformX}>
           {images.map(image =>
             (image.caption.blocks || []).map(({ text }, i) => (

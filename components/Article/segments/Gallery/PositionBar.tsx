@@ -14,6 +14,7 @@ const grid = generateGrid()
 
 const Wrapper = styled.div<any>`
   ${grid.placeInColumns(4, { span: 6 })}
+  ${grid.placeInRows(3)}
   ${grid.display}
   ${({ length }) => positionBarGrid(length).columns}
 

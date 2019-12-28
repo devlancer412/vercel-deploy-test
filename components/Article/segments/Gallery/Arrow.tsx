@@ -45,6 +45,7 @@ const Wrapper = styled.div<any>`
   display: flex;
   ${({ facing }) =>
     grid.placeInColumns(facing === 'left' ? 1 : 11, { span: 2 })};
+  ${grid.placeInRows(1)}
   position: relative;
   align-items: center;
   ${animate}

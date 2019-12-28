@@ -64,8 +64,8 @@ const LogoAnimation = styled.div<WithAnimation>`
 `
 
 const LogoMask = styled.div`
-  ${grid.small.placeInColumns(1, {})}
-  ${grid.small.placeInRows(3, {})}
+  ${grid.small.placeInColumns(1)}
+  ${grid.small.placeInRows(3)}
 
   position: relative;
   width: 100%;
@@ -74,7 +74,7 @@ const LogoMask = styled.div`
 
   @media (min-width: ${breakpoint}px) {
     ${grid.wide.placeInColumns(1, { span: 12 })}
-    ${grid.wide.placeInRows(2, {})}
+    ${grid.wide.placeInRows(2)}
   }
 `
 
@@ -96,26 +96,28 @@ const footerDetail = css`
 `
 
 const Legal = styled.small<WithAnimation>`
-  ${grid.small.placeInColumns(1, {})}
-  ${grid.small.placeInRows(4, {})}
+  ${grid.small.placeInColumns(1, { span: 12 })}
+  ${grid.small.placeInRows(4)}
 
   margin: 1rem 0 5rem 0;
   ${footerDetail}
 
   display: flex;
+  justify-content: center;
   ${({ animate }) => animate}
 
   @media (min-width: ${breakpoint}px) {
     margin: auto 0;
     margin-bottom: 2.8rem;
+    justify-content: flex-start;
     ${grid.wide.placeInColumns(1, { span: 3 })}
-    ${grid.wide.placeInRows(3, {})}
+    ${grid.wide.placeInRows(3)}
   }
 `
 
 const Contact = styled.address<WithAnimation>`
-  ${grid.small.placeInColumns(1, {})}
-  ${grid.small.placeInRows(2, {})}
+  ${grid.small.placeInColumns(1)}
+  ${grid.small.placeInRows(2)}
 
   display: flex;
   flex-direction: column;
@@ -134,7 +136,7 @@ const Contact = styled.address<WithAnimation>`
     margin: auto ${({ theme }) => css`calc(-1 * ${theme.grid.gap})`};
     margin-bottom: 2.8rem;
     ${grid.wide.placeInColumns(4, { span: 6 })}
-    ${grid.wide.placeInRows(3, {})}
+    ${grid.wide.placeInRows(3)}
   }
 
   * {
@@ -143,8 +145,8 @@ const Contact = styled.address<WithAnimation>`
 `
 
 const Social = styled(Ul)<WithAnimation>`
-  ${grid.small.placeInColumns(1, {})}
-  ${grid.small.placeInRows(1, {})}
+  ${grid.small.placeInColumns(1)}
+  ${grid.small.placeInRows(1)}
 
   justify-content: center;
   margin: 0 auto 5rem auto;
@@ -158,7 +160,7 @@ const Social = styled(Ul)<WithAnimation>`
     margin: auto 0;
     margin-bottom: 2.8rem;
     ${grid.wide.placeInColumns(10, { span: 3 })}
-    ${grid.wide.placeInRows(3, {})}
+    ${grid.wide.placeInRows(3)}
   }
 `
 
@@ -175,12 +177,7 @@ const SocialLi = styled.li`
 `
 
 const Email = styled.a`
-  margin-bottom: 0.8rem;
   ${link.gray}
-
-  @media (min-width: ${breakpoint}px) {
-    margin-bottom: 0;
-  }
 `
 
 const PhoneNumber = styled.a`

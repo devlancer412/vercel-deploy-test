@@ -25,9 +25,9 @@ const currentPage = css<{ onHover: number; isActive: boolean }>`
 `
 
 const NavLink = styled(Detail.Link)<{ onHover: number; isActive: boolean }>`
-  font-size: ${convert.viewportUnits(1.2, { to: 1 }).fromRem}; // 1.2rem
+  font-size: ${convert.viewportUnits(1.2, { to: 1.2 }).fromRem}; // 1.2rem
 
-  margin-bottom: ${convert.viewportUnits(3, { by: 0.15 }).fromRem};
+  margin-bottom: ${convert.viewportUnits(3, { by: 0.5 }).fromRem};
   margin-left: 0;
 
   ${`@media (min-width: ${breakpoint}px)`} {
@@ -86,9 +86,8 @@ const AllWrapper = styled.nav<any>`
   ${animate.defaultTransition}
 
   position: fixed;
-  height: calc(100vh + 1rem); // 1rem how much the nav is transformed back when small
+  height: 100vh; // 1rem how much the nav is transformed back when small
   width: 100vw;
-  top: -3.1rem; // same as parent padding
   left: calc(-1 * ${({ theme }) => theme.grid.padding});
   display: flex;
   align-items: center;
@@ -98,12 +97,14 @@ const AllWrapper = styled.nav<any>`
   overflow: hidden;
   opacity: 1;
   ${({ expanded }) => (expanded ? expandedStyle : hiddenStyle)}
+  padding-bottom: 12.4rem; // double the height of parent padding
+  box-sizing: border-box;
 
   ${`@media (min-width: ${breakpoint}px)`} {
     position: static;
     height: auto;
     width: auto;
-    top: auto;
+    padding-bottom: 0;
     pointer-events: all;
     left: auto;
     display: grid;

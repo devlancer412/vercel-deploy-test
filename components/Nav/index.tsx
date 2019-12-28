@@ -23,7 +23,7 @@ const breakpoint = 800
 const wrapperTransform = ({ isSmall, footerVisible, hamburgerOpen }) => {
   if (footerVisible && !hamburgerOpen)
     return 'transform: translateY(-100%); opacity: 0;'
-  if (!isSmall) return `transform: translateY(0); opacity: 1;`
+  if (!isSmall || hamburgerOpen) return `transform: translateY(0); opacity: 1;`
   return `transform: translateY(-1rem); opacity: 1;`
 }
 
@@ -86,7 +86,7 @@ const LogoLink = styled.a`
 const NavTarget = styled.div`
   position: absolute;
   width: 100vw;
-  height: 100vh;
+  height: 1rem;
   top: 0;
   left: 0;
 `

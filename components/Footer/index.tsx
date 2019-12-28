@@ -154,7 +154,7 @@ const Social = styled(Ul)<WithAnimation>`
   ${({ animate }) => animate}
 
   @media (min-width: ${breakpoint}px) {
-    justify-content: right;
+    justify-content: flex-end;
     margin: auto 0;
     margin-bottom: 2.8rem;
     ${grid.wide.placeInColumns(10, { span: 3 })}

@@ -47,7 +47,7 @@ const HoverTarget = styled.div`
   ${grid.columns}
   ${grid.rows}
 
-  height: 100%;
+  height: auto;
 
   ${ArticlePreview.Heading} {
     ${animate.defaultTransition}
@@ -58,6 +58,10 @@ const HoverTarget = styled.div`
       ${animate.defaultTransition}
       color: #e9e9e9;
     }
+  }
+
+  @media (orientation: landscape) and (min-height: 540px) {
+    height: 100%;
   }
 `
 

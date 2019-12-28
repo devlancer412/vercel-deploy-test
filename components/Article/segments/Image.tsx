@@ -47,6 +47,10 @@ export const Wrapper = styled.div<any>`
 
   @media (min-width: ${breakpoint}px) {
     ${({ start, span }) => gridColumn(start, span)};
+
+    & + & {
+      margin-top: ${topMargin};
+    }
   }
 `
 

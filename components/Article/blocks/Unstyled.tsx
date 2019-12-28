@@ -11,10 +11,10 @@ import * as segments from '../segments'
 const grid = generateGrid()
 
 const Paragraph = styled.p<{ animation: string }>`
-  white-space: pre-wrap;
-
   ${typography.bodyCopy}
 
+  ${typography.textIndent}
+  white-space: normal;
   margin-block-start: 0em;
   margin-block-end: 0em;
 

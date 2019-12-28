@@ -8,11 +8,17 @@ import * as ImageComponents from '../../blocks/Image/Image.styles'
 const Stabilise = styled.div`
   flex-basis: 100%;
   flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
+  // display: flex;
+  // flex-direction: column;
+  // justify-content: flex-end;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: minmax(0, 1fr) auto;
 
   ${ArticlePreview.FeatureImage} {
     flex-grow: 1;
+    display: flex;
   }
 `
 
@@ -27,7 +33,7 @@ export const Body = ({ article, i }) => {
             image={previewImage}
             objectFit="cover"
             inColumns={12}
-            imgix={{ ar: '1105:503', fit: 'crop' }}
+            imgix={{ ar: '96:80', fit: 'crop' }}
             overrideClip="height: 100%; max-height: auto;"
           />
         </ArticlePreview.FeatureImage>

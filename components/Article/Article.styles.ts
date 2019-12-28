@@ -114,9 +114,8 @@ export const Intro = styled.div<WithAnimation>`
   ${grid.placeInColumns(1, { span: 12 })}
   ${grid.placeInRows(4)}
   ${typography.intro}
-  white-space: pre-wrap;
-  tab-size: 28px;
-  -moz-tab-size: 28px;
+  white-space: normal;
+  ${typography.textIndent}
   ${({ animation }) => animation}
 
   @media (min-width: 500px) {

@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
+import { useSwipeable } from 'react-swipeable'
 
 import { generateGrid } from '../../../lib/grid'
 import * as convert from '../../../lib/convert'
@@ -19,8 +20,13 @@ const grid = generateGrid({
 
 export const Wrapper = styled.article`
   ${grid.placeInColumns(1.5, { span: 11 })}
-  display: flex;
-  flex-direction: column;
+  // display: flex;
+  // flex-direction: column;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: minmax(0, 1fr) auto;
+
   margin-bottom: ${convert.viewportUnits(12, { by: 0.4 }).fromRem}; // 12rem
 `
 
@@ -102,6 +108,12 @@ export const FeatureGallery = ({ featured }) => {
   const previousPreview = () => setIndex(i => Math.max(0, i - 1))
   const scroll = () => (index < length - 1 ? nextPreview() : setIndex(0))
 
+  const handlers = useSwipeable({
+    onSwipedLeft: nextPreview,
+    onSwipedRight: previousPreview,
+    preventDefaultTouchmoveEvent: true,
+  })
+
   React.useEffect(() => {
     const timeout = setTimeout(scroll, 6000)
     return () => clearTimeout(timeout)
@@ -133,7 +145,7 @@ export const FeatureGallery = ({ featured }) => {
 
   return (
     <Wrapper>
-      <HoverTarget>
+      <HoverTarget {...handlers}>
         <Arrows>
           <Arrow.Arrow
             facing="left"

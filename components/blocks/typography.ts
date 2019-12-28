@@ -9,7 +9,10 @@ export const bodyCopy = css`
   letter-spacing: ${convert.viewportUnits(0.036, { by: 0.7 })
     .fromRem}; // 0.036rem
   font-weight: 100;
-  tab-size: 2.8rem;
+`
+
+export const textIndent = css`
+  text-indent: ${convert.viewportUnits(5.6, { by: 0.5 }).fromRem};
 `
 
 export const section = css`

@@ -39,11 +39,14 @@ const ArrowButton = styled.button<any>`
   background-color: transparent;
   border: none;
   z-index: 2;
+  margin: 0 0.2rem;
 
   padding: 0;
   position: relative;
   transform: rotate(${rotated}deg);
   pointer-events: ${({ visible }) => (visible ? 'all' : 'none')};
+
+  cursor: pointer;
 
   ${animate.defaultTransition}
   transition-property: color;
@@ -52,6 +55,7 @@ const ArrowButton = styled.button<any>`
   &:before {
     ${arrowButtonSide('100%', '1px')}
   }
+
   &:after {
     ${arrowButtonSide('1px', '100%')}
   }
@@ -59,15 +63,9 @@ const ArrowButton = styled.button<any>`
   &::-moz-focus-inner {
     ${onFocus}
   }
+
   &:focus {
     ${onFocus}
-  }
-
-  &:hover {
-    &:before,
-    &:after {
-      background-color: #e9e9e9;
-    }
   }
 `
 

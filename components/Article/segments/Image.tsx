@@ -9,6 +9,8 @@ import * as convert from '../../../lib/convert'
 import * as Loading from '../../Loading'
 import * as Img from '../../blocks/Image/Fetch'
 
+const breakpoint = 600
+
 const grid = generateGrid()
 
 const gridColumn = (start: number, span: number) =>
@@ -32,12 +34,20 @@ const topMargin = convert.viewportUnits(11.2, { by: 0.625 }).fromRem
 const bottomMargin = convert.viewportUnits(12, { by: 0.625 }).fromRem
 
 export const Wrapper = styled.div<any>`
-  ${({ start, span }) => gridColumn(start, span)};
+  ${grid.placeInColumns(1, { span: 12 })}
   margin: ${topMargin} 0 ${bottomMargin} 0;
+
+  & + & {
+    margin-top: 0;
+  }
 
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media (min-width: ${breakpoint}px) {
+    ${({ start, span }) => gridColumn(start, span)};
+  }
 `
 
 export const Image = ({ image }) => {

@@ -32,12 +32,20 @@ const Aside = styled.aside<{ animation: string }>`
 `
 
 const Cite = styled.cite`
+  display: block;
+  margin-bottom: 1.5rem;
+
   ${typography.detail}
   vertical-align: ${
     convert.viewportUnits(1.7, { by: scaleDownBy }).fromRem
   }; // 1.7rem
   margin-right: 1.1rem;
   font-style: normal;
+
+  @media (min-width: 550px) {
+    display: inline;
+    margin-bottom: 0;
+  }
 `
 
 const PullQuote = ({ quote }: { quote: string }) => {

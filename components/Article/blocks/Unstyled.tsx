@@ -14,7 +14,7 @@ const Paragraph = styled.p<{ animation: string }>`
   ${typography.bodyCopy}
 
   ${typography.textIndent}
-  white-space: normal;
+  white-space: pre-wrap;
   margin-block-start: 0em;
   margin-block-end: 0em;
 

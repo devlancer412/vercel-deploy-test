@@ -58,9 +58,9 @@ export const articleTitle = css`
 
 export const detail = css`
   font-family: 'Adieu Light';
-  font-size: 1rem;
+  font-size: ${convert.viewportUnits(1, { by: 0.8 }).fromRem};
   line-height: 1.2; // 1.2rem
-  letter-spacing: 0.018rem;
+  letter-spacing: ${convert.viewportUnits(0.018, { by: 0.8 }).fromRem};
   font-weight: 100;
   text-transform: uppercase;
 `

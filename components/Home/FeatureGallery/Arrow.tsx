@@ -14,13 +14,6 @@ const rotated = ({ facing }) => (facing === 'left' ? 135 : -45)
 const onFocus = `
   outline: none;
   border: 0;
-
-  &:before, &:after {
-    color: #000;
-    outline-width: 1px;
-    outline-style: dotted;
-    outline-offset: 1px;
-  }
 `
 
 const arrowButtonSide = (width, height) => css`

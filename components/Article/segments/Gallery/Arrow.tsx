@@ -3,6 +3,8 @@ import styled, { css } from 'styled-components'
 import { generateGrid } from '../../../../lib/grid'
 import * as convert from '../../../../lib/convert'
 
+const breakpoint = 600
+
 const grid = generateGrid()
 
 const otherDirection = ({ facing }) => (facing === 'left' ? 'right' : 'left')
@@ -52,6 +54,12 @@ const Wrapper = styled.div<any>`
   margin-${direction}: auto;
   margin-${otherDirection}: -16px;
   transition: 0.4s ease-in all;
+
+  visibility: hidden;
+
+  @media (min-width: ${breakpoint}px) {
+    visibility: visible;
+  }
 `
 
 type Direction = 'left' | 'right'

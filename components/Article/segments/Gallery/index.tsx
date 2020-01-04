@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useSwipeable } from 'react-swipeable'
 
 import { generateGrid } from '../../../../lib/grid'
 import * as convert from '../../../../lib/convert'
@@ -12,7 +13,7 @@ import * as PositionBar from './PositionBar'
 
 const grid = generateGrid({ rows: { repeat: [3, 'auto'] } })
 
-const breakpoint = 950
+const breakpoint = 600
 
 const Wrapper = styled.div<any>`
   ${grid.placeInColumns(1, { span: 12 })}
@@ -44,12 +45,16 @@ const RightTarget = styled.div<any>`
 `
 
 const Images = styled.div<any>`
-  ${grid.placeInColumns(3, { span: 8 })}
+  ${grid.placeInColumns(1, { span: 12 })}
   ${p => grid.placeInRows(p.row)}
 
   display: flex;
   overflow: hidden;
   z-index: 2;
+
+  @media (min-width: ${breakpoint}px) {
+    ${grid.placeInColumns(3, { span: 8 })}
+  }
 `
 
 const InternalWrapper = styled.div<any>`
@@ -79,6 +84,7 @@ const StabiliseImage = styled.div<any>`
 export const Gallery = ({ images }) => {
   const [index, setIndex] = React.useState(0)
   const [initialHeight, setInitialHeight] = React.useState(0)
+  const length = images.length
 
   // Use to reference carousel x position
   const imageWrapper = React.useRef(null)
@@ -87,8 +93,21 @@ export const Gallery = ({ images }) => {
   let imageRefs = React.useRef(new Map()).current
   const imageRef = id => imageRefs.get(`${id}-${index}`)
 
-  const nextImage = () => setIndex(i => i + 1)
-  const previousImage = () => setIndex(i => i - 1)
+  const nextImage = () => setIndex(i => Math.min(i + 1, length - 1))
+  const previousImage = () => setIndex(i => Math.max(0, i - 1))
+  const scroll = () => (index < length - 1 ? nextImage() : setIndex(0))
+
+  const handlers = useSwipeable({
+    onSwipedLeft: nextImage,
+    onSwipedRight: previousImage,
+    preventDefaultTouchmoveEvent: true,
+    trackMouse: true,
+  })
+
+  React.useEffect(() => {
+    const timeout = setTimeout(scroll, 6000)
+    return () => clearTimeout(timeout)
+  }, [index])
 
   const transformX = imageWrapper.current
     ? index * imageWrapper.current.clientWidth
@@ -123,7 +142,7 @@ export const Gallery = ({ images }) => {
   ))
 
   return (
-    <Wrapper>
+    <Wrapper {...handlers}>
       <LeftTarget onClick={previousImage} />
       <RightTarget onClick={nextImage} />
 

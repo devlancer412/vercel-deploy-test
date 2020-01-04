@@ -114,7 +114,7 @@ export const Intro = styled.div<WithAnimation>`
   ${grid.placeInColumns(1, { span: 12 })}
   ${grid.placeInRows(4)}
   ${typography.intro}
-  white-space: normal;
+  white-space: pre-wrap;
   ${typography.textIndent}
   ${({ animation }) => animation}
 

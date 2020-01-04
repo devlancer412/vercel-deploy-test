@@ -32,7 +32,7 @@ export const aspectRatio = {
   1: [182, 105],
 }
 
-export const Details = ({ category, createdAt }) => {
+export const Details = ({ category, createdAt, playAnimation = false }) => {
   const [ref, animation] = animate.useDefaultAnimation({
     // On the homepage gallery because the default translate puts
     // the details beyond the overflow: hidden, it would never trigger
@@ -44,7 +44,7 @@ export const Details = ({ category, createdAt }) => {
   const yearShort = yearLong.slice(2)
 
   return (
-    <styles.Details ref={ref} animation={animation}>
+    <styles.Details ref={ref} animation={playAnimation && animation}>
       <span>{category.title}</span>
       <time>
         {day}.{month}.{yearShort}

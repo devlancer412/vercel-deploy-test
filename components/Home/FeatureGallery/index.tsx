@@ -18,10 +18,10 @@ const grid = generateGrid({
   rows: { exact: '1fr auto' },
 })
 
+const mediaTouchScreen = '@media (hover: none) and (max-width: 649px)'
+
 export const Wrapper = styled.article`
   ${grid.placeInColumns(1.5, { span: 11 })}
-  // display: flex;
-  // flex-direction: column;
 
   display: grid;
   grid-template-columns: 1fr;
@@ -63,6 +63,10 @@ const HoverTarget = styled.div`
     ${ArticlePreview.Heading} {
       ${animate.defaultTransition}
       color: #e9e9e9;
+
+      ${mediaTouchScreen} {
+        color: #000000;
+      }
     }
   }
 
@@ -75,6 +79,7 @@ const Arrows = styled.div`
   ${grid.placeInColumns(10, { span: 2 })}
   ${grid.placeInRows(2)}
   display: flex;
+  visibility: visible;
   justify-content: flex-end;
   align-items: center;
   z-index: 3;
@@ -86,6 +91,10 @@ const Arrows = styled.div`
         color: #000000 !important;
       }
     }
+  }
+
+  ${mediaTouchScreen} {
+    visibility: hidden;
   }
 `
 

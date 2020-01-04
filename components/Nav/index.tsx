@@ -57,6 +57,48 @@ export const Header = styled.header`
   align-items: center;
 `
 
+const expandedStyle = `
+  opacity: 1;
+  pointer-events: all;
+`
+
+const hiddenStyle = `
+  opacity: 0;
+  pointer-events: none;
+`
+
+const LinksWrapper = styled(NavLinks.AllWrapper)<any>`
+  ${`@media (max-width: ${breakpoint - 1}px)`} {
+    position: fixed;
+    height: 100vh; // 1rem how much the nav is transformed back when small
+    width: 100vw;
+    left: calc(-1 * ${({ theme }) => theme.grid.padding});
+    top: -3.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #fff;
+
+    ${({ expanded }) => (expanded ? expandedStyle : hiddenStyle)}
+    padding-bottom: 30%;
+    box-sizing: border-box;
+
+    ${NavLinks.Wrapper} {
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    ${NavLinks.NavLink} {
+      margin-bottom: ${convert.viewportUnits(3, { by: 0.5 }).fromRem};
+      margin-left: 0;
+    }
+  }
+`
+
 const logoScale = ({ isSmall, hamburgerOpen }) => {
   if (isSmall && !hamburgerOpen) return `scale(0.6)`
   return `scale(1)`
@@ -138,11 +180,11 @@ export const Nav = ({ footerVisible, active = null }) => {
             </LogoLink>
           </Link>
         </Header>
-        <NavLinks.All
-          expanded={hamburgerOpen}
-          active={active}
-          onLinkClick={onLinkClick}
-        />
+
+        <LinksWrapper expanded={hamburgerOpen}>
+          <NavLinks.Left active={active} onLinkClick={onLinkClick} />
+          <NavLinks.Right active={active} onLinkClick={onLinkClick} />
+        </LinksWrapper>
       </Wrapper>
     </>
   )

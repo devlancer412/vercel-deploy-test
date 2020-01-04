@@ -38,7 +38,11 @@ export const Body = ({ article, i }) => {
           />
         </ArticlePreview.FeatureImage>
 
-        <ArticlePreview.Details category={category} createdAt={createdAt} playAnimation={!i} />
+        <ArticlePreview.Details
+          category={category}
+          createdAt={createdAt}
+          playAnimation={!i}
+        />
       </Stabilise>
     </Link>
   )

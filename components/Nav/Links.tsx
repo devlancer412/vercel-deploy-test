@@ -24,16 +24,14 @@ const currentPage = css<{ onHover: number; isActive: boolean }>`
   font-weight: bold;
 `
 
-const NavLink = styled(Detail.Link)<{ onHover: number; isActive: boolean }>`
+export const NavLink = styled(Detail.Link)<{
+  onHover: number
+  isActive: boolean
+}>`
   font-size: ${convert.viewportUnits(1.2, { to: 1.2 }).fromRem}; // 1.2rem
 
-  margin-bottom: ${convert.viewportUnits(3, { by: 0.5 }).fromRem};
-  margin-left: 0;
-
-  ${`@media (min-width: ${breakpoint}px)`} {
-    margin-left: ${convert.viewportUnits(6.5, { by: 0.15 }).fromRem}; // 6.5rem
-    margin-bottom 0;
-  }
+  margin-left: ${convert.viewportUnits(6.5, { by: 0.15 }).fromRem}; // 6.5rem
+  margin-bottom 0;
 
   ${({ isActive }) => isActive && currentPage}
 
@@ -48,36 +46,18 @@ const NavLink = styled(Detail.Link)<{ onHover: number; isActive: boolean }>`
 
 type LinksType = { align: 'left' | 'right' }
 
-const Wrapper = styled.div<LinksType>`
+export const Wrapper = styled.div<LinksType>`
   ${({ align }) => grid.placeInColumns(align === 'left' ? 1 : 8, { span: 5 })}
   ${grid.placeInRows(1)}
 
-  text-align: center;
-  display: flex;
+  text-align: ${({ align }) => align};
+  display: block;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-
-  ${`@media (min-width: ${breakpoint}px)`} {
-    text-align: ${({ align }) => align};
-    display: block;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-  }
 `
 
-const expandedStyle = `
-  opacity: 1;
-  pointer-events: all;
-`
-
-const hiddenStyle = `
-  opacity: 0;
-  pointer-events: none;
-`
-
-const AllWrapper = styled.nav<any>`
+export const AllWrapper = styled.nav<any>`
   ${grid.placeInColumns(1, { span: 12 })}
   ${grid.placeInRows(1)}
   ${grid.display}
@@ -85,33 +65,19 @@ const AllWrapper = styled.nav<any>`
 
   ${animate.defaultTransition}
 
-  position: fixed;
-  height: 100vh; // 1rem how much the nav is transformed back when small
-  width: 100vw;
-  left: calc(-1 * ${({ theme }) => theme.grid.padding});
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  background-color: #fff;
-  overflow: hidden;
+  position: static;
+  height: auto;
+  width: auto;
+  padding-bottom: 0;
+  pointer-events: all;
+  left: auto;
+  top: auto;
+  display: grid;
+  background-color: transparent;
+  z-index: 0;
   opacity: 1;
-  ${({ expanded }) => (expanded ? expandedStyle : hiddenStyle)}
-  padding-bottom: 30%;
-  box-sizing: border-box;
-
-  ${`@media (min-width: ${breakpoint}px)`} {
-    position: static;
-    height: auto;
-    width: auto;
-    padding-bottom: 0;
-    pointer-events: all;
-    left: auto;
-    display: grid;
-    background-color: transparent;
-    z-index: 0;
-    opacity: 1;
-  }
+  overflow: hidden;
+  box-sizing: content-box;
 `
 
 const navItems = {
@@ -138,7 +104,7 @@ const NavItem = ({ path, title, active, onLinkClick, onHover = null }) => {
   )
 }
 
-const Left = ({ active, onLinkClick }) => {
+export const Left = ({ active, onLinkClick = null }) => {
   return (
     <Wrapper align="left">
       {navItems.left.map(linkDetails => (
@@ -148,7 +114,7 @@ const Left = ({ active, onLinkClick }) => {
   )
 }
 
-const Right = ({ active, onLinkClick }) => {
+export const Right = ({ active, onLinkClick = null }) => {
   return (
     <Wrapper align="right">
       {navItems.right.map(linkDetails => (

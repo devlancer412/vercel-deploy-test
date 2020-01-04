@@ -188,17 +188,17 @@ const navGrid = generateGrid()
 
 const Nav = styled.nav<WithAnimation>`
   padding-bottom: 1.7rem;
-  display: none;
+  ${navGrid.display}
+  ${navGrid.columns}
   ${defaultTransition}
   transition-delay: 1.1s;
   opacity: 1;
   ${({ animate }) => animate}
+`
 
-  @media (min-width: 800px) {
-    // Nav breakpoint
-    ${navGrid.display}
-    ${navGrid.columns}
-  }
+const LinksWrapper = styled(NavLinks.AllWrapper)`
+  display: flex;
+  justify-content: space-between;
 `
 
 export const fragment = gql`
@@ -283,7 +283,10 @@ export const Footer = ({
         <LogoAnimation animate={logoStyle}>
           {!withoutNav && (
             <Nav animate={navStyle}>
-              <NavLinks.All active={active} />
+              <LinksWrapper expanded={false}>
+                <NavLinks.Left active={active} />
+                <NavLinks.Right active={active} />
+              </LinksWrapper>
             </Nav>
           )}
 

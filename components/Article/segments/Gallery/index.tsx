@@ -8,7 +8,6 @@ import * as convert from '../../../../lib/convert'
 import * as typography from '../../../blocks/typography'
 
 import * as Img from '../../../blocks/Image/Fetch'
-import * as Arrow from './Arrow'
 import * as PositionBar from './PositionBar'
 
 const grid = generateGrid({ rows: { repeat: [3, 'auto'] } })
@@ -26,22 +25,32 @@ const Wrapper = styled.div<any>`
 `
 
 const LeftTarget = styled.div<any>`
-  ${grid.placeInColumns(1, { span: 6.5 })}
+  ${grid.placeInColumns(1, { span: 5.5 })}
+
+  @media (min-width: 750px) {
+    ${grid.placeInColumns(1, { span: 6 })}
+  }
+
   ${grid.placeInRows(1)}
   width: 100%;
   height: 100%;
   z-index: 3;
-  margin-right: calc(0.5 * ${p => p.theme.grid.padding});
-  cursor: url(http://www.rw-designer.com/cursor-view/27667.png), auto;
+
+  cursor: url(/images/left-arrow.svg), w-resize;
 `
 const RightTarget = styled.div<any>`
-  ${grid.placeInColumns(6.5, { span: 6.5 })}
+  ${grid.placeInColumns(6, { span: 7 })}
+
+  @media (min-width: 750px) {
+    ${grid.placeInColumns(6.5, { span: 6.5 })}
+  }
+
   ${grid.placeInRows(1)}
   width: 100%;
   height: 100%;
   z-index: 3;
-  margin-left: calc(0.5 * ${p => p.theme.grid.padding});
-  cursor: url(http://www.rw-designer.com/cursor-view/27589.png), auto;
+
+  cursor: url(/images/right-arrow.svg), e-resize;
 `
 
 const Images = styled.div<any>`
@@ -146,19 +155,11 @@ export const Gallery = ({ images }) => {
       <LeftTarget onClick={previousImage} />
       <RightTarget onClick={nextImage} />
 
-      <Arrow.Arrow facing="left" visible={!!index} onClick={previousImage} />
-
       <Images ref={imageWrapper} row={1}>
         <InternalWrapper transformX={transformX} maxHeight={initialHeight}>
           {renderedImages}
         </InternalWrapper>
       </Images>
-
-      <Arrow.Arrow
-        facing="right"
-        visible={index < images.length - 1}
-        onClick={nextImage}
-      />
 
       <Images row={2}>
         <InternalWrapper transformX={transformX}>

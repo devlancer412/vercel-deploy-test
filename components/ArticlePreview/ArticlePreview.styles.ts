@@ -6,13 +6,13 @@ import * as animate from '../../lib/animate'
 import * as typography from '../blocks/typography'
 import * as Detail from '../blocks/Typography/Detail'
 
-type WithAnimation = { animation: string }
+type WithAnimation = { animation?: string }
 
-type HeadingProps = { width: number } & WithAnimation
+type HeadingProps = { width?: number } & WithAnimation
 export const Heading = styled.h2<HeadingProps>`
   ${typography.articleTitle}
 
-  ${({ width }) => `width: ${width}0%;`}
+  ${({ width }) => width && `width: ${width}0%;`}
 
   margin-top: ${convert.viewportUnits(1.9, { by: 0.625 }).fromRem}; // 1.9rem
   margin-bottom: ${convert.viewportUnits(0.3, { by: 0.625 }).fromRem};

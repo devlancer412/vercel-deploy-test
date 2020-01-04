@@ -5,21 +5,28 @@ import * as ArticlePreview from '../../ArticlePreview'
 import * as Image from '../../blocks/Image'
 import * as ImageComponents from '../../blocks/Image/Image.styles'
 
+const mediaTouchScreen = '@media (hover: none) and (max-width: 649px)'
+
+const FeatureImage = styled(ArticlePreview.FeatureImage)`
+  flex-grow: 1;
+  display: flex;
+`
+
+const PreviewHeading = styled(ArticlePreview.Heading)`
+  width: 80%;
+
+  ${mediaTouchScreen} {
+    width: 100%;
+  }
+`
+
 const Stabilise = styled.div`
   flex-basis: 100%;
   flex-shrink: 0;
-  // display: flex;
-  // flex-direction: column;
-  // justify-content: flex-end;
 
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: minmax(0, 1fr) auto;
-
-  ${ArticlePreview.FeatureImage} {
-    flex-grow: 1;
-    display: flex;
-  }
 `
 
 export const Body = ({ article, i }) => {
@@ -28,7 +35,7 @@ export const Body = ({ article, i }) => {
   return (
     <Link href={`/${category.title}/${slug}`} passHref>
       <Stabilise as="a">
-        <ArticlePreview.FeatureImage>
+        <FeatureImage>
           <Image.Image
             image={previewImage}
             objectFit="cover"
@@ -36,7 +43,7 @@ export const Body = ({ article, i }) => {
             imgix={{ ar: '96:80', fit: 'crop' }}
             overrideClip="height: 100%; max-height: auto;"
           />
-        </ArticlePreview.FeatureImage>
+        </FeatureImage>
 
         <ArticlePreview.Details
           category={category}
@@ -54,9 +61,7 @@ export const Heading = ({ article, i, animation }) => {
   return (
     <Link href={`/${category.title}/${slug}`} passHref>
       <Stabilise as="a">
-        <ArticlePreview.Heading animation={animation} width={8}>
-          {heading}
-        </ArticlePreview.Heading>
+        <PreviewHeading animation={animation}>{heading}</PreviewHeading>
       </Stabilise>
     </Link>
   )

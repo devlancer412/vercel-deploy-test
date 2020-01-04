@@ -97,7 +97,7 @@ const AllWrapper = styled.nav<any>`
   overflow: hidden;
   opacity: 1;
   ${({ expanded }) => (expanded ? expandedStyle : hiddenStyle)}
-  padding-bottom: 12.4rem; // double the height of parent padding
+  padding-bottom: 30%;
   box-sizing: border-box;
 
   ${`@media (min-width: ${breakpoint}px)`} {

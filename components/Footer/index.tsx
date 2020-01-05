@@ -188,12 +188,17 @@ const navGrid = generateGrid()
 
 const Nav = styled.nav<WithAnimation>`
   padding-bottom: 1.7rem;
-  ${navGrid.display}
-  ${navGrid.columns}
+  display: none;
   ${defaultTransition}
   transition-delay: 1.1s;
   opacity: 1;
   ${({ animate }) => animate}
+
+  @media (min-width: 800px) {
+    // Nav breakpoint
+    ${navGrid.display}
+    ${navGrid.columns}
+  }
 `
 
 const LinksWrapper = styled(NavLinks.AllWrapper)`

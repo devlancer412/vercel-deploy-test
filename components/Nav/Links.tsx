@@ -92,7 +92,7 @@ const navItems = {
 
 const NavItem = ({ path, title, active, onLinkClick, onHover = null }) => {
   return (
-    <Link href={path} passHref>
+    <Link href={`/${path}`} passHref>
       <NavLink
         onHover={onHover}
         isActive={active === path}

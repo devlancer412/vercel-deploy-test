@@ -12,8 +12,15 @@ const positionBarGrid = (length: number) =>
 
 const grid = generateGrid()
 
+const breakpoint = 700
+
 const Wrapper = styled.div<any>`
-  ${grid.placeInColumns(4, { span: 6 })}
+  ${grid.placeInColumns(1, { span: 12 })}
+
+  @media (min-width: ${breakpoint}px) {
+    ${grid.placeInColumns(4, { span: 6 })}
+  }
+
   ${grid.placeInRows(3)}
   ${grid.display}
   ${({ length }) => positionBarGrid(length).columns}

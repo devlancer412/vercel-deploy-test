@@ -116,7 +116,7 @@ const CategoryPage = () => {
         <Nav.Nav footerVisible={footerVisible} active={category} />
         <CategorySection.CategorySection
           categorySection={firstCategory}
-          initialRows={1}
+          initialRows={3}
           showIntros
         />
       </Layout>

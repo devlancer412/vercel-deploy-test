@@ -15,7 +15,7 @@ const grid = generateGrid()
 const breakpoint = 700
 
 const Wrapper = styled.div<any>`
-  ${grid.placeInColumns(1, { span: 12 })}
+  ${grid.placeInColumns(2.5, { span: 9 })}
 
   @media (min-width: ${breakpoint}px) {
     ${grid.placeInColumns(4, { span: 6 })}

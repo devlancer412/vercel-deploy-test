@@ -124,7 +124,7 @@ export const FeatureGallery = ({ featured }) => {
   })
 
   React.useEffect(() => {
-    const timeout = setTimeout(scroll, 6000)
+    const timeout = setTimeout(scroll, 900000000000000000000)
     return () => clearTimeout(timeout)
   }, [index])
 

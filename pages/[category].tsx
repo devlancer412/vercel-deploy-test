@@ -9,6 +9,7 @@ import { getImageUrl } from 'takeshape-routing'
 
 import withData from '../lib/apollo'
 import { generateGrid } from '../lib/grid'
+import * as convert from '../lib/convert'
 
 import * as Nav from '../components/Nav'
 import * as Footer from '../components/Footer'
@@ -55,6 +56,7 @@ const Layout = styled.main`
   ${grid.rows}
 
   padding: 0 ${({ theme }) => theme.grid.padding};
+  margin-bottom: ${convert.viewportUnits(12, { by: 0.4 }).fromRem}; // 12rem
 
   ${Nav.Wrapper} { ${grid.placeInRows(1)} }
 

@@ -56,7 +56,7 @@ const Layout = styled.main`
   ${grid.rows}
 
   padding: 0 ${({ theme }) => theme.grid.padding};
-  margin-bottom: ${convert.viewportUnits(12, { by: 0.4 }).fromRem}; // 12rem
+  margin-bottom: ${convert.viewportUnits(8, { by: 0.4 }).fromRem}; // 8rem
 
   ${Nav.Wrapper} { ${grid.placeInRows(1)} }
 

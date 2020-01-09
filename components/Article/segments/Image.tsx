@@ -37,6 +37,10 @@ export const Wrapper = styled.div<any>`
   ${grid.placeInColumns(1, { span: 12 })}
   margin: ${topMargin} 0 ${bottomMargin} 0;
 
+  &:first-child {
+    margin-top: ${convert.viewportUnits(6.2, { by: 0.625 }).fromRem};
+  }
+
   & + & {
     margin-top: 0;
   }

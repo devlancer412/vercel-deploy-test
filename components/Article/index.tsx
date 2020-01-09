@@ -32,12 +32,10 @@ export const fragment = gql`
     featureImage {
       path
     }
-    contributions {
-      contributionType {
-        value
-      }
+    credit {
+      type
 
-      contributedBy {
+      person {
         name
       }
     }
@@ -73,7 +71,7 @@ export const Article = ({ article, category }) => {
     intro,
     content,
     createdAt,
-    contributions,
+    credit,
   } = article
 
   const [subHeadingRef, subHeadingAnimation] = animate.useDefaultAnimation()
@@ -103,12 +101,10 @@ export const Article = ({ article, category }) => {
         </H1>
 
         <Attributions ref={contributionsRef} animation={contributionsAnimation}>
-          {contributions.map(({ contributionType, contributedBy }) => (
-            <Attribution
-              key={`${contributionType.value}-${contributedBy.name}`}
-            >
-              <Contributed>{contributionType.value}</Contributed>
-              <Person>{contributedBy.name}</Person>
+          {credit.map(({ type, person }) => (
+            <Attribution key={`${type}-${person.map(p => p.name).join('-')}`}>
+              <Contributed>{type}</Contributed>
+              <Person>{person.map(p => p.name).join(', ')}</Person>
             </Attribution>
           ))}
         </Attributions>

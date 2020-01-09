@@ -46,13 +46,15 @@ const TopArticleImage = styled.div`
   ${grid.small.placeInRows(1)}
   margin-bottom: ${convert.viewportUnits(1.2, { by: 0.625 }).fromRem}; // 1.2rem
 
-  // For when the article body preview is taller than the image on ~700w screens
-  height: 100%;
+  height: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
 
   ${({ theme }) => `@media (min-width: ${theme.breakpoint.home}px)`} {
+    margin-bottom: 0;
+  // For when the article body preview is taller than the image on ~700w screens
+    height: 100%;
     ${grid.wide.placeInColumns(1, { span: 7 })}
     ${grid.wide.placeInRows(1)}
   }

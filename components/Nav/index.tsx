@@ -80,7 +80,7 @@ const LinksWrapper = styled(NavLinks.AllWrapper)<any>`
     background-color: #fff;
 
     ${({ expanded }) => (expanded ? expandedStyle : hiddenStyle)}
-    padding-bottom: 30%;
+    padding-bottom: 3.1rem;
     box-sizing: border-box;
 
     ${NavLinks.Wrapper} {

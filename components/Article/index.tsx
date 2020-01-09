@@ -101,12 +101,13 @@ export const Article = ({ article, category }) => {
         </H1>
 
         <Attributions ref={contributionsRef} animation={contributionsAnimation}>
-          {credit.map(({ type, person }) => (
-            <Attribution key={`${type}-${person.map(p => p.name).join('-')}`}>
-              <Contributed>{type}</Contributed>
-              <Person>{person.map(p => p.name).join(', ')}</Person>
-            </Attribution>
-          ))}
+          {credit &&
+            credit.map(({ type, person }) => (
+              <Attribution key={`${type}-${person.map(p => p.name).join('-')}`}>
+                <Contributed>{type}</Contributed>
+                <Person>{person.map(p => p.name).join(', ')}</Person>
+              </Attribution>
+            ))}
         </Attributions>
       </Heading>
 

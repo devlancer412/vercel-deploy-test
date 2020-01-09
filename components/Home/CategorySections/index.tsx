@@ -133,7 +133,7 @@ const RemainingRows = ({
         size: initialRows * 3,
         sortArticles: [
           {
-            field: '_updatedAt',
+            field: '_enabledAt',
             order: 'desc',
           },
         ],

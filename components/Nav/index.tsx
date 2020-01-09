@@ -70,10 +70,9 @@ const hiddenStyle = `
 const LinksWrapper = styled(NavLinks.AllWrapper)<any>`
   ${`@media (max-width: ${breakpoint - 1}px)`} {
     position: fixed;
-    height: 100vh; // 1rem how much the nav is transformed back when small
+    height: calc(100vh - 3.1rem); // 3.1rem the nav padding
     width: 100vw;
     left: calc(-1 * ${({ theme }) => theme.grid.padding});
-    top: -3.1rem;
     display: flex;
     align-items: center;
     justify-content: center;

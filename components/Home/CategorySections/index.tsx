@@ -20,7 +20,7 @@ import * as typography from '../../blocks/typography'
 export const variables = (initialRows: number) => ({
   sortArticles: [
     {
-      field: '_updatedAt',
+      field: '_enabledAt',
       order: 'desc',
     },
   ],

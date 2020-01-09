@@ -11,6 +11,14 @@ const A = styled.a`
 `
 
 export const Link = ({ text, url, target }) => {
+  if (url.startsWith('http') || url.startsWith('www')) {
+    return (
+      <A href={url} target={target}>
+        {text}
+      </A>
+    )
+  }
+
   return (
     <NextLink href={url} passHref>
       <A target={target}>{text}</A>

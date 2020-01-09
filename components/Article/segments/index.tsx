@@ -1,4 +1,5 @@
 import * as Image from './Image'
+import * as Oembed from './Oembed'
 import * as Gallery from './Gallery'
 import * as Link from './Link'
 
@@ -29,6 +30,11 @@ export const map = {
 
   SUB({ text }) {
     return <sub>{text}</sub>
+  },
+
+  oembed({ entity }) {
+    const { data } = entity
+    return <Oembed.Oembed html={data.html} />
   },
 
   image({ entity }: any) {

@@ -6,7 +6,8 @@ import * as animate from '../../../lib/animate'
 import { generateGrid } from '../../../lib/grid'
 import * as body from '../lib/body'
 
-import * as Unstyled from './Unstyled'
+import * as Oembed from '../segments/Oembed'
+import * as Image from '../segments/Image'
 import * as typography from '../../blocks/typography'
 
 const grid = generateGrid()
@@ -21,7 +22,7 @@ const base = css<{ animation: string }>`
   text-transform: uppercase;
   ${({ animation }) => animation}
 
-  & + *:not(${Unstyled.Paragraph}) {
+  & + ${Image.Wrapper}, + ${Oembed.Wrapper} {
     margin-top: ${convert.viewportUnits(5, { by: 0.625 }).fromRem};
   }
 `

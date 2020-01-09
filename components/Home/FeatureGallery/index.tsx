@@ -27,6 +27,7 @@ export const Wrapper = styled.article`
   grid-template-columns: 1fr;
   grid-template-rows: minmax(0, 1fr) auto;
 
+  margin-top: ${convert.viewportUnits(5, { by: 0.625 }).fromRem}; // 5rem
   margin-bottom: ${convert.viewportUnits(12, { by: 0.4 }).fromRem}; // 12rem
 `
 

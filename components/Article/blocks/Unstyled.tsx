@@ -1,8 +1,9 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import * as replace from '../lib/replace'
 import * as body from '../lib/body'
 import * as animate from '../../../lib/animate'
+import * as convert from '../../../lib/convert'
 import { generateGrid } from '../../../lib/grid'
 
 import * as typography from '../../blocks/typography'
@@ -11,7 +12,7 @@ import * as segments from '../segments'
 
 const grid = generateGrid()
 
-const Paragraph = styled.p<{ animation: string }>`
+export const Paragraph = styled.p<{ animation: string }>`
   ${typography.bodyCopy}
 
   ${typography.textIndent}

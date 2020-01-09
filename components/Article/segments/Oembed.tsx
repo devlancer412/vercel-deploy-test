@@ -15,8 +15,8 @@ const breakpoint = 600
 
 const grid = generateGrid()
 
-const topMargin = convert.viewportUnits(11.2, { by: 0.625 }).fromRem
-const bottomMargin = convert.viewportUnits(12, { by: 0.625 }).fromRem
+const topMargin = convert.viewportUnits(6.2, { by: 0.625 }).fromRem
+const bottomMargin = convert.viewportUnits(6, { by: 0.625 }).fromRem
 
 export const Wrapper = styled.div<any>`
   margin: ${topMargin} 0 ${bottomMargin} 0;
@@ -32,12 +32,6 @@ export const Wrapper = styled.div<any>`
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  @media (min-width: ${breakpoint}px) {
-    & + & {
-      margin-top: ${topMargin};
-    }
-  }
 
   ${body.placement}
 `

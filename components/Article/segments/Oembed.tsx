@@ -15,8 +15,8 @@ const breakpoint = 600
 
 const grid = generateGrid()
 
-const topMargin = convert.viewportUnits(6.2, { by: 0.625 }).fromRem
-const bottomMargin = convert.viewportUnits(6, { by: 0.625 }).fromRem
+const topMargin = convert.viewportUnits(10.2, { by: 0.625 }).fromRem
+const bottomMargin = convert.viewportUnits(10, { by: 0.625 }).fromRem
 
 export const Wrapper = styled.div<any>`
   margin: ${topMargin} 0 ${bottomMargin} 0;

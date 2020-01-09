@@ -22,7 +22,7 @@ const base = css<{ animation: string }>`
   ${({ animation }) => animation}
 
   & + *:not(${Unstyled.Paragraph}) {
-    margin-top: ${convert.viewportUnits(2, { by: 0.625 }).fromRem};
+    margin-top: ${convert.viewportUnits(5, { by: 0.625 }).fromRem};
   }
 `
 

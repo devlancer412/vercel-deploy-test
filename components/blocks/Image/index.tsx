@@ -44,7 +44,7 @@ export const Image = ({
   const genImageDetails = (imageSize: number) => {
     return {
       url: getImageUrl(image.path, {
-        q: 75,
+        q: 50,
         auto: 'format',
         w: imageSize,
         ...imgix,

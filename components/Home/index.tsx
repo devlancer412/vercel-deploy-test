@@ -35,7 +35,7 @@ export const Wrapper = styled.main`
   ${grid.display}
   ${grid.columns}
 
-  margin-top: ${convert.viewportUnits(5, { by: 0.625 }).fromRem}; // 5rem
+  margin-top: ${convert.viewportUnits(2, { by: 0.625 }).fromRem}; // 5rem
   margin-bottom: ${convert.viewportUnits(5.3, { by: 0.625 }).fromRem}; // 5.3rem
 
   ${CategorySection.Wrapper}:last-child {

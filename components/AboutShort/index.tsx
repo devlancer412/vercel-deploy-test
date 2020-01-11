@@ -25,6 +25,7 @@ export const Wrapper = styled.div<any>`
   text-transform: uppercase;
   line-height: 1.25; // 5rem
   text-align: center;
+  white-space: pre-wrap;
 
   display: flex;
   justify-content: center;

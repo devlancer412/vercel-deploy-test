@@ -113,6 +113,7 @@ export const Gallery = ({ images }) => {
   const nextImage = () => setIndex(i => Math.min(i + 1, length - 1))
   const previousImage = () => setIndex(i => Math.max(0, i - 1))
   const scroll = () => (isLast ? setIndex(0) : nextImage())
+  const scrollBack = () => (isFirst ? setIndex(length - 1) : previousImage())
 
   const handlers = useSwipeable({
     onSwipedLeft: nextImage,
@@ -160,14 +161,8 @@ export const Gallery = ({ images }) => {
 
   return (
     <Wrapper {...handlers}>
-      <LeftTarget
-        onClick={isFirst ? nextImage : previousImage}
-        arrow={isFirst ? 'right' : 'left'}
-      />
-      <RightTarget
-        onClick={isLast ? previousImage : nextImage}
-        arrow={isLast ? 'left' : 'right'}
-      />
+      <LeftTarget onClick={scrollBack} arrow={'left'} />
+      <RightTarget onClick={scroll} arrow={'right'} />
 
       <Images ref={imageWrapper} row={1}>
         <InternalWrapper transformX={transformX} maxHeight={initialHeight}>

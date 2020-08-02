@@ -15,6 +15,7 @@ export const fragment = gql`
     previewImage {
       path
     }
+    previewImageFocalPoint
     intro
     createdAt: _enabledAt
     category {
@@ -53,15 +54,26 @@ export const Details = ({ category, createdAt, playAnimation = false }) => {
   )
 }
 
-export const Splash = ({ previewImage, width, position = null }) => (
-  <Image.Image
-    image={previewImage}
-    imgix={{ ar: aspectRatio[width].join(':'), fit: 'crop' }}
-    objectFit="cover"
-    setRatio={aspectRatio[width]}
-    inColumns={width}
-  />
-)
+export const Splash = ({
+  previewImage,
+  previewImageFocalPoint,
+  width,
+  position = null,
+}) => {
+  const splashRatio = aspectRatio[width]
+  const heightPercentage = (splashRatio[1] * 100) / splashRatio[0]
+
+  return (
+    <Image.Image
+      image={previewImage}
+      imgix={{ ar: aspectRatio[width].join(':'), fit: 'crop' }}
+      objectFit="cover"
+      objectPosition={previewImageFocalPoint || 'center'}
+      heightPercentage={heightPercentage}
+      inColumns={width}
+    />
+  )
+}
 
 export const Intro = styles.Intro
 export const Heading = styles.Heading
@@ -112,7 +124,12 @@ export const Body = ({
 }
 
 export const ArticlePreview = ({ articlePreview, width, ...bodyProps }) => {
-  const { previewImage, category, slug } = articlePreview
+  const {
+    previewImage,
+    previewImageFocalPoint,
+    category,
+    slug,
+  } = articlePreview
 
   const [widthRatio, heightRatio] = aspectRatio[width]
   const scale = (heightRatio * 100) / widthRatio
@@ -123,6 +140,7 @@ export const ArticlePreview = ({ articlePreview, width, ...bodyProps }) => {
         <styles.FeatureImage>
           <Splash
             previewImage={previewImage}
+            previewImageFocalPoint={previewImageFocalPoint}
             width={width}
             position="absolute"
           />

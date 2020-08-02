@@ -91,7 +91,11 @@ export const Section = ({ title, first }) => {
     <Link href={`/${first.category.title}/${first.slug}`} passHref>
       <Wrapper>
         <TopArticleImage>
-          <ArticlePreview.Splash previewImage={first.previewImage} width={7} />
+          <ArticlePreview.Splash
+            previewImage={first.previewImage}
+            previewImageFocalPoint={first.previewImageFocalPoint}
+            width={7}
+          />
         </TopArticleImage>
 
         <TopArticleBody>

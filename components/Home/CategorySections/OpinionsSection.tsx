@@ -92,7 +92,11 @@ export const Section = ({ title, first }) => {
             category={first.category}
             createdAt={first.createdAt}
           />
-          <ArticlePreview.Splash previewImage={first.previewImage} width={1} />
+          <ArticlePreview.Splash
+            previewImage={first.previewImage}
+            previewImageFocalPoint={first.previewImageFocalPoint}
+            width={1}
+          />
         </TopArticleDetails>
 
         <TopArticleHeader ref={ref} animation={animation}>

@@ -11,8 +11,9 @@ type ImageProps = {
   onLoad?: () => void
   imgix?: Record<any, string | number>
   objectFit?: string
-  intrinsicHeight?: boolean
-  setRatio?: [number, number]
+  objectPosition?: string
+  height?: string
+  heightPercentage?: number
   inColumns?: number
   overrideClip?: string
 }
@@ -25,8 +26,9 @@ export const Image = ({
   onLoad,
   imgix,
   objectFit,
-  intrinsicHeight,
-  setRatio,
+  objectPosition,
+  height,
+  heightPercentage,
   inColumns,
   overrideClip,
 }: ImageProps) => {
@@ -67,21 +69,24 @@ export const Image = ({
     cachedImage.src = lazyUrl
   }, [])
 
-  const caption = image.caption && image.caption.blocks.map(b => b.text)
-  const padding = setRatio && (setRatio[1] * 100) / setRatio[0]
+  const caption =
+    image.caption &&
+    image.caption.blocks.reduce((c, b) => (b.text ? [...c, b.text] : c), [])
+
   const imageVw = inColumns ? Math.ceil((inColumns * 100) / 12) : 100
 
   return (
     <>
-      <Styled.Clip setPadding={padding} overrideClip={overrideClip}>
+      <Styled.Clip setPadding={heightPercentage} overrideClip={overrideClip}>
         <Styled.Img
           className="blur-up lazyload"
           data-src={large.url}
           src={lazyUrl}
           onLoad={onLoad}
           objectFit={objectFit}
-          intrinsicHeight={intrinsicHeight}
-          setPosition={padding ? 'absolute' : null}
+          objectPosition={objectPosition}
+          height={height}
+          setPosition={heightPercentage ? 'absolute' : null}
           data-srcset={`
             ${xxs.url} ${xxs.size}w,
             ${xs.url} ${xs.size}w,
@@ -94,7 +99,9 @@ export const Image = ({
         />
       </Styled.Clip>
 
-      {caption && !hideCaption && <Styled.Caption>{caption}</Styled.Caption>}
+      {caption && caption.length > 0 && !hideCaption && (
+        <Styled.Caption>{caption}</Styled.Caption>
+      )}
     </>
   )
 }

@@ -18,13 +18,16 @@ const blurUp = css`
 
 export const Img = styled.img<{
   objectFit?: string
+  objectPosition?: string
   setPosition?: string
-  intrinsicHeight?: boolean
+  height?: string
 }>`
   width: 100%;
   display: block;
-  ${({ intrinsicHeight }) => intrinsicHeight && `height: intrinsic;`}
+  ${({ height }) => height && `height: ${height};`}
   ${({ objectFit }) => objectFit && `object-fit: ${objectFit};`}
+  ${({ objectPosition }) =>
+    objectPosition && `object-position: ${objectPosition};`}
   ${({ setPosition }) => setPosition && `position: ${setPosition};`}
 
   ${blurUp}

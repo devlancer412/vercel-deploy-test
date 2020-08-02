@@ -30,7 +30,13 @@ const Stabilise = styled.div`
 `
 
 export const Body = ({ article, i }) => {
-  const { previewImage, category, createdAt, slug } = article
+  const {
+    previewImage,
+    previewImageFocalPoint,
+    category,
+    createdAt,
+    slug,
+  } = article
 
   return (
     <Link href={`/${category.title}/${slug}`} passHref>
@@ -39,6 +45,7 @@ export const Body = ({ article, i }) => {
           <Image.Image
             image={previewImage}
             objectFit="cover"
+            objectPosition={previewImageFocalPoint}
             inColumns={12}
             imgix={{ ar: '96:80', fit: 'crop' }}
             overrideClip="height: 100%; max-height: auto;"

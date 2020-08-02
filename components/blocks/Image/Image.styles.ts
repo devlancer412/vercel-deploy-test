@@ -33,6 +33,7 @@ export const Img = styled.img<{
   ${blurUp}
 `
 
+// @ts-ignore
 export const Caption = styled(Detail.Block)`
   margin: ${convert.viewportUnits(2, { by: 0.625 }).fromRem} auto 0 auto;
 `

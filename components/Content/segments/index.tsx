@@ -40,6 +40,7 @@ export const interactions = config => {
     )}, ${creator(c.Oembed.Wrapper)}`
   }
 
+  // @ts-ignore
   return css`
     ${atomics(
       w =>

@@ -92,3 +92,22 @@ export const subHeading = css`
   font-weight: 100;
   text-transform: uppercase;
 `
+
+export const underlined = css`
+  border-bottom: 0.5px solid;
+  line-height: 0.928571; // 2.6rem
+  vertical-align: baseline;
+  text-decoration: none;
+  display: inline-block;
+  text-indent: 0;
+`
+
+export const pullquote = css`
+  font-family: 'Adieu Light';
+  font-size: ${convert.viewportUnits(4, { by: 0.4 }).fromRem}; // 4rem
+  line-height: 1;
+  font-weight: 100;
+  text-transform: uppercase;
+  letter-spacing: ${convert.viewportUnits(0.07, { by: 0.4 })
+    .fromRem}; // 0.07rem
+`

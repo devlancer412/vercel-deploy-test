@@ -25,6 +25,8 @@ const GET_HOME_PAGE = gql`
   query GetHomePage(
     $filterArticles: JSON!
     $sortArticles: [TSSearchSort]!
+    $filterCaseStudies: JSON!
+    $sortCaseStudies: [TSSearchSort]!
     $size: Int!
   ) {
     getHomePage {

@@ -100,7 +100,9 @@ export const Body = ({
 
   return (
     <>
-      <Details category={category} createdAt={createdAt} />
+      {category && createdAt && (
+        <Details category={category} createdAt={createdAt} />
+      )}
       {!withoutHeading && (
         <styles.Heading
           width={headingWidth}

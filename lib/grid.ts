@@ -36,14 +36,18 @@ type PlaceInOpts = {
 const placeIn = placementType => gutter => (from, opts: PlaceInOpts = {}) => {
   const { to = null, span = null } = opts
   // If span exists, else if to exists, else only span 1
-  const withoutGap = num => (gutter ? num * 2 - 1 : num)
+  const withoutGap = num => (num ? (gutter ? num * 2 - 1 : num) : null)
   const start = withoutGap(from)
-  const spanning = span ? withoutGap(span) : to ? withoutGap(to) - start : 1
+  const spanning = span
+    ? withoutGap(span)
+    : to
+    ? withoutGap(to) - (start || 0)
+    : 1
 
   return `
-    -ms-grid-${placementType}: ${start};
+    ${start ? `-ms-grid-${placementType}: ${start};` : ''}
     -ms-grid-${placementType}-span: ${spanning};
-    grid-${placementType}: ${start} / span ${spanning};
+    grid-${placementType}: ${start ? `${start} /` : ''} span ${spanning};
   `
 }
 

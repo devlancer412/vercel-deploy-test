@@ -81,7 +81,10 @@ export const AllWrapper = styled.nav<any>`
 `
 
 const navItems = {
-  left: [{ path: 'about', title: 'About' }],
+  left: [
+    { path: 'case-studies', title: 'Case Studies' },
+    { path: 'about', title: 'About' },
+  ],
 
   right: [
     { path: 'news', title: 'News' },

@@ -22,7 +22,6 @@ export const Wrapper = styled.section`
   ${grid.small.rows}
 
   border-top: 1px solid #000000;
-  margin-top: 11rem;
   padding-top: 5.6rem;
   margin-bottom: 11rem;
 
@@ -55,7 +54,7 @@ const Title = styled(Header.H1)`
   }
 `
 
-export const NextArticle = ({ nextArticle }) => {
+export const Article = ({ nextArticle }) => {
   return (
     <Wrapper>
       <Title>
@@ -66,6 +65,32 @@ export const NextArticle = ({ nextArticle }) => {
 
       <ArticlePreview.ArticlePreview
         articlePreview={nextArticle}
+        width={4}
+        headingWidth={8}
+      />
+    </Wrapper>
+  )
+}
+
+export const CaseStudy = ({ nextCaseStudy }) => {
+  const preview = {
+    heading: nextCaseStudy.heading,
+    intro: nextCaseStudy.intro,
+    slug: nextCaseStudy.slug,
+    category: { title: 'case-studies' },
+    previewImage: nextCaseStudy.landscapeImage,
+  }
+
+  return (
+    <Wrapper>
+      <Title>
+        Next
+        <br />
+        Case Study
+      </Title>
+
+      <ArticlePreview.ArticlePreview
+        articlePreview={preview}
         width={4}
         headingWidth={8}
       />

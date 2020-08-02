@@ -12,29 +12,21 @@ import * as takeshape from '../../lib/takeshape'
 
 import * as Loading from '../../components/Loading'
 import * as Nav from '../../components/Nav'
-import * as Article from '../../components/Article'
+import * as CaseStudy from '../../components/CaseStudy'
 import * as Footer from '../../components/Footer'
 import * as Contact from '../../components/About/Contact'
 import * as NextPiece from '../../components/NextPiece'
 
-const ARTICLES_QUERY = gql`
-  ${Article.fragment}
+const CASE_STUDIES_QUERY = gql`
+  ${CaseStudy.fragment}
   ${Contact.fragment}
   ${Footer.fragment}
 
-  query GetArticlePage($categoryFilter: JSON, $articleFilter: JSON) {
-    getCategoryList(filter: $categoryFilter) {
+  query GetCaseStudyPage($caseStudyFilter: JSON) {
+    getCaseStudyList(filter: $caseStudyFilter) {
       total
-
       items {
-        _id
-
-        articleSet(filter: $articleFilter) {
-          total
-          items {
-            ...Article
-          }
-        }
+        ...CaseStudy
       }
     }
 
@@ -48,7 +40,7 @@ const ARTICLES_QUERY = gql`
   }
 `
 
-const grid = generateGrid({ rows: { repeat: [3, 'auto'] } })
+const grid = generateGrid({ rows: { repeat: [2, 'auto'] } })
 
 const Layout = styled.div`
   ${grid.display}
@@ -58,27 +50,22 @@ const Layout = styled.div`
   padding: 0 ${({ theme }) => theme.grid.padding};
 
   ${Nav.Wrapper} { ${grid.placeInRows(1, {})} }
-  ${Article.Wrapper} { ${grid.placeInRows(2, {})} }
-  ${NextPiece.Wrapper} { ${grid.placeInRows(3, {})} }
+  ${CaseStudy.Wrapper} { ${grid.placeInRows(1, {})} }
+  ${NextPiece.Wrapper} { ${grid.placeInRows(2, {})} }
 `
 
 const ArticlePage = ({ data, error }) => {
   const [footerVisible, setFooterVisible] = React.useState(false)
 
   const router = useRouter()
-  const { category, slug } = router.query
+  const { slug } = router.query
 
-  if (Array.isArray(category)) return <ErrorPage statusCode={404} />
   if (Array.isArray(slug)) return <ErrorPage statusCode={404} />
-  if (error || !data) return <ErrorPage statusCode={400} />
+  if (error || !data) return <ErrorPage statusCode={400} title={error} />
 
-  const { getCategoryList, getContact, getFooter } = data
-  if (!getCategoryList.total) return <ErrorPage statusCode={404} />
-  const [firstCategory] = getCategoryList.items
-
-  const articleList = firstCategory.articleSet
-  if (!articleList.total) return <ErrorPage statusCode={404} />
-  const [article] = articleList.items
+  const { getCaseStudyList, getContact, getFooter } = data
+  if (!getCaseStudyList.total) return <ErrorPage statusCode={404} />
+  const [caseStudy] = getCaseStudyList.items
 
   React.useEffect(() => {
     if (window) {
@@ -93,7 +80,7 @@ const ArticlePage = ({ data, error }) => {
   return (
     <>
       <Head>
-        <title>{article.heading} | Early</title>
+        <title>{caseStudy.heading} | Early</title>
         <meta
           name="viewport"
           content="initial-scale=1.0, width=device-width"
@@ -103,8 +90,10 @@ const ArticlePage = ({ data, error }) => {
 
       <Layout>
         <Nav.Nav footerVisible={footerVisible} />
-        <Article.Article article={article} category={category} />
-        <NextPiece.Article nextArticle={article.nextArticle} />
+        <CaseStudy.CaseStudy caseStudy={caseStudy} />
+        {caseStudy.nextCaseStudy && (
+          <NextPiece.CaseStudy nextCaseStudy={caseStudy.nextCaseStudy} />
+        )}
       </Layout>
 
       <Footer.Footer
@@ -118,9 +107,8 @@ const ArticlePage = ({ data, error }) => {
 
 export async function getServerSideProps({ params }) {
   try {
-    const data = await takeshape.request(ARTICLES_QUERY, {
-      categoryFilter: { term: { title: params.category.toLowerCase() } },
-      articleFilter: { term: { slug: params.slug.toLowerCase() } },
+    const data = await takeshape.request(CASE_STUDIES_QUERY, {
+      caseStudyFilter: { term: { slug: params.slug.toLowerCase() } },
     })
     return { props: { data } }
   } catch (e) {

@@ -3,6 +3,7 @@ import { gql } from 'apollo-boost'
 
 import * as FeatureGallery from './FeatureGallery'
 import * as CategorySection from './CategorySections'
+import * as CaseStudyScopeSection from './CaseStudyScopeSection'
 import * as ArticlePreview from '../ArticlePreview'
 
 import { generateGrid } from '../../lib/grid'
@@ -12,20 +13,31 @@ const grid = generateGrid({ rows: { repeat: [4, 'auto'] } })
 
 export const variables = {
   ...CategorySection.variables(1),
+  ...CaseStudyScopeSection.variables(1),
   filterArticles: { bool: { allowOnHomepage: true } },
+  filterCaseStudies: { bool: { allowOnHomepage: true } },
 }
 
 export const fragment = gql`
   ${ArticlePreview.fragment}
   ${CategorySection.fragment}
+  ${CaseStudyScopeSection.fragment}
 
   fragment Home on HomePage {
     featured {
       ...ArticlePreview
     }
 
-    categorySections {
-      ...CategorySection
+    sections {
+      __typename
+
+      ... on Category {
+        ...CategorySection
+      }
+
+      ... on CaseStudyScope {
+        ...CaseStudyScopeSection
+      }
     }
   }
 `
@@ -43,16 +55,25 @@ export const Wrapper = styled.main`
 `
 
 export const Home = ({ home }) => {
-  const { categorySections } = home
+  const { sections } = home
 
-  return (
-    <Wrapper>
-      {categorySections.map(categorySection => (
+  const renderSection = section => {
+    if (section.__typename == 'Category') {
+      return (
         <CategorySection.CategorySection
-          key={`category-section-${categorySection.title}`}
-          categorySection={categorySection}
+          key={`category-section-${section.title}`}
+          categorySection={section}
         />
-      ))}
-    </Wrapper>
-  )
+      )
+    } else if (section.__typename == 'CaseStudyScope') {
+      return (
+        <CaseStudyScopeSection.CaseStudyScopeSection
+          key={`case-study-scope-section-${section.title}`}
+          caseStudyScopeSection={section}
+        />
+      )
+    }
+  }
+
+  return <Wrapper>{sections.map(renderSection)}</Wrapper>
 }

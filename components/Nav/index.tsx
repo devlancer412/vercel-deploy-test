@@ -34,15 +34,19 @@ export const Wrapper = styled.nav<{ styles: string; expanded: boolean }>`
   ${grid.all.columns}
   ${grid.all.rows}
 
-  width: calc(100% + 1px);
+  // width: calc(100% + 1px);
+  margin-left: calc(-1 * ${({ theme }) => theme.grid.padding});
+  width: 100vw;
   position: sticky;
   top: 0;
   z-index: 4;
   ${animate.defaultTransition}
 
   box-sizing: border-box;
-  padding: 3.1rem 0 2.3rem 0;
+  padding: 3.1rem ${({ theme }) => theme.grid.padding} 2.3rem ${({ theme }) =>
+  theme.grid.padding};
   background-color: #ffffff;
+  align-self: flex-start; // For when multiple things want to start from page top
 
   ${({ styles }) => styles}
 `

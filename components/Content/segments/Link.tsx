@@ -4,9 +4,10 @@ import NextLink from 'next/link'
 import * as animate from '../../../lib/animate'
 
 import * as link from '../../blocks/link'
+import * as typography from '../../blocks/typography'
 
 const A = styled.a`
-  text-decoration: underline;
+  ${typography.underlined}
   ${link.gray}
 `
 

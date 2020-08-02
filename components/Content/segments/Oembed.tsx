@@ -19,21 +19,30 @@ const topMargin = convert.viewportUnits(10.2, { by: 0.625 }).fromRem
 const bottomMargin = convert.viewportUnits(10, { by: 0.625 }).fromRem
 
 export const Wrapper = styled.div<any>`
+  ${grid.placeInColumns(1, { span: 12 })}
   margin: ${topMargin} 0 ${bottomMargin} 0;
-
-  &:first-child {
-    margin-top: ${convert.viewportUnits(6.2, { by: 0.625 }).fromRem};
-  }
-
-  & + & {
-    margin-top: 0;
-  }
 
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 
-  ${body.placement}
+  // Video size hack
+  height: 0;
+  padding-top: 25px;
+  padding-bottom: 56.25%;
+
+  iframe {
+    width: 100% !important;
+    height: 100% !important;
+    position: absolute;
+    top: 0;
+    height: 0;
+  }
+
+  @media (min-width: ${breakpoint}px) {
+    ${grid.placeInColumns(3, { span: 8 })};
+  }
 `
 
 export const Oembed = ({ html }) => {

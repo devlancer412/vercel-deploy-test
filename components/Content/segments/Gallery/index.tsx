@@ -14,7 +14,7 @@ const grid = generateGrid({ rows: { repeat: [3, 'auto'] } })
 
 const breakpoint = 700
 
-const Wrapper = styled.div<any>`
+export const Wrapper = styled.div<any>`
   ${grid.placeInColumns(1, { span: 12 })}
   ${grid.display}
   ${grid.columns}

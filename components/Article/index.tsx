@@ -7,7 +7,7 @@ import * as animate from '../../lib/animate'
 import * as ArticlePreview from '../ArticlePreview'
 
 import * as Image from '../blocks/Image'
-import * as Content from './Content'
+import * as Content from '../Content'
 
 import {
   FeatureImage,
@@ -57,6 +57,9 @@ export const Wrapper = styled.article`
   ${grid.columns}
   ${grid.rows}
   margin-top: 2rem;
+  margin-bottom: 24rem;
+
+  ${Content.Wrapper} { ${grid.placeInRows(5)} }
 
   ${`@media (min-width: ${breakpoint}px)`} {
     margin-top: 0;

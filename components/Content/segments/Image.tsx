@@ -1,12 +1,8 @@
-import { gql } from 'apollo-boost'
 import styled from 'styled-components'
-import { useQuery } from '@apollo/react-hooks'
-import { getImageUrl } from 'takeshape-routing'
 
 import { generateGrid } from '../../../lib/grid'
 import * as convert from '../../../lib/convert'
 
-import * as Loading from '../../Loading'
 import * as Img from '../../blocks/Image/Fetch'
 
 const breakpoint = 600
@@ -30,20 +26,8 @@ const alignMap = {
   default: { left: 3, right: 7, center: 5 },
 }
 
-const topMargin = convert.viewportUnits(11.2, { by: 0.625 }).fromRem
-const bottomMargin = convert.viewportUnits(12, { by: 0.625 }).fromRem
-
 export const Wrapper = styled.div<any>`
   ${grid.placeInColumns(1, { span: 12 })}
-  margin: ${topMargin} 0 ${bottomMargin} 0;
-
-  &:first-child {
-    margin-top: ${convert.viewportUnits(6.2, { by: 0.625 }).fromRem};
-  }
-
-  & + & {
-    margin-top: 0;
-  }
 
   display: flex;
   flex-direction: column;
@@ -51,10 +35,6 @@ export const Wrapper = styled.div<any>`
 
   @media (min-width: ${breakpoint}px) {
     ${({ start, span }) => gridColumn(start, span)};
-
-    & + & {
-      margin-top: ${topMargin};
-    }
   }
 `
 
@@ -66,7 +46,7 @@ export const Image = ({ image }) => {
 
   return (
     <Wrapper start={start[alignment || 'center']} span={span}>
-      <Img.Image details={image} intrinsicHeight />
+      <Img.Image details={image} height={'intrinsic'} />
     </Wrapper>
   )
 }

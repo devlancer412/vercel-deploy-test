@@ -27,7 +27,7 @@ const base = css<{ animation: string }>`
   }
 `
 
-const H1 = styled.h1<{ animation: string }>`
+export const H1 = styled.h1<{ animation: string }>`
   margin-top: ${convert.viewportUnits(4, { by: 0.625 }).fromRem};
   margin-bottom: ${convert.viewportUnits(3, { by: 0.625 }).fromRem};
   font-size: ${convert.viewportUnits(2.5, { by: 0.625 }).fromRem};
@@ -35,7 +35,7 @@ const H1 = styled.h1<{ animation: string }>`
   ${base}
 `
 
-const H2 = styled.h2<{ animation: string }>`
+export const H2 = styled.h2<{ animation: string }>`
   margin-top: ${convert.viewportUnits(3.5, { by: 0.625 }).fromRem};
   margin-bottom: ${convert.viewportUnits(2.5, { by: 0.625 }).fromRem};
   font-size: ${convert.viewportUnits(2, { by: 0.625 }).fromRem};
@@ -43,7 +43,7 @@ const H2 = styled.h2<{ animation: string }>`
   ${base}
 `
 
-const H3 = styled.h3<{ animation: string }>`
+export const H3 = styled.h3<{ animation: string }>`
   margin-top: ${convert.viewportUnits(3, { by: 0.625 }).fromRem};
   margin-bottom: ${convert.viewportUnits(2, { by: 0.625 }).fromRem};
   font-size: ${convert.viewportUnits(1.5, { by: 0.625 }).fromRem};
@@ -57,7 +57,7 @@ const components = {
   'header-three': H3,
 }
 
-const Header = ({ type, text }) => {
+export const Header = ({ type, text }) => {
   const [ref, animation] = animate.useDefaultAnimation()
 
   const HeaderComponent = components[type]
@@ -67,13 +67,4 @@ const Header = ({ type, text }) => {
       {text}
     </HeaderComponent>
   )
-}
-
-export function process(prevBlocks, current) {
-  // Ignore any styles inside a pullquote
-  const block = {
-    type: current.type,
-    element: <Header text={current.text} type={current.type} />,
-  }
-  return [block, ...prevBlocks]
 }

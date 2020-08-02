@@ -1,5 +1,7 @@
+import React from 'react'
 import { gql } from 'apollo-boost'
 import { useQuery } from '@apollo/react-hooks'
+import * as takeshape from '../../../lib/takeshape'
 
 import * as Loading from '../../Loading'
 
@@ -17,15 +19,31 @@ const ASSET_QUERY = gql`
   }
 `
 
+const fetchImage = async imageId => {
+  try {
+    const data = await takeshape.request(ASSET_QUERY, {
+      _id: imageId,
+    })
+    return { data }
+  } catch (e) {
+    return { error: 'Error fetching image' }
+  }
+}
+
 export const useImage = details => {
-  const { loading, error, data } = useQuery(ASSET_QUERY, {
-    variables: { _id: details.id },
-  })
+  const [result, setResult] = React.useState<any>({ loading: true })
 
-  if (loading || error || !data) return { loading, error, image: null }
+  React.useEffect(() => {
+    const fetch = async () => {
+      const image = await fetchImage(details.id)
+      setResult(image)
+    }
 
-  const asset = data.getAsset
-  return { loading, error, image: { ...asset, ...details } }
+    fetch()
+  }, [])
+
+  if (result.loading || result.error) return result
+  return { image: { ...result.data.getAsset, ...details } }
 }
 
 export const Image = ({ details, ...imageProps }) => {

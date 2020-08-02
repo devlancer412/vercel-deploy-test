@@ -8,6 +8,7 @@ import { gql } from 'apollo-boost'
 
 import withData from '../../lib/apollo'
 import { generateGrid } from '../../lib/grid'
+import * as takeshape from '../../lib/takeshape'
 
 import * as Loading from '../../components/Loading'
 import * as Nav from '../../components/Nav'
@@ -61,7 +62,7 @@ const Layout = styled.div`
   ${NextArticle.Wrapper} { ${grid.placeInRows(3, {})} }
 `
 
-const ArticlePage = () => {
+const ArticlePage = ({ data, error }) => {
   const [footerVisible, setFooterVisible] = React.useState(false)
 
   const router = useRouter()
@@ -69,15 +70,6 @@ const ArticlePage = () => {
 
   if (Array.isArray(category)) return <ErrorPage statusCode={404} />
   if (Array.isArray(slug)) return <ErrorPage statusCode={404} />
-
-  const { loading, error, data } = useQuery(ARTICLES_QUERY, {
-    variables: {
-      categoryFilter: { term: { title: category.toLowerCase() } },
-      articleFilter: { term: { slug: slug.toLowerCase() } },
-    },
-  })
-
-  if (loading) return <Loading.Loading />
   if (error || !data) return <ErrorPage statusCode={400} />
 
   const { getCategoryList, getContact, getFooter } = data
@@ -124,4 +116,16 @@ const ArticlePage = () => {
   )
 }
 
-export default withData(ArticlePage)
+export async function getServerSideProps({ params }) {
+  try {
+    const data = await takeshape.request(ARTICLES_QUERY, {
+      categoryFilter: { term: { title: params.category.toLowerCase() } },
+      articleFilter: { term: { slug: params.slug.toLowerCase() } },
+    })
+    return { props: { data } }
+  } catch (e) {
+    return { props: { error: 'Error fetching page contents' } }
+  }
+}
+
+export default ArticlePage

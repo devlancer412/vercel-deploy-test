@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { generateGrid } from '../../../lib/grid'
 import * as convert from '../../../lib/convert'
 import * as animate from '../../../lib/animate'
+import * as takeshape from '../../../lib/takeshape'
 
 import * as NewsSection from './NewsSection'
 import * as FeaturesSection from './FeaturesSection'
@@ -100,6 +101,26 @@ const FETCH_MORE = gql`
   }
 `
 
+const useLazyLoading = (): any => {
+  const [loading, setLoading] = React.useState(false)
+  const [data, setData] = React.useState(null)
+
+  const fetch = async variables => {
+    setData(null)
+    setLoading(true)
+
+    try {
+      const result = await takeshape.request(FETCH_MORE, variables)
+      setData(result)
+      setLoading(false)
+    } catch (e) {
+      setLoading(false)
+    }
+  }
+
+  return [fetch, { loading, data }]
+}
+
 const RemainingRows = ({
   initialRows,
   totalArticles,
@@ -111,7 +132,7 @@ const RemainingRows = ({
   const [articles, setArticles] = React.useState([])
   const newRows = () => setRows(r => r + initialRows)
 
-  const [fetchMoreArticles, { loading, data }] = apollo.useLazyQuery(FETCH_MORE)
+  const [fetchMoreArticles, { loading, data }] = useLazyLoading()
 
   React.useEffect(() => {
     // Once the new articles are fetched, this effect adds the newly
@@ -127,17 +148,15 @@ const RemainingRows = ({
     // When more rows are added, this effect sends a query to TakeShape
     // asking for more articles.
     fetchMoreArticles({
-      variables: {
-        id: categoryId,
-        from: initialLength + (rows - initialRows) * 3,
-        size: initialRows * 3,
-        sortArticles: [
-          {
-            field: '_enabledAt',
-            order: 'desc',
-          },
-        ],
-      },
+      id: categoryId,
+      from: initialLength + (rows - initialRows) * 3,
+      size: initialRows * 3,
+      sortArticles: [
+        {
+          field: '_enabledAt',
+          order: 'desc',
+        },
+      ],
     })
   }, [rows])
 

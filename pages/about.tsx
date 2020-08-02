@@ -9,6 +9,7 @@ import { getImageUrl } from 'takeshape-routing'
 import withData from '../lib/apollo'
 import { generateGrid } from '../lib/grid'
 import * as convert from '../lib/convert'
+import * as takeshape from '../lib/takeshape'
 
 import * as AboutLong from '../components/AboutLong'
 import * as AboutShort from '../components/AboutShort'
@@ -89,11 +90,9 @@ const Layout = styled.main`
   }
 `
 
-const AboutPage = ({ galleryPlacements }) => {
+const AboutPage = ({ data, error }) => {
   const [footerVisible, setFooterVisible] = React.useState(false)
-  const { loading, error, data } = useQuery(GET_ABOUT_PAGE)
 
-  if (loading) return <Loading.Loading />
   if (error || !data) return <ErrorPage statusCode={400} />
 
   const { getAbout, getContact, getFooter } = data
@@ -153,4 +152,13 @@ const AboutPage = ({ galleryPlacements }) => {
   )
 }
 
-export default withData(AboutPage)
+export async function getServerSideProps({ params }) {
+  try {
+    const data = await takeshape.request(GET_ABOUT_PAGE)
+    return { props: { data } }
+  } catch (e) {
+    return { props: { error: 'Error fetching page contents' } }
+  }
+}
+
+export default AboutPage

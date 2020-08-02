@@ -10,6 +10,7 @@ import { getImageUrl } from 'takeshape-routing'
 import withData from '../lib/apollo'
 import { generateGrid } from '../lib/grid'
 import * as convert from '../lib/convert'
+import * as takeshape from '../lib/takeshape'
 
 import * as Nav from '../components/Nav'
 import * as Footer from '../components/Footer'
@@ -65,7 +66,7 @@ const Layout = styled.main`
   }
 `
 
-const CategoryPage = () => {
+const CategoryPage = ({ error, data }) => {
   const [footerVisible, setFooterVisible] = React.useState(false)
 
   const router = useRouter()
@@ -73,16 +74,7 @@ const CategoryPage = () => {
 
   if (Array.isArray(category)) return <ErrorPage statusCode={404} />
 
-  const { loading, error, data } = useQuery(GET_CATEGORY_PAGE, {
-    variables: {
-      categoryFilter: { term: { title: category.toLowerCase() } },
-      filterArticles: {},
-      ...CategorySection.variables(3),
-    },
-  })
-
-  if (loading) return <Loading.Loading />
-  if (error || !data) return <ErrorPage statusCode={400} />
+  if (error || !data) return <ErrorPage statusCode={400} title={error} />
 
   const { getCategoryList, getContact, getFooter } = data
   if (!getCategoryList.total) return <ErrorPage statusCode={404} />
@@ -133,4 +125,17 @@ const CategoryPage = () => {
   )
 }
 
-export default withData(CategoryPage)
+export async function getServerSideProps({ params }) {
+  try {
+    const data = await takeshape.request(GET_CATEGORY_PAGE, {
+      categoryFilter: { term: { title: params.category.toLowerCase() } },
+      filterArticles: {},
+      ...CategorySection.variables(3),
+    })
+    return { props: { data } }
+  } catch (e) {
+    return { props: { error: 'Error fetching page contents' } }
+  }
+}
+
+export default CategoryPage

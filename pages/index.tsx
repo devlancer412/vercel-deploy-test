@@ -4,9 +4,11 @@ import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 import Head from 'next/head'
 import { getImageUrl } from 'takeshape-routing'
+import ErrorPage from 'next/error'
 
 import withData from '../lib/apollo'
 import { generateGrid } from '../lib/grid'
+import * as takeshape from '../lib/takeshape'
 
 import * as Nav from '../components/Nav'
 import * as Footer from '../components/Footer'
@@ -69,12 +71,10 @@ const Layout = styled.main`
   }
 `
 
-const HomePage = () => {
-  const [footerVisible, setFooterVisible] = React.useState(false)
+const HomePage = ({ data, error }) => {
+  if (error || !data) return <ErrorPage statusCode={400} title={error} />
 
-  const { loading, error, data } = useQuery(GET_HOME_PAGE, {
-    variables: Home.variables,
-  })
+  const [footerVisible, setFooterVisible] = React.useState(false)
 
   React.useEffect(() => {
     if (window) {
@@ -85,9 +85,6 @@ const HomePage = () => {
       window.lazySizesConfig.expand = 0
     }
   }, [])
-
-  if (loading) return <Loading.Loading />
-  if (error || !data) return <div>Error</div>
 
   const { getHomePage, getContact, getFooter } = data
   const { meta, featured, ...home } = getHomePage
@@ -141,4 +138,13 @@ const HomePage = () => {
   )
 }
 
-export default withData(HomePage)
+export async function getServerSideProps() {
+  try {
+    const data = await takeshape.request(GET_HOME_PAGE, Home.variables)
+    return { props: { data } }
+  } catch (e) {
+    return { props: { error: 'Error fetching page contents' } }
+  }
+}
+
+export default HomePage

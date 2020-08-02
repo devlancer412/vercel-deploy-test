@@ -20,7 +20,7 @@ export const fragment = gql`
 const Li = styled.li<{ i: number; animate: any }>`
   margin: 0.8rem 0;
   ${({ animate }) => animate}
-  transition-delay: 0.${({ i }) => 3 + i}s;
+  transition-delay: ${({ i }) => (3 + i) / 10}s;
 `
 
 type ServicesProps = {

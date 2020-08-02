@@ -154,7 +154,7 @@ const AboutPage = ({ data, error }) => {
 
 export async function getServerSideProps({ params }) {
   try {
-    const data = await takeshape.request(GET_ABOUT_PAGE)
+    const data = await takeshape.request(GET_ABOUT_PAGE, {})
     return { props: { data } }
   } catch (e) {
     return { props: { error: 'Error fetching page contents' } }

@@ -23,7 +23,7 @@ export const Wrapper = styled.section`
 
   border-top: 1px solid #000000;
   padding-top: 5.6rem;
-  margin-bottom: 11rem;
+  margin-bottom: 9rem;
 
   @media (min-width: ${breakpoint}px) {
     ${grid.wide.columns}

@@ -68,6 +68,7 @@ export const Remaining = ({ caseStudies }) => {
             articlePreview={preview}
             width={4}
             fullIntro
+            withoutDetails
           />
         )
       })}

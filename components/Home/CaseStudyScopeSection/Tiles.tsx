@@ -196,7 +196,8 @@ const TileIntro = styled.div<{ shortened?: boolean }>`
 `
 
 const TilePreview = styled.a`
-  display: block;
+  display: flex;
+  flex-grow: 1;
 `
 
 const TileWrapper = styled.a<any>`
@@ -204,7 +205,8 @@ const TileWrapper = styled.a<any>`
   ${({ grid, order }) => grid.small.placeInRows(order)}
 
   position: relative;
-  display: block;
+  display: flex;
+  flex-direction: column;
 
   ${ArticlePreview.Wrapper} { display: flex; }
   ${TilePreview} { display: none; }
@@ -216,7 +218,7 @@ const TileWrapper = styled.a<any>`
       grid.tiles.placeInRows(position.row, { span: rows })}
 
     ${ArticlePreview.Wrapper} { display: none; }
-    ${TilePreview} { display: block; }
+    ${TilePreview} { display: flex; }
   }
 `
 
@@ -250,6 +252,7 @@ const Tile = ({ caseStudy, tile, position, grid, order }) => {
             heightPercentage={heightRatio}
             height={'100%'}
             inColumns={columns}
+            overrideClip={`flex-grow: 1;`}
           />
 
           {<tile.Overlay caseStudy={caseStudy} />}

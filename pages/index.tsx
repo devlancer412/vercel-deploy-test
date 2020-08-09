@@ -21,6 +21,7 @@ const GET_HOME_PAGE = gql`
   ${Home.fragment}
   ${Footer.fragment}
   ${Contact.fragment}
+  ${Nav.fragment}
 
   query GetHomePage(
     $filterArticles: JSON!
@@ -48,6 +49,10 @@ const GET_HOME_PAGE = gql`
 
     getFooter {
       ...Footer
+    }
+
+    getNavigation {
+      ...Navigation
     }
   }
 `
@@ -88,7 +93,7 @@ const HomePage = ({ data, error }) => {
     }
   }, [])
 
-  const { getHomePage, getContact, getFooter } = data
+  const { getHomePage, getContact, getFooter, getNavigation } = data
   const { meta, featured, ...home } = getHomePage
 
   return (
@@ -126,7 +131,7 @@ const HomePage = ({ data, error }) => {
       </Head>
 
       <Layout>
-        <Nav.Nav footerVisible={footerVisible} />
+        <Nav.Nav navigation={getNavigation} footerVisible={footerVisible} />
         <Featured.FeatureGallery featured={featured} />
         <Home.Home home={home} />
       </Layout>
@@ -134,6 +139,7 @@ const HomePage = ({ data, error }) => {
       <Footer.Footer
         contact={getContact}
         footer={getFooter}
+        navigation={getNavigation}
         onVisibility={setFooterVisible}
       />
     </>

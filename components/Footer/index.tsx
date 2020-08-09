@@ -239,6 +239,7 @@ type FooterProps = {
 export const Footer = ({
   contact,
   footer,
+  navigation,
   onScroll,
   onVisibility,
   withoutNav = false,
@@ -289,8 +290,8 @@ export const Footer = ({
           {!withoutNav && (
             <Nav animate={navStyle}>
               <LinksWrapper expanded={false}>
-                <NavLinks.Left active={active} />
-                <NavLinks.Right active={active} />
+                <NavLinks.Left links={navigation.leftLinks} active={active} />
+                <NavLinks.Right links={navigation.rightLinks} active={active} />
               </LinksWrapper>
             </Nav>
           )}

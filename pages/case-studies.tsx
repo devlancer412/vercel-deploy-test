@@ -26,6 +26,7 @@ const GET_CASE_STUDIES_PAGE = gql`
   ${Footer.fragment}
   ${Contact.fragment}
   ${CaseStudyScopeSection.fragment}
+  ${Nav.fragment}
 
   query GetCaseStudiesPage(
     $caseStudyScopeFilter: JSON!
@@ -47,6 +48,10 @@ const GET_CASE_STUDIES_PAGE = gql`
 
     getFooter {
       ...Footer
+    }
+
+    getNavigation {
+      ...Navigation
     }
   }
 `
@@ -75,7 +80,7 @@ const CaseStudyPage = ({ error, data }) => {
 
   if (error || !data) return <ErrorPage statusCode={400} title={error} />
 
-  const { getCaseStudyScopeList, getContact, getFooter } = data
+  const { getCaseStudyScopeList, getContact, getFooter, getNavigation } = data
   if (!getCaseStudyScopeList.total) return <ErrorPage statusCode={404} />
   const [firstCaseStudyScope] = getCaseStudyScopeList.items
 
@@ -104,7 +109,11 @@ const CaseStudyPage = ({ error, data }) => {
       </Head>
 
       <Layout>
-        <Nav.Nav footerVisible={footerVisible} active={'case-studies'} />
+        <Nav.Nav
+          navigation={getNavigation}
+          footerVisible={footerVisible}
+          active={'case-studies'}
+        />
         <CaseStudyScopeSection.CaseStudyScopeSection
           caseStudyScopeSection={firstCaseStudyScope}
           initialRows={INITIAL_ROWS}
@@ -115,6 +124,7 @@ const CaseStudyPage = ({ error, data }) => {
         active={'case-studies'}
         contact={getContact}
         footer={getFooter}
+        navigation={getNavigation}
         onVisibility={setFooterVisible}
       />
     </>

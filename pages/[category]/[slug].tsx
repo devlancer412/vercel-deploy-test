@@ -21,6 +21,7 @@ const ARTICLES_QUERY = gql`
   ${Article.fragment}
   ${Contact.fragment}
   ${Footer.fragment}
+  ${Nav.fragment}
 
   query GetArticlePage($categoryFilter: JSON, $articleFilter: JSON) {
     getCategoryList(filter: $categoryFilter) {
@@ -44,6 +45,10 @@ const ARTICLES_QUERY = gql`
 
     getFooter {
       ...Footer
+    }
+
+    getNavigation {
+      ...Navigation
     }
   }
 `
@@ -72,7 +77,7 @@ const ArticlePage = ({ data, error }) => {
   if (Array.isArray(slug)) return <ErrorPage statusCode={404} />
   if (error || !data) return <ErrorPage statusCode={400} />
 
-  const { getCategoryList, getContact, getFooter } = data
+  const { getCategoryList, getContact, getFooter, getNavigation } = data
   if (!getCategoryList.total) return <ErrorPage statusCode={404} />
   const [firstCategory] = getCategoryList.items
 
@@ -102,7 +107,7 @@ const ArticlePage = ({ data, error }) => {
       </Head>
 
       <Layout>
-        <Nav.Nav footerVisible={footerVisible} />
+        <Nav.Nav navigation={getNavigation} footerVisible={footerVisible} />
         <Article.Article article={article} category={category} />
         <NextPiece.Article nextArticle={article.nextArticle} />
       </Layout>
@@ -110,6 +115,7 @@ const ArticlePage = ({ data, error }) => {
       <Footer.Footer
         contact={getContact}
         footer={getFooter}
+        navigation={getNavigation}
         onVisibility={setFooterVisible}
       />
     </>

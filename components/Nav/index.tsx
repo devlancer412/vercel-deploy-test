@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import Link from 'next/link'
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
 import { useInView } from 'react-intersection-observer'
+import gql from 'graphql-tag'
 
 import { generateGrid } from '../../lib/grid'
 import * as convert from '../../lib/convert'
@@ -19,6 +20,36 @@ const grid = {
 }
 
 export const breakpoint = 800
+
+export const fragment = gql`
+  fragment Navigation on Navigation {
+    leftLinks {
+      __typename
+
+      ... on Category {
+        title
+      }
+
+      ... on Link {
+        heading
+        url
+      }
+    }
+
+    rightLinks {
+      __typename
+
+      ... on Category {
+        title
+      }
+
+      ... on Link {
+        heading
+        url
+      }
+    }
+  }
+`
 
 const wrapperTransform = ({ isSmall, footerVisible, hamburgerOpen }) => {
   if (footerVisible && !hamburgerOpen)
@@ -142,7 +173,7 @@ const NavTarget = styled.div`
   left: 0;
 `
 
-export const Nav = ({ footerVisible, active = null }) => {
+export const Nav = ({ navigation, footerVisible, active = null }) => {
   const wrapperRef = React.useRef()
   const [targetRef, targetInView, targetEntry] = useInView({
     threshold: 1,
@@ -191,8 +222,16 @@ export const Nav = ({ footerVisible, active = null }) => {
         </Header>
 
         <LinksWrapper expanded={hamburgerOpen}>
-          <NavLinks.Left active={active} onLinkClick={onLinkClick} />
-          <NavLinks.Right active={active} onLinkClick={onLinkClick} />
+          <NavLinks.Left
+            links={navigation.leftLinks}
+            active={active}
+            onLinkClick={onLinkClick}
+          />
+          <NavLinks.Right
+            links={navigation.rightLinks}
+            active={active}
+            onLinkClick={onLinkClick}
+          />
         </LinksWrapper>
       </Wrapper>
     </>

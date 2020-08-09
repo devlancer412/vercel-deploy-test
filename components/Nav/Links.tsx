@@ -99,7 +99,7 @@ const navItems = {
 
 const NavItem = ({ path, title, active, onLinkClick, onHover = null }) => {
   return (
-    <Link href={`/${path}`} passHref>
+    <Link href={path} passHref>
       <NavLink
         onHover={onHover}
         isActive={active === path}
@@ -111,35 +111,62 @@ const NavItem = ({ path, title, active, onLinkClick, onHover = null }) => {
   )
 }
 
-export const Left = ({ active, onLinkClick = null }) => {
+const renderNavItem = (linkDetails, active, onLinkClick) => {
+  if (linkDetails.__typename == 'Category') {
+    return (
+      <NavItem
+        path={`/${linkDetails.title}`}
+        title={linkDetails.title}
+        active={active}
+        onLinkClick={onLinkClick}
+      />
+    )
+  } else if (linkDetails.__typename == 'Link') {
+    return (
+      <NavItem
+        path={linkDetails.url}
+        title={linkDetails.heading}
+        active={active}
+        onLinkClick={onLinkClick}
+      />
+    )
+  }
+}
+
+export const Left = ({ links, active, onLinkClick = null }) => {
   return (
     <Wrapper align="left">
-      {navItems.left.map(linkDetails => (
-        <NavItem {...linkDetails} active={active} onLinkClick={onLinkClick} />
-      ))}
+      {links.map(l => renderNavItem(l, active, onLinkClick))}
     </Wrapper>
   )
 }
 
-export const Right = ({ active, onLinkClick = null }) => {
+export const Right = ({ links, active, onLinkClick = null }) => {
   return (
     <Wrapper align="right">
-      {navItems.right.map(linkDetails => (
-        <NavItem {...linkDetails} active={active} onLinkClick={onLinkClick} />
-      ))}
+      {links.map(l => renderNavItem(l, active, onLinkClick))}
     </Wrapper>
   )
 }
 
 export const All = ({
+  navigation,
   expanded = false,
   active = null,
   onLinkClick = null,
 }) => {
   return (
     <AllWrapper expanded={expanded}>
-      <Left active={active} onLinkClick={onLinkClick} />
-      <Right active={active} onLinkClick={onLinkClick} />
+      <Left
+        links={navigation.leftLinks}
+        active={active}
+        onLinkClick={onLinkClick}
+      />
+      <Right
+        links={navigation.rightLinks}
+        active={active}
+        onLinkClick={onLinkClick}
+      />
     </AllWrapper>
   )
 }

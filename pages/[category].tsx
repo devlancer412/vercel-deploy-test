@@ -24,6 +24,7 @@ const GET_CATEGORY_PAGE = gql`
   ${Footer.fragment}
   ${Contact.fragment}
   ${CategorySection.fragment}
+  ${Nav.fragment}
 
   query GetCategoryPage(
     $categoryFilter: JSON!
@@ -45,6 +46,10 @@ const GET_CATEGORY_PAGE = gql`
 
     getFooter {
       ...Footer
+    }
+
+    getNavigation {
+      ...Navigation
     }
   }
 `
@@ -76,7 +81,7 @@ const CategoryPage = ({ error, data }) => {
 
   if (error || !data) return <ErrorPage statusCode={400} title={error} />
 
-  const { getCategoryList, getContact, getFooter } = data
+  const { getCategoryList, getContact, getFooter, getNavigation } = data
   if (!getCategoryList.total) return <ErrorPage statusCode={404} />
   const [firstCategory] = getCategoryList.items
 
@@ -107,7 +112,11 @@ const CategoryPage = ({ error, data }) => {
       </Head>
 
       <Layout>
-        <Nav.Nav footerVisible={footerVisible} active={category} />
+        <Nav.Nav
+          navigation={getNavigation}
+          footerVisible={footerVisible}
+          active={category}
+        />
         <CategorySection.CategorySection
           categorySection={firstCategory}
           initialRows={3}
@@ -119,6 +128,7 @@ const CategoryPage = ({ error, data }) => {
         active={category}
         contact={getContact}
         footer={getFooter}
+        navigation={getNavigation}
         onVisibility={setFooterVisible}
       />
     </>

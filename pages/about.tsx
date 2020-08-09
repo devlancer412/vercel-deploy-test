@@ -26,6 +26,7 @@ const GET_ABOUT_PAGE = gql`
   ${Contact.fragment}
   ${Services.fragment}
   ${Footer.fragment}
+  ${Nav.fragment}
 
   query GetAboutPage {
     getAbout {
@@ -48,6 +49,10 @@ const GET_ABOUT_PAGE = gql`
 
     getFooter {
       ...Footer
+    }
+
+    getNavigation {
+      ...Navigation
     }
   }
 `
@@ -95,7 +100,7 @@ const AboutPage = ({ data, error }) => {
 
   if (error || !data) return <ErrorPage statusCode={400} />
 
-  const { getAbout, getContact, getFooter } = data
+  const { getAbout, getContact, getFooter, getNavigation } = data
   const { shortIntro, longIntro, services, meta = {} } = getAbout
 
   const pageTitle = 'About | Early'
@@ -135,7 +140,11 @@ const AboutPage = ({ data, error }) => {
       </Head>
 
       <Layout>
-        <Nav.Nav footerVisible={footerVisible} active="about" />
+        <Nav.Nav
+          navigation={getNavigation}
+          footerVisible={footerVisible}
+          active="about"
+        />
         <AboutShort.AboutShort details={shortIntro} />
         <AboutLong.AboutLong details={longIntro} />
         <Services.Services services={services} />
@@ -146,6 +155,7 @@ const AboutPage = ({ data, error }) => {
         active="about"
         contact={getContact}
         footer={getFooter}
+        navigation={getNavigation}
         onVisibility={setFooterVisible}
       />
     </>

@@ -57,7 +57,7 @@ export const Wrapper = styled.div<LinksType>`
   flex-direction: column;
 `
 
-export const AllWrapper = styled.nav<any>`
+export const allLinksWrapper = css`
   ${grid.placeInColumns(1, { span: 12 })}
   ${grid.placeInRows(1)}
   ${grid.display}
@@ -78,6 +78,10 @@ export const AllWrapper = styled.nav<any>`
   opacity: 1;
   overflow: hidden;
   box-sizing: content-box;
+`
+
+export const AllWrapper = styled.nav<any>`
+  ${allLinksWrapper}
 `
 
 const navItems = {

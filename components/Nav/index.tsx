@@ -18,7 +18,7 @@ const grid = {
   parent: generateGrid(),
 }
 
-const breakpoint = 800
+export const breakpoint = 800
 
 const wrapperTransform = ({ isSmall, footerVisible, hamburgerOpen }) => {
   if (footerVisible && !hamburgerOpen)
@@ -71,21 +71,27 @@ const hiddenStyle = `
   pointer-events: none;
 `
 
-const LinksWrapper = styled(NavLinks.AllWrapper)<any>`
+const LinksWrapper = styled.nav<any>`
+  ${`@media (min-width: ${breakpoint}px)`} {
+    ${NavLinks.allLinksWrapper}
+  }
+
   ${`@media (max-width: ${breakpoint - 1}px)`} {
     position: fixed;
     height: calc(100vh - 3.1rem); // 3.1rem the nav padding
-    width: 100vw;
-    left: calc(-1 * ${({ theme }) => theme.grid.padding});
+    width: 100%;
+    left: 0;
+    top: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     background-color: #fff;
 
-    ${({ expanded }) => (expanded ? expandedStyle : hiddenStyle)}
+    ${animate.defaultTransition}
+    ${({ expanded }) =>
+      expanded ? expandedStyle : hiddenStyle}
     padding-bottom: 3.1rem;
-    box-sizing: border-box;
 
     ${NavLinks.Wrapper} {
       text-align: center;

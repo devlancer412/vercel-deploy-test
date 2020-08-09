@@ -150,27 +150,6 @@ export const usingArticles = caseStudies => {
   return { topCaseStudies, remaining }
 }
 
-const TileOverlay = styled.div`
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: #000000;
-  color: #ffffff;
-  opacity: 0;
-  padding: ${convert.viewportUnits(4, { by: 0.625 }).fromRem};
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  ${animate.defaultTransition}
-
-  &:hover {
-    ${animate.defaultTransition}
-    opacity: 1;
-  }
-`
-
 const TileTitle = styled.div`
   ${typography.articleTitle}
 
@@ -193,6 +172,35 @@ const TileIntro = styled.div<{ shortened?: boolean }>`
   margin-top: auto;
 
   ${({ shortened }) => shortened && shortenedIntro}
+`
+
+const TileOverlay = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #000000;
+  color: #ffffff;
+  padding: ${convert.viewportUnits(4, { by: 0.625 }).fromRem};
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+
+  ${animate.defaultTransition}
+  opacity: 0;
+  ${TileTitle}, ${TileIntro} {
+    ${animate.defaultTransition}
+    transform: translateY(20px);
+  }
+
+  &:hover {
+    ${animate.defaultTransition}
+    opacity: 1;
+    ${TileTitle}, ${TileIntro} {
+      transform: translateY(0);
+    }
+  }
 `
 
 const TilePreview = styled.a`

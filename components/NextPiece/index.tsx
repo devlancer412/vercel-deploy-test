@@ -93,6 +93,7 @@ export const CaseStudy = ({ nextCaseStudy }) => {
         articlePreview={preview}
         width={4}
         headingWidth={8}
+        withoutDetails
       />
     </Wrapper>
   )

@@ -261,6 +261,7 @@ const Tile = ({ caseStudy, tile, position, grid, order }) => {
         articlePreview={preview}
         width={4}
         fullIntro
+        withoutDetails
       />
     </TileWrapper>
   )

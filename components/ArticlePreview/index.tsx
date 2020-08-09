@@ -92,6 +92,7 @@ export const Body = ({
   withoutIntro = false,
   fullIntro = false,
   withoutHeading = false,
+  withoutDetails = false,
 }) => {
   const { heading, intro, category, createdAt, slug } = articlePreview
 
@@ -100,7 +101,7 @@ export const Body = ({
 
   return (
     <>
-      {category && createdAt && (
+      {category && createdAt && !withoutDetails && (
         <Details category={category} createdAt={createdAt} />
       )}
       {!withoutHeading && (
@@ -108,6 +109,7 @@ export const Body = ({
           width={headingWidth}
           animation={headerAnimation}
           ref={headerRef}
+          withoutDetails={withoutDetails}
         >
           {heading}
         </styles.Heading>

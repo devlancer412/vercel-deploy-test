@@ -3,6 +3,9 @@ import React from 'react'
 import { ThemeProvider, createGlobalStyle } from 'styled-components'
 
 import theme from '../lib/theme'
+import * as animate from '../lib/animate'
+
+import * as Nav from '../components/Nav'
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -11,24 +14,20 @@ const GlobalStyle = createGlobalStyle`
     -moz-osx-font-smoothing: grayscale;
   }
 
+  // This overrides the hidden that body-scroll-lock sets on body
+  @media (min-width: ${Nav.breakpoint}px) {
+    body {
+      overflow: scroll !important;
+    }
+  }
+
   html {
     font-size: 62.5%;
   }
 
   a {
     text-decoration: none;
-    color: unset;
-    transition: color 0.2s;
-
-    &:focus {
-      outline: none;
-      font-style: italic;
-    }
-
-    &:hover {
-      color: #e9e9e9;
-      transition: color 0.2s;
-    }
+    color: #000000;
   }
 `
 
@@ -39,6 +38,7 @@ export default class MyApp extends App {
     return (
       <ThemeProvider theme={theme}>
         <>
+          <span style={{ fontFamily: 'Adieu Backslant' }}></span>
           <GlobalStyle />
           <Component {...pageProps} />
         </>

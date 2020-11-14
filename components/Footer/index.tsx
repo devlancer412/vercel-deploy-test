@@ -1,15 +1,23 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 import { gql } from 'apollo-boost'
+import Link from 'next/link'
 
 import * as convert from '../../lib/convert'
-import { useDefaultAnimation } from '../../lib/animate'
+import {
+  useDefaultAnimation,
+  useCustomAnimation,
+  defaultTransition,
+} from '../../lib/animate'
 import { generateGrid } from '../../lib/grid'
+
 import EarlyLogo from '../../public/images/early-logo-black.svg'
 
 import { Ul } from '../blocks/List'
+import * as link from '../blocks/link'
+import * as NavLinks from '../Nav/Links'
 
-const breakpoint = 1000
+const breakpoint = 1035
 
 type WithAnimation = { animate: string }
 type WithIndex = { i: number }
@@ -22,7 +30,7 @@ const grid = {
   }),
   wide: generateGrid({
     columns: { repeat: [12, '1fr'] },
-    rows: { exact: '1fr 8rem' },
+    rows: { exact: 'auto 1fr 7.8rem' },
   }),
 }
 
@@ -33,8 +41,7 @@ const Wrapper = styled.footer`
   ${grid.small.columns}
   ${grid.small.rows}
 
-  margin-top: ${convert.viewportUnits(20, { to: 6 }).fromRem};
-  padding-top: 2.5rem;
+  padding-top: 2.4rem;
   padding-left: ${({ theme }) => theme.grid.padding};
   padding-right: ${({ theme }) => theme.grid.padding};
 
@@ -49,24 +56,32 @@ const Wrapper = styled.footer`
   }
 `
 
+const LogoAnimation = styled.div<WithAnimation>`
+  width: 100%;
+  opacity: 1;
+  ${defaultTransition}
+  ${({ animate }) => animate}
+`
+
 const LogoMask = styled.div`
-  ${grid.small.placeInColumns(1, {})}
-  ${grid.small.placeInRows(3, {})}
+  ${grid.small.placeInColumns(1)}
+  ${grid.small.placeInRows(3)}
 
   position: relative;
   width: 100%;
+
   overflow: hidden;
 
   @media (min-width: ${breakpoint}px) {
     ${grid.wide.placeInColumns(1, { span: 12 })}
-    ${grid.wide.placeInRows(1, {})}
+    ${grid.wide.placeInRows(2)}
   }
 `
 
-const Logo = styled(EarlyLogo)<WithAnimation & any>`
+const Logo = styled(EarlyLogo)`
   width: 100%;
   fill: #000000;
-  ${({ animate }) => animate}
+  ${defaultTransition}
   transition-delay: 0.1s;
   position: relative;
 
@@ -81,26 +96,28 @@ const footerDetail = css`
 `
 
 const Legal = styled.small<WithAnimation>`
-  ${grid.small.placeInColumns(1, {})}
-  ${grid.small.placeInRows(4, {})}
+  ${grid.small.placeInColumns(1, { span: 12 })}
+  ${grid.small.placeInRows(4)}
 
   margin: 1rem 0 5rem 0;
   ${footerDetail}
 
   display: flex;
-
+  justify-content: center;
   ${({ animate }) => animate}
 
   @media (min-width: ${breakpoint}px) {
     margin: auto 0;
+    margin-bottom: 2.8rem;
+    justify-content: flex-start;
     ${grid.wide.placeInColumns(1, { span: 3 })}
-    ${grid.wide.placeInRows(2, {})}
+    ${grid.wide.placeInRows(3)}
   }
 `
 
 const Contact = styled.address<WithAnimation>`
-  ${grid.small.placeInColumns(1, {})}
-  ${grid.small.placeInRows(2, {})}
+  ${grid.small.placeInColumns(1)}
+  ${grid.small.placeInRows(2)}
 
   display: flex;
   flex-direction: column;
@@ -117,8 +134,9 @@ const Contact = styled.address<WithAnimation>`
   @media (min-width: ${breakpoint}px) {
     flex-direction: row;
     margin: auto ${({ theme }) => css`calc(-1 * ${theme.grid.gap})`};
+    margin-bottom: 2.8rem;
     ${grid.wide.placeInColumns(4, { span: 6 })}
-    ${grid.wide.placeInRows(2, {})}
+    ${grid.wide.placeInRows(3)}
   }
 
   * {
@@ -127,8 +145,8 @@ const Contact = styled.address<WithAnimation>`
 `
 
 const Social = styled(Ul)<WithAnimation>`
-  ${grid.small.placeInColumns(1, {})}
-  ${grid.small.placeInRows(1, {})}
+  ${grid.small.placeInColumns(1)}
+  ${grid.small.placeInRows(1)}
 
   justify-content: center;
   margin: 0 auto 5rem auto;
@@ -140,12 +158,15 @@ const Social = styled(Ul)<WithAnimation>`
   @media (min-width: ${breakpoint}px) {
     justify-content: flex-end;
     margin: auto 0;
+    margin-bottom: 2.8rem;
     ${grid.wide.placeInColumns(10, { span: 3 })}
-    ${grid.wide.placeInRows(2, {})}
+    ${grid.wide.placeInRows(3)}
   }
 `
 
-const SocialLink = styled.a``
+const SocialLink = styled.a`
+  ${link.gray}
+`
 
 const SocialLi = styled.li`
   margin-left: 12px;
@@ -156,11 +177,33 @@ const SocialLi = styled.li`
 `
 
 const Email = styled.a`
-  margin-bottom: 0.8rem;
+  ${link.gray}
+`
 
-  @media (min-width: ${breakpoint}px) {
-    margin-bottom: 0;
+const PhoneNumber = styled.a`
+  ${link.gray}
+`
+
+const navGrid = generateGrid()
+
+const Nav = styled.nav<WithAnimation>`
+  padding-bottom: 1.7rem;
+  display: none;
+  ${defaultTransition}
+  transition-delay: 1.1s;
+  opacity: 1;
+  ${({ animate }) => animate}
+
+  @media (min-width: 800px) {
+    // Nav breakpoint
+    ${navGrid.display}
+    ${navGrid.columns}
   }
+`
+
+const LinksWrapper = styled(NavLinks.AllWrapper)`
+  display: flex;
+  justify-content: space-between;
 `
 
 export const fragment = gql`
@@ -184,7 +227,24 @@ const SocialListItem = ({ name, url, acronym }) => {
   )
 }
 
-export const Footer = ({ contact, footer, onScroll }) => {
+type FooterProps = {
+  contact: any
+  footer: any
+  withoutNav?: boolean
+  onScroll?: () => void
+  onVisibility?: (v: boolean) => void
+  active?: string
+}
+
+export const Footer = ({
+  contact,
+  footer,
+  navigation,
+  onScroll,
+  onVisibility,
+  withoutNav = false,
+  active = null,
+}: FooterProps) => {
   const { email, address, phoneNumber, socials } = contact
   const { copyright } = footer
 
@@ -192,15 +252,31 @@ export const Footer = ({ contact, footer, onScroll }) => {
   const [contactRef, contactAnimate] = useDefaultAnimation()
   const [socialsRef, socialsAnimate] = useDefaultAnimation()
   const [legalRef, legalAnimate] = useDefaultAnimation()
-  const [wrapperRef, logoAnimate] = useDefaultAnimation({
+  const [wrapperRef, inView] = useCustomAnimation({
+    triggerOnce: false,
     threshold: 0.8,
-    whileHidden: `
-      transform: translateY(calc(100% + 4rem));
-    `,
   })
 
+  const logoStyle =
+    !inView &&
+    `
+      opacity: 0;
+      transform: translateY(calc(100% + 4rem));
+    `
+
+  const navStyle =
+    !inView &&
+    `
+      opacity: 0;
+      transition-delay: 0s;
+    `
+
+  React.useEffect(() => {
+    onVisibility && onVisibility(inView)
+  }, [inView])
+
   const scrollUpPage = () => {
-    onScroll()
+    onScroll && onScroll()
     window.scroll({
       behavior: 'smooth',
       top: 0,
@@ -210,12 +286,23 @@ export const Footer = ({ contact, footer, onScroll }) => {
   return (
     <Wrapper ref={wrapperRef}>
       <LogoMask>
-        <Logo animate={logoAnimate} onClick={scrollUpPage} />
+        <LogoAnimation animate={logoStyle}>
+          {!withoutNav && (
+            <Nav animate={navStyle}>
+              <LinksWrapper expanded={false}>
+                <NavLinks.Left links={navigation.leftLinks} active={active} />
+                <NavLinks.Right links={navigation.rightLinks} active={active} />
+              </LinksWrapper>
+            </Nav>
+          )}
+
+          <Logo onClick={scrollUpPage} />
+        </LogoAnimation>
       </LogoMask>
 
       <Contact ref={contactRef} animate={contactAnimate}>
         <Email href={`mailto:${email}`}>{email}</Email>
-        <a href={`tel:${phoneNumber}`}>{phoneNumber}</a>
+        <PhoneNumber href={`tel:${phoneNumber}`}>{phoneNumber}</PhoneNumber>
 
         <span>
           {address.line1}, {address.line2}

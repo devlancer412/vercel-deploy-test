@@ -80,7 +80,7 @@ const DownButton = styled.button<any>`
   }
 `
 
-export const Hero = ({ children, scrollTo, onScroll }) => {
+export const Hero = ({ children, scrollTo, onScroll = () => {} }) => {
   const [heroHeight, setHeroHeight] = React.useState('100vh')
   const [ref, inView] = animate.useCustomAnimation()
 

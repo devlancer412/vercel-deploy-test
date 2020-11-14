@@ -28,19 +28,26 @@ const create = createType => ({ repeat = null, exact = null }, gutter) => {
 export const columns = create('columns')
 export const rows = create('rows')
 
-const placeIn = placementType => gutter => (
-  from,
-  { to = null, span = null }
-) => {
+type PlaceInOpts = {
+  span?: number
+  to?: number
+}
+
+const placeIn = placementType => gutter => (from, opts: PlaceInOpts = {}) => {
+  const { to = null, span = null } = opts
   // If span exists, else if to exists, else only span 1
-  const withoutGap = num => (gutter ? num * 2 - 1 : num)
+  const withoutGap = num => (num ? (gutter ? num * 2 - 1 : num) : null)
   const start = withoutGap(from)
-  const spanning = span ? withoutGap(span) : to ? withoutGap(to) - start : 1
+  const spanning = span
+    ? withoutGap(span)
+    : to
+    ? withoutGap(to) - (start || 0)
+    : 1
 
   return `
-    -ms-grid-${placementType}: ${start};
+    ${start ? `-ms-grid-${placementType}: ${start};` : ''}
     -ms-grid-${placementType}-span: ${spanning};
-    grid-${placementType}: ${start} / span ${spanning};
+    grid-${placementType}: ${start ? `${start} /` : ''} span ${spanning};
   `
 }
 
@@ -58,8 +65,9 @@ type GridProps = {
 }
 
 export function generateGrid(opts: GridProps = {}) {
-  const columnGap = opts.columnGap || theme.grid.gap
-  const rowGap = opts.rowGap || null
+  const columnGap =
+    opts.columnGap !== undefined ? opts.columnGap : theme.grid.gap
+  const rowGap = opts.rowGap !== undefined ? opts.rowGap : null
   const columnsConfig = opts.columns || { repeat: [12, '1fr'] }
   const rowsConfig = opts.rows || { exact: '1fr' }
 

@@ -39,10 +39,7 @@ export const Wrapper = styled.div<any>`
 `
 
 const HighlightedWord = styled.span`
-  border-bottom: 1px solid;
-  line-height: 0.928571; // 2.6rem
-  display: inline-block;
-  vertical-align: baseline;
+  ${typography.underlined}
 `
 
 const Highlighted = ({ children }) => {

@@ -4,30 +4,33 @@ import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 import Head from 'next/head'
 import { getImageUrl } from 'takeshape-routing'
+import ErrorPage from 'next/error'
 
 import withData from '../lib/apollo'
 import { generateGrid } from '../lib/grid'
-import * as randomlyPlace from '../lib/randomlyPlace'
+import * as takeshape from '../lib/takeshape'
 
-import { Hero } from '../components/Hero'
-import * as AboutLong from '../components/AboutLong'
-import * as AboutShort from '../components/AboutShort'
-import * as Gallery from '../components/Landing/Gallery'
+import * as Nav from '../components/Nav'
 import * as Footer from '../components/Footer'
+import * as Home from '../components/Home'
+import * as Featured from '../components/Home/FeatureGallery'
 import * as Contact from '../components/About/Contact'
-import * as Services from '../components/About/Services'
 import * as Loading from '../components/Loading'
 
-const GET_LANDING_PAGE = gql`
-  ${Gallery.fragment}
-  ${AboutLong.fragment}
-  ${AboutShort.fragment}
-  ${Contact.fragment}
-  ${Services.fragment}
+const GET_HOME_PAGE = gql`
+  ${Home.fragment}
   ${Footer.fragment}
+  ${Contact.fragment}
+  ${Nav.fragment}
 
-  query getLanding {
-    getLanding {
+  query GetHomePage(
+    $filterArticles: JSON!
+    $sortArticles: [TSSearchSort]!
+    $filterCaseStudies: JSON!
+    $sortCaseStudies: [TSSearchSort]!
+    $size: Int!
+  ) {
+    getHomePage {
       meta {
         title
         description
@@ -37,23 +40,7 @@ const GET_LANDING_PAGE = gql`
         }
       }
 
-      aboutShort {
-        ...AboutShort
-      }
-
-      gallery {
-        ...LandingGallery
-      }
-
-      aboutLong {
-        ...AboutLong
-      }
-    }
-
-    getAbout {
-      services {
-        ...Services
-      }
+      ...Home
     }
 
     getContact {
@@ -63,36 +50,51 @@ const GET_LANDING_PAGE = gql`
     getFooter {
       ...Footer
     }
+
+    getNavigation {
+      ...Navigation
+    }
   }
 `
 
-const grid = generateGrid({ rows: { repeat: [4, 'auto'] } })
+const grid = {
+  layout: generateGrid({ rows: { repeat: [3, 'auto'] } }),
+  fill: generateGrid({ rows: { exact: 'auto 100vh auto' } }),
+}
 
 const Layout = styled.main`
-  ${grid.display}
-  ${grid.columns}
-  ${grid.rows}
+  ${grid.layout.display}
+  ${grid.layout.columns}
+  ${grid.layout.rows}
 
   padding: 0 ${({ theme }) => theme.grid.padding};
 
-  ${Gallery.Wrapper} { ${grid.placeInRows(1, {})} }
-  ${AboutLong.Wrapper} { ${grid.placeInRows(2, {})} }
-  ${Services.Wrapper} { ${grid.placeInRows(3, {})} }
-  ${Contact.Wrapper} { ${grid.placeInRows(4, {})} }
+  ${Nav.Wrapper} { ${grid.layout.placeInRows(1)} }
+  ${Featured.Wrapper} { ${grid.layout.placeInRows(2)} }
+  ${Home.Wrapper} { ${grid.layout.placeInRows(3)} }
+
+  @media (orientation: landscape) and (min-height: 540px) {
+    ${grid.fill.rows}
+  }
 `
 
-const Landing = ({ galleryPlacements }) => {
-  const main = React.useRef(null)
-  const [hasJumped, setHasJumped] = useState(false)
-  const { loading, error, data } = useQuery(GET_LANDING_PAGE)
-  const jumpOccurred = () => setHasJumped(true)
+const HomePage = ({ data, error }) => {
+  if (error || !data) return <ErrorPage statusCode={400} title={error} />
 
-  if (loading) return <Loading.Loading />
-  if (error || !data) return <div>Error</div>
+  const [footerVisible, setFooterVisible] = React.useState(false)
 
-  const { getLanding, getContact, getAbout, getFooter } = data
-  const { aboutShort, gallery, aboutLong, meta } = getLanding
-  const { services } = getAbout
+  React.useEffect(() => {
+    if (window) {
+      require('lazysizes')
+      // @ts-ignore
+      window.lazySizesConfig = window.lazySizesConfig || {}
+      // @ts-ignore
+      window.lazySizesConfig.expand = 0
+    }
+  }, [])
+
+  const { getHomePage, getContact, getFooter, getNavigation } = data
+  const { meta, featured, ...home } = getHomePage
 
   return (
     <>
@@ -128,39 +130,29 @@ const Landing = ({ galleryPlacements }) => {
         )}
       </Head>
 
-      <Hero scrollTo={main} onScroll={jumpOccurred}>
-        <AboutShort.AboutShort details={aboutShort} />
-      </Hero>
-
-      <Layout ref={main}>
-        <Gallery.Gallery
-          content={gallery}
-          pageJumped={hasJumped}
-          placements={galleryPlacements}
-        />
-        <AboutLong.AboutLong details={aboutLong} />
-        <Services.Services services={services} />
-        <Contact.Contact contactDetails={getContact} />
+      <Layout>
+        <Nav.Nav navigation={getNavigation} footerVisible={footerVisible} />
+        <Featured.FeatureGallery featured={featured} />
+        <Home.Home home={home} />
       </Layout>
 
       <Footer.Footer
-        onScroll={jumpOccurred}
         contact={getContact}
         footer={getFooter}
+        navigation={getNavigation}
+        onVisibility={setFooterVisible}
       />
     </>
   )
 }
 
-Landing.getInitialProps = () => {
-  return {
-    galleryPlacements: [
-      randomlyPlace.get(),
-      randomlyPlace.get(),
-      randomlyPlace.get(),
-      randomlyPlace.get(),
-    ],
+export async function getServerSideProps() {
+  try {
+    const data = await takeshape.request(GET_HOME_PAGE, Home.variables)
+    return { props: { data } }
+  } catch (e) {
+    return { props: { error: 'Error fetching page contents' } }
   }
 }
 
-export default withData(Landing)
+export default HomePage

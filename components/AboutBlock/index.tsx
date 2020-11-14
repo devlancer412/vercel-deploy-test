@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-import { H2 } from '../blocks/Header'
+import { H2 } from '../blocks/Typography/Header'
 import * as typography from '../blocks/typography'
 
 import * as convert from '../../lib/convert'

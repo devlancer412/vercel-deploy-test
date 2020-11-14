@@ -17,7 +17,7 @@ export const fragment = gql`
 const gridColumn = (start, span) =>
   grid.placeInColumns(true)(start, { span: span })
 
-const Wrapper = styled.div<any>`
+export const Wrapper = styled.div<any>`
   font-family: 'Editorial New Ultralight';
 
   font-size: ${convert.viewportUnits(4, { to: 1.2 }).fromRem}; // 4rem
@@ -25,6 +25,7 @@ const Wrapper = styled.div<any>`
   text-transform: uppercase;
   line-height: 1.25; // 5rem
   text-align: center;
+  white-space: pre-wrap;
 
   display: flex;
   justify-content: center;

@@ -230,6 +230,7 @@ const SocialListItem = ({ name, url, acronym }) => {
 type FooterProps = {
   contact: any
   footer: any
+  navigation: any
   withoutNav?: boolean
   onScroll?: () => void
   onVisibility?: (v: boolean) => void

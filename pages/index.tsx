@@ -112,6 +112,7 @@ const HomePage = ({ data, error }) => {
           <>
             <meta property="og:description" content={meta.description} />
             <meta itemProp="description" content={meta.description} />
+            <meta name="description" content={meta.description} />
             <meta name="twitter:description" content={meta.description} />
           </>
         )}

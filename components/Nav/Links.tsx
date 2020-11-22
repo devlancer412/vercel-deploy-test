@@ -52,10 +52,10 @@ export const Wrapper = styled.div<LinksType>`
   ${grid.placeInRows(1)}
 
   text-align: ${({ align }) => align};
-  display: block;
+  display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
+  flex-direction: row;
 `
 
 export const allLinksWrapper = css`

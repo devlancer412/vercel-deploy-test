@@ -212,8 +212,11 @@ export const CategorySection = ({
   return (
     <Wrapper>
       <Header ref={headerRef} animation={headerAnimation}>
-        {title}
+        <Link href={`/${title.toLowerCase()}`} passHref>
+          <a>{title}</a>
+        </Link>
       </Header>
+
       <SectionComponent.Section title={title} {...topRow} />
 
       {Array(initialRows)

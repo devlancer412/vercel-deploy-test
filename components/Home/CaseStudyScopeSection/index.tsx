@@ -206,7 +206,9 @@ export const CaseStudyScopeSection = ({
   return (
     <Wrapper>
       <Header ref={headerRef} animation={headerAnimation}>
-        {title}
+        <Link href={`/case-studies`} passHref>
+          <a>{title}</a>
+        </Link>
       </Header>
 
       <Tiles.Section title={title} {...topRow} />

@@ -93,6 +93,7 @@ export const Section = ({ title, first }) => {
         <TopArticleImage>
           <ArticlePreview.Splash
             previewImage={first.previewImage}
+            previewImageAlt={first.previewImageAlt}
             previewImageFocalPoint={first.previewImageFocalPoint}
             width={7}
           />

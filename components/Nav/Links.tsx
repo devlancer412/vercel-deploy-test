@@ -11,21 +11,22 @@ const grid = generateGrid()
 
 const breakpoint = 800
 
-const activeLink = css<{ onHover: number; isActive: boolean }>`
+const activeLink = css<{ hoverLetterSpacing: number; isActive: boolean }>`
   color: #000000;
   font-family: 'Adieu Backslant';
   // The Backslant font causes the width of the word
   // to change, resulting in jumps if not accounted for
-  ${({ onHover }) => onHover && `letter-spacing: ${onHover}rem;`}
+  ${({ hoverLetterSpacing }) =>
+    hoverLetterSpacing && `letter-spacing: ${hoverLetterSpacing}rem;`}
 `
 
-const currentPage = css<{ onHover: number; isActive: boolean }>`
+const currentPage = css<{ hoverLetterSpacing: number; isActive: boolean }>`
   ${activeLink}
   font-weight: bold;
 `
 
 export const NavLink = styled(Detail.Link)<{
-  onHover: number
+  hoverLetterSpacing: number
   isActive: boolean
 }>`
   font-size: ${convert.viewportUnits(1.2, { to: 1.2 }).fromRem}; // 1.2rem
@@ -93,15 +94,21 @@ const navItems = {
   right: [
     { path: 'news', title: 'News' },
     { path: 'features', title: 'Features' },
-    { path: 'opinions', title: 'Opinions', onHover: 0.025 },
+    { path: 'opinions', title: 'Opinions', hoverLetterSpacing: 0.025 },
   ],
 }
 
-const NavItem = ({ path, title, active, onLinkClick, onHover = null }) => {
+const NavItem = ({
+  path,
+  title,
+  active,
+  onLinkClick,
+  hoverLetterSpacing = null,
+}) => {
   return (
     <Link href={path} passHref>
       <NavLink
-        onHover={onHover}
+        hoverLetterSpacing={hoverLetterSpacing}
         isActive={active === path}
         onClick={onLinkClick || (() => {})}
       >

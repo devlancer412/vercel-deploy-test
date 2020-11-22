@@ -67,9 +67,18 @@ type Direction = 'left' | 'right'
 type ArrowProps = {
   facing: Direction
   visible: boolean
+  label: string
   onClick: () => void
 }
 
-export const Arrow = ({ facing, visible, onClick }: ArrowProps) => {
-  return <ArrowButton facing={facing} visible={visible} onClick={onClick} />
+export const Arrow = ({ facing, visible, onClick, label }: ArrowProps) => {
+  return (
+    <ArrowButton
+      facing={facing}
+      visible={visible}
+      disabled={!visible}
+      ariaLabel={label}
+      onClick={onClick}
+    />
+  )
 }

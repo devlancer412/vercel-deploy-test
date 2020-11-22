@@ -159,12 +159,14 @@ export const FeatureGallery = ({ featured }) => {
         <Arrows>
           <Arrow.Arrow
             facing="left"
+            label="Left in carousel"
             visible={!!index}
             onClick={previousPreview}
           />
 
           <Arrow.Arrow
             facing="right"
+            label="Right in carousel"
             visible={index < featured.length - 1}
             onClick={nextPreview}
           />

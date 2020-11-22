@@ -15,6 +15,7 @@ import * as takeshape from '../lib/takeshape'
 import * as Nav from '../components/Nav'
 import * as Footer from '../components/Footer'
 import * as Loading from '../components/Loading'
+import * as NoItems from '../components/NoItems'
 import * as Contact from '../components/About/Contact'
 import * as CaseStudyScopeSection from '../components/Home/CaseStudyScopeSection'
 
@@ -56,21 +57,32 @@ const GET_CASE_STUDIES_PAGE = gql`
   }
 `
 
-const grid = generateGrid({ rows: { repeat: [2, 'auto'] } })
+const grid = {
+  layout: generateGrid({ rows: { repeat: [2, 'auto'] } }),
+  page: generateGrid({ rows: { exact: 'auto min-content' } }),
+}
 
 const Layout = styled.main`
-  ${grid.display}
-  ${grid.columns}
-  ${grid.rows}
+  ${grid.layout.display}
+  ${grid.layout.columns}
+  ${grid.layout.rows}
+  grid-column: 1 / -1;
 
   padding: 0 ${({ theme }) => theme.grid.padding};
   margin-bottom: ${convert.viewportUnits(8, { by: 0.4 }).fromRem}; // 8rem
 
-  ${Nav.Wrapper} { ${grid.placeInRows(1)} }
+  ${Nav.Wrapper} { ${grid.layout.placeInRows(1)} }
 
   ${CaseStudyScopeSection.Wrapper}:last-child {
     border-bottom: 0;
   }
+`
+
+const Page = styled.div`
+  ${grid.page.display}
+  ${grid.page.columns}
+  ${grid.page.rows}
+  min-height: 100vh;
 `
 
 const CaseStudyPage = ({ error, data }) => {
@@ -84,6 +96,8 @@ const CaseStudyPage = ({ error, data }) => {
   if (!getCaseStudyScopeList.total) return <ErrorPage statusCode={404} />
   const [firstCaseStudyScope] = getCaseStudyScopeList.items
 
+  const hasContent = CaseStudyScopeSection.hasCaseStudies(firstCaseStudyScope)
+
   React.useEffect(() => {
     if (window) {
       require('lazysizes')
@@ -95,7 +109,7 @@ const CaseStudyPage = ({ error, data }) => {
   }, [])
 
   return (
-    <>
+    <Page>
       <Head>
         <title>Case Studies | Early</title>
 
@@ -111,13 +125,17 @@ const CaseStudyPage = ({ error, data }) => {
       <Layout>
         <Nav.Nav
           navigation={getNavigation}
-          footerVisible={footerVisible}
+          footerVisible={hasContent && footerVisible}
           active={'case-studies'}
         />
-        <CaseStudyScopeSection.CaseStudyScopeSection
-          caseStudyScopeSection={firstCaseStudyScope}
-          initialRows={INITIAL_ROWS}
-        />
+        {hasContent ? (
+          <CaseStudyScopeSection.CaseStudyScopeSection
+            caseStudyScopeSection={firstCaseStudyScope}
+            initialRows={INITIAL_ROWS}
+          />
+        ) : (
+          <NoItems.NoItems title={'Case Studies'} />
+        )}
       </Layout>
 
       <Footer.Footer
@@ -127,7 +145,7 @@ const CaseStudyPage = ({ error, data }) => {
         navigation={getNavigation}
         onVisibility={setFooterVisible}
       />
-    </>
+    </Page>
   )
 }
 

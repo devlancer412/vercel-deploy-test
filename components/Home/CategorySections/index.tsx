@@ -184,6 +184,9 @@ const RemainingRows = ({
   )
 }
 
+export const hasArticles = ({ initialArticleSet }) =>
+  initialArticleSet.total > 0
+
 export const CategorySection = ({
   categorySection,
   initialRows = 1,

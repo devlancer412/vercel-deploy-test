@@ -10,6 +10,7 @@ import * as Nav from '../components/Nav'
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
+    min-height: 100%;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -23,6 +24,7 @@ const GlobalStyle = createGlobalStyle`
 
   html {
     font-size: 62.5%;
+    min-height: 100%;
   }
 
   a {

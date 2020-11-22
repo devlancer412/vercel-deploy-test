@@ -182,6 +182,9 @@ const RemainingRows = ({
   )
 }
 
+export const hasCaseStudies = ({ initialCaseStudySet }) =>
+  initialCaseStudySet.total > 0
+
 export const CaseStudyScopeSection = ({
   caseStudyScopeSection,
   initialRows = 0,
@@ -190,8 +193,10 @@ export const CaseStudyScopeSection = ({
   const { total } = initialCaseStudySet
 
   const [headerRef, headerAnimation] = animate.useDefaultAnimation()
+  const [noneRef, noneAnimation] = animate.useDefaultAnimation()
 
   const caseStudies = Tiles.usingArticles(initialCaseStudySet.items)
+
   if (!caseStudies) return null
   const { remaining: initialRemaining, ...topRow } = caseStudies
 

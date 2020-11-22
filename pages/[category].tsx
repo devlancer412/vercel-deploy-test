@@ -15,10 +15,9 @@ import * as takeshape from '../lib/takeshape'
 import * as Nav from '../components/Nav'
 import * as Footer from '../components/Footer'
 import * as Loading from '../components/Loading'
+import * as NoItems from '../components/NoItems'
 import * as Contact from '../components/About/Contact'
 import * as CategorySection from '../components/Home/CategorySections'
-
-//import * as Home from '../components/Home'
 
 const GET_CATEGORY_PAGE = gql`
   ${Footer.fragment}
@@ -54,21 +53,32 @@ const GET_CATEGORY_PAGE = gql`
   }
 `
 
-const grid = generateGrid({ rows: { repeat: [2, 'auto'] } })
+const grid = {
+  layout: generateGrid({ rows: { repeat: [2, 'auto'] } }),
+  page: generateGrid({ rows: { exact: 'auto min-content' } }),
+}
 
 const Layout = styled.main`
-  ${grid.display}
-  ${grid.columns}
-  ${grid.rows}
+  ${grid.layout.display}
+  ${grid.layout.columns}
+  ${grid.layout.rows}
+  grid-column: 1 / -1;
 
   padding: 0 ${({ theme }) => theme.grid.padding};
   margin-bottom: ${convert.viewportUnits(8, { by: 0.4 }).fromRem}; // 8rem
 
-  ${Nav.Wrapper} { ${grid.placeInRows(1)} }
+  ${Nav.Wrapper} { ${grid.layout.placeInRows(1)} }
 
   ${CategorySection.Wrapper}:last-child {
     border-bottom: 0;
   }
+`
+
+const Page = styled.div`
+  ${grid.page.display}
+  ${grid.page.columns}
+  ${grid.page.rows}
+  min-height: 100vh;
 `
 
 const CategoryPage = ({ error, data }) => {
@@ -96,9 +106,10 @@ const CategoryPage = ({ error, data }) => {
   }, [])
 
   const pageTitle = category.charAt(0).toUpperCase() + category.slice(1)
+  const hasContent = CategorySection.hasArticles(firstCategory)
 
   return (
-    <>
+    <Page>
       <Head>
         <title>{pageTitle} | Early</title>
 
@@ -114,14 +125,18 @@ const CategoryPage = ({ error, data }) => {
       <Layout>
         <Nav.Nav
           navigation={getNavigation}
-          footerVisible={footerVisible}
+          footerVisible={hasContent && footerVisible}
           active={category}
         />
-        <CategorySection.CategorySection
-          categorySection={firstCategory}
-          initialRows={3}
-          showIntros
-        />
+        {hasContent ? (
+          <CategorySection.CategorySection
+            categorySection={firstCategory}
+            initialRows={3}
+            showIntros
+          />
+        ) : (
+          <NoItems.NoItems title={pageTitle} />
+        )}
       </Layout>
 
       <Footer.Footer
@@ -131,7 +146,7 @@ const CategoryPage = ({ error, data }) => {
         navigation={getNavigation}
         onVisibility={setFooterVisible}
       />
-    </>
+    </Page>
   )
 }
 

@@ -38,8 +38,8 @@ const layGrid = (from, to, columns = 3, rows = 1) => {
   `
 }
 
-export const Wrapper = styled.section`
-  ${layGrid(1, 13, 1, 3)}
+export const Wrapper = styled.section<{ numberOfArticles: number }>`
+  ${({ numberOfArticles }) => layGrid(1, 13, 1, numberOfArticles)}
   margin-top: ${({ theme }) => theme.home.rowGap};
 
   ${({ theme }) => `@media (min-width: ${theme.breakpoint.home}px)`} {
@@ -52,7 +52,7 @@ export const Remaining = ({ articles, withoutIntros = false }) => {
   if (!articles.length) return null
 
   return (
-    <Wrapper>
+    <Wrapper numberOfArticles={articles.length}>
       {articles.map(article => (
         <ArticlePreview.ArticlePreview
           key={`remaining-article-${article._id}`}

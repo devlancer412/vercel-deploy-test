@@ -32,7 +32,7 @@ export const Content = ({ content, config = {} }) => {
 
   return (
     <Wrapper config={config}>
-      {processedBlocks.map(({ element }) => element)}
+      {processedBlocks.map(({ element }) => element)}a
     </Wrapper>
   )
 }

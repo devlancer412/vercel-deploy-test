@@ -220,6 +220,7 @@ const SocialListItem = ({ name, url, acronym }) => {
         href={url}
         title={name}
         target="_blank"
+        rel="noreferrer"
       >
         {acronym}
       </SocialLink>

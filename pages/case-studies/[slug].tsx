@@ -111,16 +111,16 @@ const ArticlePage = ({ data, error }) => {
   )
 }
 
-const FILTER_ENABLED = process.env.PREVIEWS
-  ? []
-  : [{ term: { _enabled: true } }]
-
 export async function getServerSideProps({ params }) {
+  const filterEnabled = process.env.PREVIEWS
+    ? []
+    : [{ term: { _enabled: true } }]
+
   try {
     const data = await takeshape.request(CASE_STUDIES_QUERY, {
       caseStudyFilter: [
         { term: { slug: params.slug.toLowerCase() } },
-        ...FILTER_ENABLED,
+        ...filterEnabled,
       ],
     })
     return { props: { data } }

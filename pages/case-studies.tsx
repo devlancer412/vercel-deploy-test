@@ -149,16 +149,16 @@ const CaseStudyPage = ({ error, data }) => {
   )
 }
 
-const WHERE_ENABLED = process.env.PREVIEWS ? {} : { _enabled: { eq: true } }
-const FILTER_ENABLED = process.env.PREVIEWS
-  ? []
-  : [{ term: { _enabled: true } }]
-
 export async function getServerSideProps({ params }) {
+  const whereEnabled = process.env.PREVIEWS ? {} : { _enabled: { eq: true } }
+  const filterEnabled = process.env.PREVIEWS
+    ? []
+    : [{ term: { _enabled: true } }]
+
   try {
     const data = await takeshape.request(GET_CASE_STUDIES_PAGE, {
-      caseStudyScopeWhere: { title: { eq: 'Case Studies' }, ...WHERE_ENABLED },
-      caseStudyFilter: FILTER_ENABLED,
+      caseStudyScopeWhere: { title: { eq: 'Case Studies' }, ...whereEnabled },
+      caseStudyFilter: filterEnabled,
       ...CaseStudyScopeSection.variables(INITIAL_ROWS),
     })
     return { props: { data } }

@@ -146,15 +146,15 @@ const HomePage = ({ data, error }) => {
   )
 }
 
-const FILTER_ENABLED = process.env.PREVIEWS
-  ? []
-  : [{ term: { _enabled: true } }]
-
 export async function getServerSideProps() {
+  const filterEnabled = process.env.PREVIEWS
+    ? []
+    : [{ term: { _enabled: true } }]
+
   try {
     const data = await takeshape.request(GET_HOME_PAGE, {
-      articleFilter: FILTER_ENABLED,
-      caseStudyFilter: FILTER_ENABLED,
+      articleFilter: filterEnabled,
+      caseStudyFilter: filterEnabled,
       ...Home.variables,
     })
     return { props: { data } }

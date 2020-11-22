@@ -125,21 +125,21 @@ const ArticlePage = ({ data, error }) => {
   )
 }
 
-const WHERE_ENABLED = process.env.PREVIEWS ? {} : { _enabled: { eq: true } }
-const FILTER_ENABLED = process.env.PREVIEWS
-  ? []
-  : [{ term: { _enabled: true } }]
-
 export async function getServerSideProps({ params }) {
+  const whereEnabled = process.env.PREVIEWS ? {} : { _enabled: { eq: true } }
+  const filterEnabled = process.env.PREVIEWS
+    ? []
+    : [{ term: { _enabled: true } }]
+
   try {
     const data = await takeshape.request(ARTICLES_QUERY, {
       categoryWhere: {
         title: { eq: params.category.toLowerCase() },
-        ...WHERE_ENABLED,
+        ...whereEnabled,
       },
       articleFilter: [
         { term: { slug: params.slug.toLowerCase() } },
-        ...FILTER_ENABLED,
+        ...filterEnabled,
       ], // They don't have any docs on this format, which is why I am not using it where I can, but this array means an implicit AND
     })
     return { props: { data } }

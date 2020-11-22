@@ -150,19 +150,19 @@ const CategoryPage = ({ error, data }) => {
   )
 }
 
-const WHERE_ENABLED = process.env.PREVIEWS ? {} : { _enabled: { eq: true } }
-const FILTER_ENABLED = process.env.PREVIEWS
-  ? []
-  : [{ term: { _enabled: true } }]
-
 export async function getServerSideProps({ params }) {
+  const whereEnabled = process.env.PREVIEWS ? {} : { _enabled: { eq: true } }
+  const filterEnabled = process.env.PREVIEWS
+    ? []
+    : [{ term: { _enabled: true } }]
+
   try {
     const data = await takeshape.request(GET_CATEGORY_PAGE, {
       categoryWhere: {
         title: { eq: params.category.toLowerCase() },
-        ...WHERE_ENABLED,
+        ...whereEnabled,
       },
-      articleFilter: FILTER_ENABLED,
+      articleFilter: filterEnabled,
       ...CategorySection.variables(3),
     })
     return { props: { data } }

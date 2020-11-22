@@ -1,6 +1,5 @@
-import { gql } from 'apollo-boost'
+import gql from 'graphql-tag'
 import styled from 'styled-components'
-import { useQuery } from '@apollo/react-hooks'
 import { getImageUrl } from 'takeshape-routing'
 
 import { generateGrid } from '../../../lib/grid'

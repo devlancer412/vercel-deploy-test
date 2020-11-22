@@ -1,12 +1,10 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { useQuery } from '@apollo/react-hooks'
-import { gql } from 'apollo-boost'
+import gql from 'graphql-tag'
 import Head from 'next/head'
 import ErrorPage from 'next/error'
 import { getImageUrl } from 'takeshape-routing'
 
-import withData from '../lib/apollo'
 import { generateGrid } from '../lib/grid'
 import * as convert from '../lib/convert'
 import * as takeshape from '../lib/takeshape'

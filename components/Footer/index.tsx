@@ -1,6 +1,6 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import { gql } from 'apollo-boost'
+import gql from 'graphql-tag'
 import Link from 'next/link'
 
 import * as convert from '../../lib/convert'

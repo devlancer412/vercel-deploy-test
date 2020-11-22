@@ -1,5 +1,5 @@
 import React from 'react'
-import { gql } from 'apollo-boost'
+import gql from 'graphql-tag'
 import NextLink from 'next/link'
 
 import * as animate from '../../lib/animate'

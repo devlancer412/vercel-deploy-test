@@ -1,4 +1,4 @@
-import { gql } from 'apollo-boost'
+import gql from 'graphql-tag'
 import styled from 'styled-components'
 
 import * as Block from '../AboutBlock'

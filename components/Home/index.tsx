@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { gql } from 'apollo-boost'
+import gql from 'graphql-tag'
 
 import * as FeatureGallery from './FeatureGallery'
 import * as CategorySection from './CategorySections'

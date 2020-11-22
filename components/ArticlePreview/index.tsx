@@ -15,6 +15,7 @@ export const fragment = gql`
     previewImage {
       path
     }
+    previewImageAlt
     previewImageFocalPoint
     intro
     createdAt: _enabledAt
@@ -56,6 +57,7 @@ export const Details = ({ category, createdAt, playAnimation = false }) => {
 
 export const Splash = ({
   previewImage,
+  previewImageAlt,
   previewImageFocalPoint,
   width,
   position = null,
@@ -66,6 +68,7 @@ export const Splash = ({
   return (
     <Image.Image
       image={previewImage}
+      imageAlt={previewImageAlt}
       imgix={{ ar: aspectRatio[width].join(':'), fit: 'crop' }}
       objectFit="cover"
       objectPosition={previewImageFocalPoint || 'center'}
@@ -130,6 +133,7 @@ export const Body = ({
 export const ArticlePreview = ({ articlePreview, width, ...bodyProps }) => {
   const {
     previewImage,
+    previewImageAlt,
     previewImageFocalPoint,
     category,
     slug,
@@ -144,6 +148,7 @@ export const ArticlePreview = ({ articlePreview, width, ...bodyProps }) => {
         <styles.FeatureImage>
           <Splash
             previewImage={previewImage}
+            previewImageAlt={previewImageAlt}
             previewImageFocalPoint={previewImageFocalPoint}
             width={width}
             position="absolute"

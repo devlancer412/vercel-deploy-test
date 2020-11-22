@@ -6,6 +6,7 @@ import * as Styled from './Image.styles'
 
 type ImageProps = {
   image: ImageType
+  imageAlt?: string
   hideCaption?: boolean
   cache?: boolean
   onLoad?: () => void
@@ -21,6 +22,7 @@ type ImageProps = {
 type ImageComponent = (props: ImageProps) => React.ReactElement
 export const Image = ({
   image,
+  imageAlt,
   hideCaption,
   cache,
   onLoad,
@@ -79,6 +81,7 @@ export const Image = ({
     <>
       <Styled.Clip setPadding={heightPercentage} overrideClip={overrideClip}>
         <Styled.Img
+          alt={imageAlt}
           className="blur-up lazyload"
           data-src={large.url}
           src={lazyUrl}

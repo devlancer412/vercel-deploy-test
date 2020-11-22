@@ -69,7 +69,7 @@ export const Splash = ({
     <Image.Image
       image={previewImage}
       imageAlt={previewImageAlt}
-      imgix={{ ar: aspectRatio[width].join(':'), fit: 'crop' }}
+      imgix={{ ar: aspectRatio[width].join(':') }}
       objectFit="cover"
       objectPosition={previewImageFocalPoint || 'center'}
       heightPercentage={heightPercentage}

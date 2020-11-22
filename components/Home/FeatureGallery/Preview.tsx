@@ -49,7 +49,7 @@ export const Body = ({ article, i }) => {
             objectFit="cover"
             objectPosition={previewImageFocalPoint}
             inColumns={12}
-            imgix={{ ar: '96:80', fit: 'crop' }}
+            imgix={{ ar: '96:80' }}
             overrideClip="height: 100%; max-height: auto;"
           />
         </FeatureImage>

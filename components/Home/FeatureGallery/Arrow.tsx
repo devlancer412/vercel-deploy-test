@@ -77,7 +77,7 @@ export const Arrow = ({ facing, visible, onClick, label }: ArrowProps) => {
       facing={facing}
       visible={visible}
       disabled={!visible}
-      ariaLabel={label}
+      aria-label={label}
       onClick={onClick}
     />
   )

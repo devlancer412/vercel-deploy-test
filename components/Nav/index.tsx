@@ -215,7 +215,7 @@ export const Nav = ({ navigation, footerVisible, active = null }) => {
             expanded={hamburgerOpen}
           />
           <Link href="/" passHref>
-            <LogoLink onClick={onLinkClick} ariaLabel="Early Homepage">
+            <LogoLink onClick={onLinkClick} aria-label="Early Homepage">
               <Logo scaleBy={logoStyle} />
             </LogoLink>
           </Link>

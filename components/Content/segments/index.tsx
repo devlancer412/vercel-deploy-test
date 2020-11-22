@@ -103,70 +103,115 @@ export const map = config => {
   return {
     // TO-DO:
     // inline code
-    empty() {
+    empty(i) {
       // An empty whitespace line. Used as a grid divider to stop
       // images sitting in the same row as each other.
-      return <c.Empty.Empty />
+      return <c.Empty.Empty key={`segment-empty-${i}`} />
     },
 
-    unstyled(children) {
-      return <c.Unstyled.Unstyled>{children}</c.Unstyled.Unstyled>
+    unstyled(children, i) {
+      return (
+        <c.Unstyled.Unstyled key={`segment-unstyled-${i}`}>
+          {children}
+        </c.Unstyled.Unstyled>
+      )
     },
 
-    'header-one'(text) {
-      return <c.Header.Header type="header-one" text={text} />
+    'header-one'(text, i) {
+      return (
+        <c.Header.Header
+          key={`segment-h1-${text}-${i}`}
+          type="header-one"
+          text={text}
+        />
+      )
     },
 
-    'header-two'(text) {
-      return <c.Header.Header type="header-two" text={text} />
+    'header-two'(text, i) {
+      return (
+        <c.Header.Header
+          key={`segment-h2-${text}-${i}`}
+          type="header-two"
+          text={text}
+        />
+      )
     },
 
-    'header-three'(text) {
-      return <c.Header.Header type="header-three" text={text} />
+    'header-three'(text, i) {
+      return (
+        <c.Header.Header
+          key={`segment-h3-${text}-${i}`}
+          type="header-three"
+          text={text}
+        />
+      )
     },
 
-    LINK({ text, entity }) {
+    LINK({ text, entity }, i) {
       const { url, target } = entity.data
-      return <c.Link.Link text={text} url={url} target={target} />
+      return (
+        <c.Link.Link
+          key={`segment-link-${url}-${i}`}
+          text={text}
+          url={url}
+          target={target}
+        />
+      )
     },
 
-    BOLD({ text }) {
-      return <strong>{text}</strong>
+    BOLD({ text }, i) {
+      return <strong key={`segment-bold-${text}-${i}`}>{text}</strong>
     },
 
-    ITALIC({ text }) {
-      return <em>{text}</em>
+    ITALIC({ text }, i) {
+      return <em key={`segment-italic-${text}-${i}`}>{text}</em>
     },
 
-    UNDERLINE({ text }) {
-      return <c.Underline.Underline>{text}</c.Underline.Underline>
+    UNDERLINE({ text }, i) {
+      return (
+        <c.Underline.Underline key={`segment-underline-${text}-${i}`}>
+          {text}
+        </c.Underline.Underline>
+      )
     },
 
-    SUP({ text }) {
-      return <sup>{text}</sup>
+    SUP({ text }, i) {
+      return <sup key={`segment-sup-${text}-${i}`}>{text}</sup>
     },
 
-    SUB({ text }) {
-      return <sub>{text}</sub>
+    SUB({ text }, i) {
+      return <sub key={`segment-sub-${text}-${i}`}>{text}</sub>
     },
 
-    pullquote(text) {
-      return <c.PullQuote.PullQuote quote={text} />
+    pullquote(text, i) {
+      return (
+        <c.PullQuote.PullQuote
+          key={`segment-pullquote-${text}-${i}`}
+          quote={text}
+        />
+      )
     },
 
-    oembed({ entity }) {
+    oembed({ entity }, i) {
       const { data } = entity
-      return <c.Oembed.Oembed html={data.html} />
+      return (
+        <c.Oembed.Oembed
+          key={`segment-oembed-${data.id}-${i}`}
+          html={data.html}
+        />
+      )
     },
 
-    image({ entity }: any) {
+    image({ entity }: any, i: number) {
       const { data } = entity
-      return <c.Image.Image image={data} />
+      return (
+        <c.Image.Image key={`segment-image-${data.id}-${i}`} image={data} />
+      )
     },
 
-    gallery(segments) {
+    gallery(segments, i: number) {
       const data = segments.map(({ entity }) => entity.data)
-      return <c.Gallery.Gallery images={data} />
+      return <c.Gallery.Gallery key={`segment-gallery-${i}`} images={data} />
     },
   }
 }

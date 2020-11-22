@@ -170,6 +170,7 @@ const RemainingRows = ({
           const row = articles.slice(i * 3, i * 3 + 3)
           return row.length ? (
             <Remaining.Remaining
+              key={`remaining-${categoryId}-row-${i}`}
               withoutIntros={!includeIntros}
               articles={row}
             />
@@ -218,6 +219,7 @@ export const CategorySection = ({
           const articles = initialRemaining.slice(i * 3, i * 3 + 3)
           return articles.length ? (
             <Remaining.Remaining
+              key={`remaining-initial-${categorySection._id}-row-${i}`}
               withoutIntros={!includeIntros}
               articles={articles}
             />

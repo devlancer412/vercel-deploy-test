@@ -115,6 +115,7 @@ const renderNavItem = (linkDetails, active, onLinkClick) => {
   if (linkDetails.__typename == 'Category') {
     return (
       <NavItem
+        key={`navlink-category-${linkDetails.title}`}
         path={`/${linkDetails.title}`}
         title={linkDetails.title}
         active={active}
@@ -124,6 +125,7 @@ const renderNavItem = (linkDetails, active, onLinkClick) => {
   } else if (linkDetails.__typename == 'Link') {
     return (
       <NavItem
+        key={`navlink-url-${linkDetails.url}`}
         path={linkDetails.url}
         title={linkDetails.heading}
         active={active}

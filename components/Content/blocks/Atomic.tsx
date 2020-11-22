@@ -1,9 +1,9 @@
 import * as replace from '../lib/replace'
 
-const render = (segmentMap, segment) => {
+const render = (segmentMap, segment, i) => {
   const renderSegment = segmentMap[segment.type]
   if (!renderSegment) return null
-  return renderSegment(segment)
+  return renderSegment(segment, i)
 }
 
 const isGalleryImage = block => {
@@ -15,14 +15,14 @@ const isGalleryImage = block => {
 const isImage = block => block && block.type === 'image'
 const isGallery = block => block.type === 'gallery'
 
-const createGalleryBlock = (segmentMap, segments) => ({
+const createGalleryBlock = (segmentMap, segments, i) => ({
   type: 'gallery',
   segments,
-  element: segmentMap.gallery(segments),
+  element: segmentMap.gallery(segments, i),
 })
 
 export function process(segmentMap, entityMap) {
-  return (prevBlocks, current) => {
+  return (prevBlocks, current, i) => {
     // Process the atomic entity
     const block = replace.entities(current, entityMap)
     const [firstSegment] = block.segments
@@ -32,7 +32,7 @@ export function process(segmentMap, entityMap) {
     const atomic = {
       type: firstSegment.type,
       segment: firstSegment,
-      element: render(segmentMap, firstSegment),
+      element: render(segmentMap, firstSegment, i),
     }
 
     // The following logic is about condensing 3 or more back to back images
@@ -45,7 +45,7 @@ export function process(segmentMap, entityMap) {
     // If the last element was a gallery, add the current image to that
     if (isGallery(firstBlock)) {
       const segments = [atomic.segment, ...firstBlock.segments]
-      const galleryBlock = createGalleryBlock(segmentMap, segments)
+      const galleryBlock = createGalleryBlock(segmentMap, segments, i)
       return [galleryBlock, secondBlock, ...restBlocks]
     }
 
@@ -57,7 +57,7 @@ export function process(segmentMap, entityMap) {
     // If both preceding blocks are images, condense them into a gallery
     const segments = [atomic.segment, firstBlock.segment, secondBlock.segment]
 
-    const galleryBlock = createGalleryBlock(segmentMap, segments)
+    const galleryBlock = createGalleryBlock(segmentMap, segments, i)
     return [galleryBlock, ...restBlocks]
   }
 }

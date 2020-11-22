@@ -23,10 +23,10 @@ export const Content = ({ content, config = {} }) => {
   const blockProcessor = Block.process(segmentMap, entityMap)
 
   const processedBlocks = blocks
-    .reduce((prevBlocks, block) => {
+    .reduce((prevBlocks, block, i) => {
       const process = blockProcessor[block.type]
       if (!process) return prevBlocks
-      return process(prevBlocks, block)
+      return process(prevBlocks, block, i)
     }, [])
     .reverse()
 

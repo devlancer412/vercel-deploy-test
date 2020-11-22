@@ -117,7 +117,11 @@ export const Article = ({ article, category }) => {
       </Heading>
 
       <FeatureImage>
-        <Image.Image image={featureImage} imageAlt={featureImageAlt} />
+        <Image.Image
+          key={`article-${heading}-feature-image`}
+          image={featureImage}
+          imageAlt={featureImageAlt}
+        />
       </FeatureImage>
 
       <SubHeading ref={subHeadingRef} animation={subHeadingAnimation}>

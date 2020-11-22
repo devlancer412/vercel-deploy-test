@@ -24,7 +24,7 @@ const CASE_STUDIES_QUERY = gql`
   ${Nav.fragment}
 
   query GetCaseStudyPage($caseStudyFilter: JSON) {
-    getCaseStudyList(filter: $caseStudyFilter) {
+    getCaseStudyList(filter: $caseStudyFilter, size: 1) {
       total
       items {
         ...CaseStudy
@@ -111,10 +111,17 @@ const ArticlePage = ({ data, error }) => {
   )
 }
 
+const FILTER_ENABLED = process.env.PREVIEWS
+  ? []
+  : [{ term: { _enabled: true } }]
+
 export async function getServerSideProps({ params }) {
   try {
     const data = await takeshape.request(CASE_STUDIES_QUERY, {
-      caseStudyFilter: { term: { slug: params.slug.toLowerCase() } },
+      caseStudyFilter: [
+        { term: { slug: params.slug.toLowerCase() } },
+        ...FILTER_ENABLED,
+      ],
     })
     return { props: { data } }
   } catch (e) {

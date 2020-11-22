@@ -23,14 +23,17 @@ const ARTICLES_QUERY = gql`
   ${Footer.fragment}
   ${Nav.fragment}
 
-  query GetArticlePage($categoryFilter: JSON, $articleFilter: JSON) {
-    getCategoryList(filter: $categoryFilter) {
+  query GetArticlePage(
+    $categoryWhere: TSWhereCategoryInput!
+    $articleFilter: JSON!
+  ) {
+    getCategoryList(where: $categoryWhere, size: 1) {
       total
 
       items {
         _id
 
-        articleSet(filter: $articleFilter) {
+        articleSet(filter: $articleFilter, size: 1) {
           total
           items {
             ...Article
@@ -122,11 +125,22 @@ const ArticlePage = ({ data, error }) => {
   )
 }
 
+const WHERE_ENABLED = process.env.PREVIEWS ? {} : { _enabled: { eq: true } }
+const FILTER_ENABLED = process.env.PREVIEWS
+  ? []
+  : [{ term: { _enabled: true } }]
+
 export async function getServerSideProps({ params }) {
   try {
     const data = await takeshape.request(ARTICLES_QUERY, {
-      categoryFilter: { term: { title: params.category.toLowerCase() } },
-      articleFilter: { term: { slug: params.slug.toLowerCase() } },
+      categoryWhere: {
+        title: { eq: params.category.toLowerCase() },
+        ...WHERE_ENABLED,
+      },
+      articleFilter: [
+        { term: { slug: params.slug.toLowerCase() } },
+        ...FILTER_ENABLED,
+      ], // They don't have any docs on this format, which is why I am not using it where I can, but this array means an implicit AND
     })
     return { props: { data } }
   } catch (e) {

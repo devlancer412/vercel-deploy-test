@@ -27,12 +27,12 @@ const GET_CATEGORY_PAGE = gql`
   ${Nav.fragment}
 
   query GetCategoryPage(
-    $categoryFilter: JSON!
-    $filterArticles: JSON!
-    $sortArticles: [TSSearchSort]!
+    $categoryWhere: TSWhereCategoryInput!
+    $articleFilter: JSON!
+    $articleSort: [TSSearchSort]!
     $size: Int!
   ) {
-    getCategoryList(filter: $categoryFilter) {
+    getCategoryList(where: $categoryWhere, size: 1) {
       total
 
       items {
@@ -135,11 +135,19 @@ const CategoryPage = ({ error, data }) => {
   )
 }
 
+const WHERE_ENABLED = process.env.PREVIEWS ? {} : { _enabled: { eq: true } }
+const FILTER_ENABLED = process.env.PREVIEWS
+  ? []
+  : [{ term: { _enabled: true } }]
+
 export async function getServerSideProps({ params }) {
   try {
     const data = await takeshape.request(GET_CATEGORY_PAGE, {
-      categoryFilter: { term: { title: params.category.toLowerCase() } },
-      filterArticles: {},
+      categoryWhere: {
+        title: { eq: params.category.toLowerCase() },
+        ...WHERE_ENABLED,
+      },
+      articleFilter: FILTER_ENABLED,
       ...CategorySection.variables(3),
     })
     return { props: { data } }

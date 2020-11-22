@@ -24,10 +24,10 @@ const GET_HOME_PAGE = gql`
   ${Nav.fragment}
 
   query GetHomePage(
-    $filterArticles: JSON!
-    $sortArticles: [TSSearchSort]!
-    $filterCaseStudies: JSON!
-    $sortCaseStudies: [TSSearchSort]!
+    $articleFilter: JSON!
+    $articleSort: [TSSearchSort]!
+    $caseStudyFilter: JSON!
+    $caseStudySort: [TSSearchSort]!
     $size: Int!
   ) {
     getHomePage {
@@ -146,9 +146,17 @@ const HomePage = ({ data, error }) => {
   )
 }
 
+const FILTER_ENABLED = process.env.PREVIEWS
+  ? []
+  : [{ term: { _enabled: true } }]
+
 export async function getServerSideProps() {
   try {
-    const data = await takeshape.request(GET_HOME_PAGE, Home.variables)
+    const data = await takeshape.request(GET_HOME_PAGE, {
+      articleFilter: FILTER_ENABLED,
+      caseStudyFilter: FILTER_ENABLED,
+      ...Home.variables,
+    })
     return { props: { data } }
   } catch (e) {
     return { props: { error: 'Error fetching page contents' } }

@@ -19,7 +19,7 @@ import * as ArticlePreview from '../../ArticlePreview'
 import * as typography from '../../blocks/typography'
 
 export const variables = (initialRows: number) => ({
-  sortArticles: [
+  articleSort: [
     {
       field: '_enabledAt',
       order: 'desc',
@@ -35,8 +35,8 @@ export const fragment = gql`
     _id
     title
     initialArticleSet: articleSet(
-      filter: $filterArticles
-      sort: $sortArticles
+      filter: $articleFilter
+      sort: $articleSort
       size: $size
     ) {
       total

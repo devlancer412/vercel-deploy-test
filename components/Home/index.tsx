@@ -14,8 +14,6 @@ const grid = generateGrid({ rows: { repeat: [4, 'auto'] } })
 export const variables = {
   ...CategorySection.variables(1),
   ...CaseStudyScopeSection.variables(1),
-  filterArticles: { bool: { allowOnHomepage: true } },
-  filterCaseStudies: { bool: { allowOnHomepage: true } },
 }
 
 export const fragment = gql`

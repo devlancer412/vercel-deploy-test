@@ -17,7 +17,7 @@ import * as Remaining from './Remaining'
 import * as typography from '../../blocks/typography'
 
 export const variables = (initialRows: number) => ({
-  sortCaseStudies: [
+  caseStudySort: [
     {
       field: '_enabledAt',
       order: 'desc',
@@ -31,8 +31,8 @@ export const fragment = gql`
     _id
     title
     initialCaseStudySet: caseStudySet(
-      filter: $filterCaseStudies
-      sort: $sortCaseStudies
+      filter: $caseStudyFilter
+      sort: $caseStudySort
       size: $size
     ) {
       total

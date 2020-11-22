@@ -29,12 +29,12 @@ const GET_CASE_STUDIES_PAGE = gql`
   ${Nav.fragment}
 
   query GetCaseStudiesPage(
-    $caseStudyScopeFilter: JSON!
-    $filterCaseStudies: JSON!
-    $sortCaseStudies: [TSSearchSort]!
+    $caseStudyScopeWhere: TSWhereCaseStudyScopeInput!
+    $caseStudyFilter: JSON!
+    $caseStudySort: [TSSearchSort]!
     $size: Int!
   ) {
-    getCaseStudyScopeList(filter: $caseStudyScopeFilter) {
+    getCaseStudyScopeList(where: $caseStudyScopeWhere, size: 1) {
       total
 
       items {
@@ -131,11 +131,16 @@ const CaseStudyPage = ({ error, data }) => {
   )
 }
 
+const WHERE_ENABLED = process.env.PREVIEWS ? {} : { _enabled: { eq: true } }
+const FILTER_ENABLED = process.env.PREVIEWS
+  ? []
+  : [{ term: { _enabled: true } }]
+
 export async function getServerSideProps({ params }) {
   try {
     const data = await takeshape.request(GET_CASE_STUDIES_PAGE, {
-      caseStudyScopeFilter: { term: { title: 'Case Studies' } },
-      filterCaseStudies: {},
+      caseStudyScopeWhere: { title: { eq: 'Case Studies' }, ...WHERE_ENABLED },
+      caseStudyFilter: FILTER_ENABLED,
       ...CaseStudyScopeSection.variables(INITIAL_ROWS),
     })
     return { props: { data } }

@@ -32,6 +32,7 @@ const Stabilise = styled.div`
 export const Body = ({ article, i }) => {
   const {
     previewImage,
+    previewImageAlt,
     previewImageFocalPoint,
     category,
     createdAt,
@@ -44,6 +45,7 @@ export const Body = ({ article, i }) => {
         <FeatureImage>
           <Image.Image
             image={previewImage}
+            imageAlt={previewImageAlt}
             objectFit="cover"
             objectPosition={previewImageFocalPoint}
             inColumns={12}

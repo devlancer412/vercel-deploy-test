@@ -68,11 +68,19 @@ export const Wrapper = styled.section`
   border-bottom: 1px solid #000000;
 `
 
-const Header = styled.h2<{ animation: string }>`
+const Header = styled.h2<{
+  animation: string
+  sectionComponentHidden: boolean
+}>`
   ${grid.placeInRows(1)}
   ${grid.placeInColumns(1, { span: 12 })}
   text-align: center;
-  margin-bottom: ${convert.viewportUnits(11, { by: 0.625 }).fromRem}; // 11rem
+  margin-bottom: ${({ sectionComponentHidden }) => {
+    if (sectionComponentHidden) {
+      return 0
+    }
+    return convert.viewportUnits(11, { by: 0.625 }).fromRem
+  }}; // 11rem
   ${typography.section}
   ${({ animation }) => animation}
 `
@@ -200,8 +208,9 @@ export const CategorySection = ({
   if (!SectionComponent) return null
 
   const articles = SectionComponent.usingArticles(initialArticleSet.items)
-  if (!articles) return null
-  const { remaining: initialRemaining, ...topRow } = articles
+  const { remaining: initialRemaining, ...topRow } = articles || {
+    remaining: articles,
+  }
 
   const includeIntros = showIntros || SectionComponent.includeRemainingIntros
 
@@ -210,13 +219,19 @@ export const CategorySection = ({
 
   return (
     <Wrapper>
-      <Header ref={headerRef} animation={headerAnimation}>
+      <Header
+        ref={headerRef}
+        animation={headerAnimation}
+        sectionComponentHidden={topRowLength == 0}
+      >
         <Link href={`/${title.toLowerCase()}`} passHref>
           <a>{title}</a>
         </Link>
       </Header>
 
-      <SectionComponent.Section title={title} {...topRow} />
+      {topRowLength > 0 && (
+        <SectionComponent.Section title={title} {...topRow} />
+      )}
 
       {Array(initialRows)
         .fill(null)

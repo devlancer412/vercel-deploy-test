@@ -46,7 +46,8 @@ export const includeRemainingIntros = false
 
 export const usingArticles = articles => {
   const [first, second, ...remaining] = articles
-  if (!first || !second) return null
+  if (!first && !second) return { remaining }
+  if (!second) return { remaining: [first, ...remaining] }
   return { first, second, remaining }
 }
 

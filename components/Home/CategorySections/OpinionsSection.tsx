@@ -77,7 +77,7 @@ export const includeRemainingIntros = false
 
 export const usingArticles = articles => {
   const [first, ...remaining] = articles
-  if (!first) return null
+  if (!first) return { remaining }
   return { first, remaining }
 }
 

@@ -62,7 +62,7 @@ const Layout = styled.main`
   ${grid.columns}
   ${grid.rows}
 
-  padding: 0 ${({ theme }) => theme.grid.padding};
+  padding: 0 ${props => props.theme && props.theme.grid.padding};
 
   ${Nav.Wrapper} { ${grid.placeInRows(1, {})} }
 

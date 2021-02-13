@@ -5,11 +5,14 @@ module.exports = withFonts({
     locales: ['en'],
     defaultLocale: 'en',
   },
+  compiler: {
+    styledComponents: true,
+  },
   webpack: config => {
     // Fixes npm packages that depend on `fs` module
-    config.node = {
-      fs: 'empty',
-    }
+    // config.node = {
+    //   fs: 'empty',
+    // }
 
     config.module.rules.push({
       test: /\.svg$/,

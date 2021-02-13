@@ -121,7 +121,7 @@ export const FeatureGallery = ({ featured }) => {
   const handlers = useSwipeable({
     onSwipedLeft: nextPreview,
     onSwipedRight: previousPreview,
-    preventDefaultTouchmoveEvent: true,
+    preventScrollOnSwipe: true,
   })
 
   React.useEffect(() => {

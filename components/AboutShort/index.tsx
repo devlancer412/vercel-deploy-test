@@ -38,8 +38,8 @@ export const Wrapper = styled.div<any>`
 
   @media (min-width: 550px) {
     ${gridColumn(1.5, 11)}
-    margin-left: -${({ theme }) => theme.grid.gap};
-    margin-right: -${({ theme }) => theme.grid.gap};
+    margin-left: -${props => props.theme && props.theme.grid.gap};
+    margin-right: -${props => props.theme && props.theme.grid.gap};
   }
 `
 

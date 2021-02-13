@@ -25,8 +25,8 @@ const GET_CATEGORY_PAGE = gql`
 
   query GetCategoryPage(
     $categoryWhere: TSWhereCategoryInput!
-    $articleFilter: JSON!
-    $articleSort: [TSSearchSort]!
+    $articleFilter: JSONObject!
+    $articleSort: [TSSearchSortInput]!
     $size: Int!
   ) {
     getCategoryList(where: $categoryWhere, size: 1) {
@@ -62,7 +62,7 @@ const Layout = styled.main`
   ${grid.layout.rows}
   grid-column: 1 / -1;
 
-  padding: 0 ${({ theme }) => theme.grid.padding};
+  padding: 0 ${props => props.theme && props.theme.grid.padding};
   margin-bottom: ${convert.viewportUnits(8, { by: 0.4 }).fromRem}; // 8rem
 
   ${Nav.Wrapper} { ${grid.layout.placeInRows(1)} }
@@ -151,8 +151,8 @@ const CategoryPage = ({ error, data }) => {
 export async function getServerSideProps({ params }) {
   const whereEnabled = process.env.PREVIEWS ? {} : { _enabled: { eq: true } }
   const filterEnabled = process.env.PREVIEWS
-    ? []
-    : [{ term: { _enabled: true } }]
+    ? { match_all: {} }
+    : { term: { _enabled: true } }
 
   try {
     const data = await takeshape.request(GET_CATEGORY_PAGE, {

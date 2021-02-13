@@ -23,7 +23,7 @@ const ARTICLES_QUERY = gql`
 
   query GetArticlePage(
     $categoryWhere: TSWhereCategoryInput!
-    $articleFilter: JSON!
+    $articleFilter: JSONObject!
   ) {
     getCategoryList(where: $categoryWhere, size: 1) {
       total
@@ -61,7 +61,7 @@ const Layout = styled.div`
   ${grid.columns}
   ${grid.rows}
 
-  padding: 0 ${({ theme }) => theme.grid.padding};
+  padding: 0 ${props => props.theme && props.theme.grid.padding};
 
   ${Nav.Wrapper} { ${grid.placeInRows(1, {})} }
   ${Article.Wrapper} { ${grid.placeInRows(2, {})} }
@@ -110,7 +110,9 @@ const ArticlePage = ({ data, error }) => {
       <Layout>
         <Nav.Nav navigation={getNavigation} footerVisible={footerVisible} />
         <Article.Article article={article} category={category} />
-        <NextPiece.Article nextArticle={article.nextArticle} />
+        {article.nextArticle && (
+          <NextPiece.Article nextArticle={article.nextArticle} />
+        )}
       </Layout>
 
       <Footer.Footer
@@ -126,8 +128,8 @@ const ArticlePage = ({ data, error }) => {
 export async function getServerSideProps({ params }) {
   const whereEnabled = process.env.PREVIEWS ? {} : { _enabled: { eq: true } }
   const filterEnabled = process.env.PREVIEWS
-    ? []
-    : [{ term: { _enabled: true } }]
+    ? { match_all: {} }
+    : { _enabled: true }
 
   try {
     const data = await takeshape.request(ARTICLES_QUERY, {
@@ -135,10 +137,9 @@ export async function getServerSideProps({ params }) {
         title: { eq: params.category.toLowerCase() },
         ...whereEnabled,
       },
-      articleFilter: [
-        { term: { slug: params.slug.toLowerCase() } },
-        ...filterEnabled,
-      ], // They don't have any docs on this format, which is why I am not using it where I can, but this array means an implicit AND
+      articleFilter: {
+        term: { slug: params.slug.toLowerCase(), ...filterEnabled },
+      },
     })
     return { props: { data } }
   } catch (e) {

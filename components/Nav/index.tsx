@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
@@ -58,7 +60,7 @@ const wrapperTransform = ({ isSmall, footerVisible, hamburgerOpen }) => {
   return `transform: translateY(-1rem); opacity: 1;`
 }
 
-export const Wrapper = styled.nav<{ styles: string; expanded: boolean }>`
+export const Wrapper = styled.nav<{ $styles: string; $expanded: boolean }>`
   ${grid.parent.placeInColumns(1, { span: 12 })}
   ${grid.all.display}
 
@@ -66,7 +68,7 @@ export const Wrapper = styled.nav<{ styles: string; expanded: boolean }>`
   ${grid.all.rows}
 
   // width: calc(100% + 1px);
-  margin-left: calc(-1 * ${({ theme }) => theme.grid.padding});
+  margin-left: calc(-1 * ${props => props.theme && props.theme.grid.padding});
   width: 100vw;
   position: sticky;
   top: 0;
@@ -74,12 +76,13 @@ export const Wrapper = styled.nav<{ styles: string; expanded: boolean }>`
   ${animate.defaultTransition}
 
   box-sizing: border-box;
-  padding: 3.1rem ${({ theme }) => theme.grid.padding} 2.3rem ${({ theme }) =>
-  theme.grid.padding};
+  padding: 3.1rem ${props =>
+    props.theme && props.theme.grid.padding} 2.3rem ${props =>
+  props.theme && props.theme.grid.padding};
   background-color: #ffffff;
   align-self: flex-start; // For when multiple things want to start from page top
 
-  ${({ styles }) => styles}
+  ${props => props.$styles}
 `
 
 export const Header = styled.header`
@@ -102,7 +105,7 @@ const hiddenStyle = `
   pointer-events: none;
 `
 
-const LinksWrapper = styled.nav<any>`
+const LinksWrapper = styled.nav<{ $expanded: boolean }>`
   ${`@media (min-width: ${breakpoint}px)`} {
     ${NavLinks.allLinksWrapper}
   }
@@ -120,8 +123,8 @@ const LinksWrapper = styled.nav<any>`
     background-color: #fff;
 
     ${animate.defaultTransition}
-    ${({ expanded }) =>
-      expanded ? expandedStyle : hiddenStyle}
+    ${props =>
+      props.$expanded ? expandedStyle : hiddenStyle}
     padding-bottom: 3.1rem;
 
     ${NavLinks.Wrapper} {
@@ -208,7 +211,11 @@ export const Nav = ({ navigation, footerVisible, active = null }) => {
     <>
       <NavTarget ref={targetRef} />
 
-      <Wrapper ref={wrapperRef} styles={wrapperStyle} expanded={hamburgerOpen}>
+      <Wrapper
+        ref={wrapperRef}
+        $styles={wrapperStyle}
+        $expanded={hamburgerOpen}
+      >
         <Header>
           <Hamburger.Hamburger
             onClick={toggleHamburgerOpen}
@@ -221,7 +228,7 @@ export const Nav = ({ navigation, footerVisible, active = null }) => {
           </Link>
         </Header>
 
-        <LinksWrapper expanded={hamburgerOpen}>
+        <LinksWrapper $expanded={hamburgerOpen}>
           <NavLinks.Left
             links={navigation.leftLinks}
             active={active}

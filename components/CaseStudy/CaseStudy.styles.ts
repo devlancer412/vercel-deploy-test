@@ -22,7 +22,7 @@ export const FeatureImage = styled.div`
   ${grid.placeInColumns(1, { span: 12 })}
   ${grid.placeInRows(1)}
 
-  margin-left: calc(-1 * ${({ theme }) => theme.grid.padding});
+  margin-left: calc(-1 * ${props => props.theme && props.theme.grid.padding});
 
   width: 100vw;
   height: 100vh;

@@ -1,6 +1,11 @@
 import App from 'next/app'
 import React from 'react'
-import { ThemeProvider, createGlobalStyle } from 'styled-components'
+import {
+  ThemeProvider,
+  StyleSheetManager,
+  createGlobalStyle,
+} from 'styled-components'
+import shouldForwardProp from '@emotion/is-prop-valid'
 
 import theme from '../lib/theme'
 import * as animate from '../lib/animate'
@@ -42,7 +47,9 @@ export default class MyApp extends App {
         <>
           <span style={{ fontFamily: 'Adieu Backslant' }}></span>
           <GlobalStyle />
-          <Component {...pageProps} />
+          <StyleSheetManager shouldForwardProp={shouldForwardProp}>
+            <Component {...pageProps} />
+          </StyleSheetManager>
         </>
       </ThemeProvider>
     )

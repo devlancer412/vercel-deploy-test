@@ -42,8 +42,8 @@ const Wrapper = styled.footer`
   ${grid.small.rows}
 
   padding-top: 2.4rem;
-  padding-left: ${({ theme }) => theme.grid.padding};
-  padding-right: ${({ theme }) => theme.grid.padding};
+  padding-left: ${props => props.theme && props.theme.grid.padding};
+  padding-right: ${props => props.theme && props.theme.grid.padding};
 
   border-top: 1px solid #e9e9e9;
 

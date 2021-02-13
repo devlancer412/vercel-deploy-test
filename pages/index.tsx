@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
@@ -22,10 +24,10 @@ const GET_HOME_PAGE = gql`
   ${Nav.fragment}
 
   query GetHomePage(
-    $articleFilter: JSON!
-    $articleSort: [TSSearchSort]!
-    $caseStudyFilter: JSON!
-    $caseStudySort: [TSSearchSort]!
+    $articleFilter: JSONObject!
+    $articleSort: [TSSearchSortInput]!
+    $caseStudyFilter: JSONObject!
+    $caseStudySort: [TSSearchSortInput]!
     $size: Int!
   ) {
     getHomePage {
@@ -65,7 +67,7 @@ const Layout = styled.main`
   ${grid.layout.columns}
   ${grid.layout.rows}
 
-  padding: 0 ${({ theme }) => theme.grid.padding};
+  padding: 0 ${props => props.theme && props.theme.grid.padding};
 
   ${Nav.Wrapper} { ${grid.layout.placeInRows(1)} }
   ${Featured.Wrapper} { ${grid.layout.placeInRows(2)} }
@@ -147,8 +149,8 @@ const HomePage = ({ data, error }) => {
 
 export async function getServerSideProps() {
   const filterEnabled = process.env.PREVIEWS
-    ? []
-    : [{ term: { _enabled: true } }]
+    ? { match_all: {} }
+    : { term: { _enabled: true } }
 
   try {
     const data = await takeshape.request(GET_HOME_PAGE, {

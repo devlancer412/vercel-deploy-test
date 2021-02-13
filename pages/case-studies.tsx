@@ -29,8 +29,8 @@ const GET_CASE_STUDIES_PAGE = gql`
 
   query GetCaseStudiesPage(
     $caseStudyScopeWhere: TSWhereCaseStudyScopeInput!
-    $caseStudyFilter: JSON!
-    $caseStudySort: [TSSearchSort]!
+    $caseStudyFilter: JSONObject!
+    $caseStudySort: [TSSearchSortInput]!
     $size: Int!
   ) {
     getCaseStudyScopeList(where: $caseStudyScopeWhere, size: 1) {
@@ -66,7 +66,7 @@ const Layout = styled.main`
   ${grid.layout.rows}
   grid-column: 1 / -1;
 
-  padding: 0 ${({ theme }) => theme.grid.padding};
+  padding: 0 ${props => props.theme && props.theme.grid.padding};
   margin-bottom: ${convert.viewportUnits(8, { by: 0.4 }).fromRem}; // 8rem
 
   ${Nav.Wrapper} { ${grid.layout.placeInRows(1)} }
@@ -150,8 +150,8 @@ const CaseStudyPage = ({ error, data }) => {
 export async function getServerSideProps({ params }) {
   const whereEnabled = process.env.PREVIEWS ? {} : { _enabled: { eq: true } }
   const filterEnabled = process.env.PREVIEWS
-    ? []
-    : [{ term: { _enabled: true } }]
+    ? { match_all: {} }
+    : { term: { _enabled: true } }
 
   try {
     const data = await takeshape.request(GET_CASE_STUDIES_PAGE, {

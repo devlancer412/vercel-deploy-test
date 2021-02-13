@@ -40,7 +40,7 @@ const layGrid = (from, to, columns = 3, rows = 1) => {
 
 export const Wrapper = styled.section`
   ${layGrid(1, 13, 1, 3)}
-  margin-top: ${({ theme }) => theme.home.rowGap};
+  margin-top: ${props => props.theme && props.theme.home.rowGap};
 
   ${({ theme }) => `@media (min-width: ${theme.breakpoint.home}px)`} {
     ${layGrid(1, 13, 3, 1)}

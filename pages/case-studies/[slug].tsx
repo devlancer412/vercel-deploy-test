@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import { useRouter } from 'next/router'
 import ErrorPage from 'next/error'
@@ -21,7 +23,7 @@ const CASE_STUDIES_QUERY = gql`
   ${Footer.fragment}
   ${Nav.fragment}
 
-  query GetCaseStudyPage($caseStudyFilter: JSON) {
+  query GetCaseStudyPage($caseStudyFilter: JSONObject) {
     getCaseStudyList(filter: $caseStudyFilter, size: 1) {
       total
       items {
@@ -50,7 +52,7 @@ const Layout = styled.div`
   ${grid.columns}
   ${grid.rows}
 
-  padding: 0 ${({ theme }) => theme.grid.padding};
+  padding: 0 ${props => props.theme && props.theme.grid.padding};
 
   ${Nav.Wrapper} { ${grid.placeInRows(1, {})} }
   ${CaseStudy.Wrapper} { ${grid.placeInRows(1, {})} }
@@ -111,15 +113,17 @@ const ArticlePage = ({ data, error }) => {
 
 export async function getServerSideProps({ params }) {
   const filterEnabled = process.env.PREVIEWS
-    ? []
-    : [{ term: { _enabled: true } }]
+    ? { match_all: {} }
+    : { _enabled: true }
 
   try {
     const data = await takeshape.request(CASE_STUDIES_QUERY, {
-      caseStudyFilter: [
-        { term: { slug: params.slug.toLowerCase() } },
-        ...filterEnabled,
-      ],
+      caseStudyFilter: {
+        term: {
+          slug: params.slug.toLowerCase(),
+          ...filterEnabled,
+        },
+      },
     })
     return { props: { data } }
   } catch (e) {

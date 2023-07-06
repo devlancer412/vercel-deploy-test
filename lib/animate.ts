@@ -23,7 +23,7 @@ export const useDefaultAnimation = (
     y = '20px',
     ignore = false,
     threshold = 0.2,
-    whileHidden = null,
+    whileHidden = undefined,
   }: UseDefaultAnimationProps = opts
 
   const [ref, inView] = useInView({
